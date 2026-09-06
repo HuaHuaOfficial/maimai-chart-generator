@@ -1,4 +1,4 @@
-# maimai Chart Generator 0.3.0
+# maimai Chart Generator 0.3.1
 
 [English](README.en.md) | 简体中文
 
@@ -9,6 +9,7 @@
 - 从音频、BPM、版本和目标定数生成 BASIC～Re:MASTER 谱面。
 - 保留 Slide Star 与 Track 的独立表示，并控制星星数量上下限。
 - HARD 问题返回局部上下文重生成；相同阻塞点重复失败时扩大因果窗口，不重新生成整首。
+- 手数限制是原生 HARD：候选生成前先计算 Hold、Slide、Tap 与 Touch 的占手状态；双手已满时，只允许落在当前 Slide 手掌覆盖区内的随滑 Touch。
 - 只有完整整谱许可且 Simai 回读与许可稿一致时才写出 `maidata.txt`。
 - Windows GUI 入口为 `启动生成器.pyw`。
 
@@ -57,7 +58,7 @@ flowchart TD
 
     L3 --> I[候选编码为统一 CUDA IR]
     I --> J[④ CHECK: CUDA Harness 检测]
-    J --> J1[候选 HARD 规则]
+    J --> J1[候选 HARD 规则，含动态手数限制]
     J --> J2[密度 / 速度 / 方向变化质量校准]
     J --> J3[整谱星星上下限与完整覆盖]
 
@@ -79,6 +80,8 @@ flowchart TD
 
 运行时只有 Generator 与 Harness 两个职责主体，但 Generator 内部明确分成 WHEN、WHAT、WHERE 三层。Harness 反馈不会无条件从整首开头重来：星星数量不足返回 WHEN 增加候选时刻；类型不可行返回 WHAT；键位、轨迹或手部冲突优先返回 WHERE。同一 tick 再次失败时才扩大上下文并允许重新选择 WHAT。窗口之前的神经状态与音频编码继续复用。
 
+候选采样会提前使用 Harness 快照：确定的 HARD 直接形成采样掩码；SOFT 仅参与候选排序，若存在 CLEAN 就优先使用 CLEAN。连续候选都违反 HARD 时选择合法空拍，星星配额随后在其他音乐锚点补足，从而减少整段返工。
+
 主要模块：
 
 - `src/chart_runtime/generator`：规划、contextual V4 推理、结构化采样、缓存和局部恢复。
@@ -92,7 +95,7 @@ flowchart TD
 - 需要 NVIDIA CUDA，不提供 CPU 音乐判定回退。
 - 音频最多生成前 256 小节。
 - 低难度尚无同口径质量校准时会明确标记为不可用，而不是伪造阈值。
-- 当前 MultiTouch 指标不是几何合手证明。
+- 动态手数 HARD 使用 Touch 邻接组、Slide 接触路径和 1/180 秒松手延迟；整谱发布前会再次检查完整时间轴。
 - 模型的星星时间预测已经较稳定，星星轨迹与落位仍有改进空间。
 
 ## 许可

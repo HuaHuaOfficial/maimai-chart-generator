@@ -139,14 +139,52 @@ extern "C" __global__ void versions(
  atomicOr(flags+e,mask);}
  if(i<I){ll e=ie[i],v=version[batch[e]];if(!outer[i]&&hold[i]&&sensor[i]!=center&&v<24)atomicOr(flags+e,1ULL<<19);}
 }
+extern "C" __global__ void multitouch(
+ const ll* ie,const ll* inode,const ll* sensor,const ll* ipad,const bool* outer,const bool* hold,
+ const double* start,const double* iend,const ll* batch,
+ const ll* te,const ll* tn,const ll* path,const ll* head,const ll* tail,const double* shoot,const double* tend,const bool* wifi,
+ const double* astart,const double* aend,const ll* amask,const ll* atrack,const bool* tadj,
+ const ll* clean,int C,ull* flags,int I,int T,int A) {
+ int probe=blockIdx.x*blockDim.x+threadIdx.x;if(probe>=I+T)return;
+ double at;ll b,owner;
+ if(probe<I){at=start[probe];owner=ie[probe];b=batch[owner];}
+ else {int p=probe-I;at=shoot[p];owner=te[p];b=batch[owner];}
+ int hands=0;ll lo=owner,hi=owner;
+ for(int i=0;i<I;i++) {
+   if(batch[ie[i]]!=b||start[i]>at+1e-7||iend[i]+1.0/180<=at+1e-7)continue;
+   if(outer[i]||hold[i]){hands++;lo=min(lo,ie[i]);hi=max(hi,ie[i]);continue;}
+   int sid=(int)sensor[i]-8;ull present=0,reach=1ULL<<sid;
+   for(int j=0;j<I;j++)if(ie[j]==ie[i]&&!outer[j]&&!hold[j]&&start[j]<=at+1e-7&&iend[j]+1.0/180>at+1e-7)present|=1ULL<<((int)sensor[j]-8);
+   for(int z=0;z<33;z++)for(int a=0;a<33;a++)if((reach>>a)&1ULL)for(int q=0;q<33;q++)if(((present>>q)&1ULL)&&tadj[a*33+q])reach|=1ULL<<q;
+   bool first=true;
+   for(int j=0;j<i;j++)if(ie[j]==ie[i]&&!outer[j]&&!hold[j]&&((reach>>((int)sensor[j]-8))&1ULL)){first=false;break;}
+   if(!first)continue;
+   bool all_covered=true;
+   for(int j=i;j<I;j++)if(ie[j]==ie[i]&&!outer[j]&&!hold[j]&&((reach>>((int)sensor[j]-8))&1ULL)) {
+     bool covered=false;
+     for(int t=0;t<T&&!covered;t++)if(batch[te[t]]==b&&shoot[t]<=at+1e-7&&tend[t]+1.0/180>at+1e-7)
+       for(int a=0;a<A;a++)if(atrack[a]==t&&astart[a]<=at+1e-7&&aend[a]>at-1e-7&&(((ull)amask[a]&((ull)ipad[j]))!=0)){covered=true;break;}
+     if(!covered){all_covered=false;break;}
+   }
+   if(!all_covered){hands++;lo=min(lo,ie[i]);hi=max(hi,ie[i]);}
+ }
+ for(int t=0;t<T;t++)if(batch[te[t]]==b&&shoot[t]<=at+1e-7&&tend[t]+1.0/180>at+1e-7) {
+   bool duplicate=false;
+   for(int u=0;u<t;u++)if(batch[te[u]]==b&&te[u]==te[t]&&tn[u]==tn[t]&&path[u]==path[t]&&head[u]==head[t]&&tail[u]==tail[t]&&fabs(shoot[u]-shoot[t])<1e-7&&fabs(tend[u]-tend[t])<1e-7){duplicate=true;break;}
+   if(!duplicate){hands+=wifi[t]?2:1;lo=min(lo,te[t]);hi=max(hi,te[t]);}
+ }
+ if(hands>2)mark(flags,22,lo,hi,clean,C);
+}
 '''
 
 
 class FusedRules:
-    def __init__(self):
+    def __init__(self,codec):
         import cupy as cp
-        self.cp=cp;module=cp.RawModule(code=SOURCE,options=('--std=c++17',),name_expressions=('inputs','tracks','contacts','versions'))
-        self.functions={name:module.get_function(name) for name in ('inputs','tracks','contacts','versions')}
+        self.cp=cp;module=cp.RawModule(code=SOURCE,options=('--std=c++17',),name_expressions=('inputs','tracks','contacts','versions','multitouch'))
+        self.functions={name:module.get_function(name) for name in ('inputs','tracks','contacts','versions','multitouch')}
+        names=list(codec.vocab['touchPositions']);adj=codec.tables['touchAdjacency']
+        self.touch_adjacency=torch.tensor([[a==b or b in adj.get(a,()) for b in names] for a in names],device=codec.device,dtype=torch.bool)
 
     def run(self,c,clean,versions,limits,center,B):
         from .cuda_views import view
@@ -167,4 +205,6 @@ class FusedRules:
             launch('contacts',int(Q),tuple(arr(k) for k in ('contact_track','contact_sensor','contact_time','track_event','event_batch','input_event','input_sensor','input_outer','input_ex','input_start'))+(cl,C,fl,sf,Q,I))
             N=np.int32(len(c['note_event']))
             launch('versions',max(int(N),int(I)),tuple(arr(k) for k in ('note_event','note_kind','note_modifiers','event_batch'))+(v,)+tuple(arr(k) for k in ('input_event','input_sensor','input_outer','input_hold'))+(fl,N,I,np.int32(center)))
+            A=np.int32(len(c['action_event']))
+            launch('multitouch',int(I+T),tuple(arr(k) for k in ('input_event','input_note','input_sensor','input_pad','input_outer','input_hold','input_start','input_end','event_batch','track_event','track_note','track_path','track_head','track_tail','track_shoot','track_end','track_wifi','action_start','action_end','action_mask','action_track'))+(view(cp,self.touch_adjacency),cl,C,fl,I,T,A))
         return flags,soft

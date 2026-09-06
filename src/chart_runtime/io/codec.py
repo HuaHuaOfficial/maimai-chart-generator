@@ -115,11 +115,11 @@ class Codec:
         seconds = ticks_to_seconds(ticks, np.asarray(bt), np.asarray(bv))
         data = {k: [] for k in (
             'event_tick', 'event_time', 'event_notes', 'event_lanes', 'event_lane_count', 'event_track_speed',
-            'input_event', 'input_note', 'input_sensor', 'input_outer', 'input_hold', 'input_ex', 'input_start', 'input_end',
+            'input_event', 'input_note', 'input_sensor', 'input_pad', 'input_outer', 'input_hold', 'input_ex', 'input_start', 'input_end',
             'note_event', 'note_kind', 'note_sensor', 'note_modifiers',
               'track_event', 'track_note', 'track_route', 'track_path', 'track_head', 'track_tail', 'track_start', 'track_shoot', 'track_end', 'track_early', 'track_wifi', 'track_contacts_key',
             'contact_track', 'contact_sensor', 'contact_time',
-            'action_start', 'action_end', 'action_mask', 'action_event',
+            'action_start', 'action_end', 'action_mask', 'action_event', 'action_track',
             'queue_track', 'queue_masks', 'queue_skip', 'queue_count',
         )}
         max_notes = max((sum(n['family'] != 'touch' for n in self.parse_event(text)) for _, text in source), default=2)
@@ -146,9 +146,9 @@ class Codec:
                 pad_name = 'A'+str(sensor+1) if outer else note['start']
                 pad = int(self.tables['simplePadMasks'][pad_name])
                 if not (family == 'slide' and note['is_headless']):
-                    for key, val in zip(('input_event','input_note','input_sensor','input_outer','input_hold','input_ex','input_start','input_end'), (ei,ni,sensor,outer,held,note['is_ex'],at,at+length)):
+                    for key, val in zip(('input_event','input_note','input_sensor','input_pad','input_outer','input_hold','input_ex','input_start','input_end'), (ei,ni,sensor,pad,outer,held,note['is_ex'],at,at+length)):
                         data[key].append(val)
-                    data['action_start'].append(at); data['action_end'].append(at+length+1/60); data['action_mask'].append(pad); data['action_event'].append(ei)
+                    data['action_start'].append(at); data['action_end'].append(at+length+1/60); data['action_mask'].append(pad); data['action_event'].append(ei); data['action_track'].append(-1)
                 if family != 'slide':
                     continue
                 for track in parse_slide_tracks(note['raw']):
@@ -177,7 +177,7 @@ class Codec:
                         start, finish = shoot+float(contact['startFraction'])*move, shoot+float(contact['endFraction'])*move
                         if not wifi and float(contact['endFraction']) >= 1-1e-7:
                             finish += 1/60
-                        data['action_start'].append(start); data['action_end'].append(max(start+1e-9,finish)); data['action_mask'].append(1<<int(contact['pad'])); data['action_event'].append(ei)
+                        data['action_start'].append(start); data['action_end'].append(max(start+1e-9,finish)); data['action_mask'].append(1<<int(contact['pad'])); data['action_event'].append(ei); data['action_track'].append(ti)
                     for lane in entry['judgeLanes']:
                         count = len(lane['areaMasks']); max_areas = max(max_areas,count)
                         data['queue_track'].append(ti); data['queue_masks'].append(list(lane['areaMasks'])); data['queue_skip'].append(list(lane['skipNoPress'])); data['queue_count'].append(count)

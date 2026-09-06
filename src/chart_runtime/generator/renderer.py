@@ -400,6 +400,7 @@ def _sample_anchor(
     last_decisions: list[dict] = []
     last_candidates: list[dict] = []
     same_intent_attempts = 0
+    best_soft: tuple[str, dict, dict] | None = None
 
     def partial_context() -> dict:
         def compact(value):
@@ -483,6 +484,8 @@ def _sample_anchor(
         record_batch(proposals, decisions, 1)
         if decisions[0]["severity"] == "CLEAN":
             return proposals[0][0], proposals[0][1], decisions[0]
+        if decisions[0]["severity"] == "SOFT":
+            best_soft = (proposals[0][0], proposals[0][1], decisions[0])
         if fixed_intent is None:
             fixed_intent = copy_representation(first_rep)
         while len(proposals) < 4:
@@ -511,8 +514,8 @@ def _sample_anchor(
             if decision["severity"] == "CLEAN":
                 return proposal[0], proposal[1], decision
         for proposal, decision in zip(proposals, decisions):
-            if decision["severity"] == "SOFT":
-                return proposal[0], proposal[1], decision
+            if decision["severity"] == "SOFT" and (best_soft is None or int(decision.get('soft_cost',0))<int(best_soft[2].get('soft_cost',0))):
+                best_soft = (proposal[0],proposal[1],decision)
         while len(proposals) < max_attempts:
             batch = min(8, max_attempts - len(proposals))
             new = [
@@ -541,10 +544,12 @@ def _sample_anchor(
                 if decision["severity"] == "CLEAN":
                     return proposal[0], proposal[1], decision
             for proposal, decision in zip(new, new_decisions):
-                if decision["severity"] == "SOFT":
-                    return proposal[0], proposal[1], decision
+                if decision["severity"] == "SOFT" and (best_soft is None or int(decision.get('soft_cost',0))<int(best_soft[2].get('soft_cost',0))):
+                    best_soft = (proposal[0],proposal[1],decision)
             proposals.extend(new)
         if planned_intent is not None and not allow_intent_revision:
+            if best_soft is not None:
+                return best_soft
             raise RenderFailure(
                 "explicit intent exhausted 32 provider-judged realizations",
                 stage="provider_sampling",
@@ -555,6 +560,14 @@ def _sample_anchor(
         # same-intent budget.  It is never a silent change to an explicit plan.
         fixed_intent = None
         revisions += 1
+    if best_soft is not None:
+        return best_soft
+    rest=empty_representation(len(vocab['touchPositions']))
+    raw=provider.check_batch([rest],moment,bpm)
+    _=[_provider_result(value) for value in ([] if raw is None else list(raw))]
+    decision=_provider_decisions(provider,1)[0]
+    if decision['severity']!='HARD':
+        return '',rest,decision
     raise RenderFailure(
         "native intent search exhausted 32 fresh intents",
         stage="provider_sampling",

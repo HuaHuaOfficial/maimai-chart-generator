@@ -532,14 +532,21 @@ def decode_structured_factor_event_fast(
         touch_active = torch.as_tensor(
             intent_override["touch_presence"], device=device, dtype=torch.bool
         )
-    elif version_id >= 13 and touch_group_budget:
-        touch_prob = head.touch_presence(event_context)[0, -1].float().sigmoid()
-        touch_probability=touch_prob.detach().cpu().numpy()
-        for _ in range(32):
-            candidate = rng.random(len(touch_prob)) < touch_probability
-            if state.touch_group_count(candidate) <= touch_group_budget:
-                touch_active = torch.from_numpy(candidate).to(device)
-                break
+    elif version_id >= 13:
+        covered_touch = torch.as_tensor(snapshot.get('allowedTouchPresenceMask',np.zeros(head.c.touch_positions,np.bool_)),device=device,dtype=torch.bool)
+        if not touch_group_budget and not bool(covered_touch.any()):
+            touch_probability = None
+        else:
+            touch_prob = head.touch_presence(event_context)[0, -1].float().sigmoid()
+            touch_probability=touch_prob.detach().cpu().numpy()
+        if touch_probability is not None:
+            covered_np=covered_touch.detach().cpu().numpy()
+            for _ in range(32):
+                candidate = rng.random(len(touch_probability)) < touch_probability
+                independent=candidate&~covered_np
+                if state.touch_group_count(independent) <= touch_group_budget:
+                    touch_active = torch.from_numpy(candidate).to(device)
+                    break
     touch_output = None
     if bool(touch_active.any()):
         sensors = torch.arange(head.c.touch_positions, device=device)[None, None]

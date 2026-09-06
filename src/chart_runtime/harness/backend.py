@@ -8,7 +8,7 @@ import torch
 
 from ..domain import Evaluation,Feedback,FeedbackStop,PublishPermit,Scope,Verdict
 from ..runtime.payloads import Envelope
-from .kernel import Kernel,QUALITY_NAMES
+from .kernel import Kernel,QUALITY_NAMES,RULES_ID
 from .sampling import SamplingProvider
 
 
@@ -115,7 +115,7 @@ class HarnessBackend:
             meta={'issues':issues,'hard_counts':dict(zip(result.hard,hc[b])),'quality_counts':dict(zip(QUALITY_NAMES,qc[b])),
                   'soft':soft,'soft_budget':soft_budget,'stars':stars[b],'minimum_stars':self.minimum_stars,'maximum_stars':upper_stars if c['star_control'] else None,'base_stars':self.base_stars,
                   'quality_calibration':'available' if self.calibration else 'not_available_for_this_slot',
-                  'rules_id':'shared-cuda-rules/1','coverage':'registered mechanisms and supported complete path tables',
+                  'rules_id':RULES_ID,'coverage':'registered mechanisms and supported complete path tables',
                   'cpu_per_object_checks':False}
             if not proposal.complete:
                 meta['interruption']=dict(proposal.interruption.data)

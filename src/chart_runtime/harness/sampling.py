@@ -35,6 +35,7 @@ class SamplingProvider:
         self.timings={'snapshotSeconds':0.,'packSeconds':0.,'kernelSeconds':0.,'decisionSeconds':0.,'candidateBatches':0,'candidates':0}
         names=list(vocab['touchPositions']);adj=self.tables['touchAdjacency']
         self.adjacency=torch.tensor([[a==b or b in adj.get(a,()) for b in names] for a in names],device=self.device,dtype=torch.bool)
+        self.touch_pad_masks=torch.tensor([int(self.tables['simplePadMasks'][name]) for name in names],device=self.device,dtype=torch.int64)
 
     def bind_references(self,reference_events):
         self.references={int(t):str(x.get('text','')) if isinstance(x,dict) else str(x) for t,x in (reference_events or {}).items()}
@@ -69,8 +70,15 @@ class SamplingProvider:
         active=(c['track_start']<=at+TIME_EPSILON)&(c['track_end']+.2>at-TIME_EPSILON)
         source_lanes=set((lanes+1).detach().cpu().tolist());touch_names=[self.codec.sensors[i] for i in touch.detach().cpu().tolist()]
         nh=int(outerheld.sum().item());nt=int(touchheld.sum().item());ns=int(move.sum().item())
-        active_inputs=(c['input_start']<=at+1e-7)&(c['input_end']+1/60>at+1e-7)&c['input_outer']
-        available=max(0,2-int(active_inputs.sum().item())-nt)
+        held_release=c['input_hold']&(c['input_start']<=at+1e-7)&(c['input_end']+1/180>at+1e-7)
+        active_inputs=(c['input_start']<=at+1e-7)&(c['input_end']+1/180>at+1e-7)&c['input_outer']
+        transient_outer=active_inputs&~c['input_hold']
+        transient_touch=(c['input_start']<=at+1e-7)&(c['input_end']+1/180>at+1e-7)&~c['input_outer']&~c['input_hold']
+        transient_touch_groups=int(torch.unique(c['input_event'][transient_touch]).numel())
+        slide_hands=int((move.to(torch.int64)*(1+c['track_wifi'].to(torch.int64))).sum().item())
+        available=max(0,2-int(held_release.sum().item())-int(transient_outer.sum().item())-transient_touch_groups-slide_hands)
+        active_actions=(c['action_track']>=0)&(c['action_start']<=at+TIME_EPSILON)&(c['action_end']>at-TIME_EPSILON)
+        covered_touch=((c['action_mask'][active_actions,None]&self.touch_pad_masks[None,:])!=0).any(0) if bool(active_actions.any()) else torch.zeros(len(self.touch_pad_masks),device=self.device,dtype=torch.bool)
         frame_tracks=(c['track_shoot']<=at+INPUT_RELEASE_SECONDS+TIME_EPSILON)&(c['track_end']>=at-TIME_EPSILON)
         moving_capacity=torch.where(frame_tracks.any(),torch.tensor(1,device=self.device),torch.tensor(2,device=self.device))
         outer_capacity=int((moving_capacity-active_inputs.sum()).clamp(0,2).item())
@@ -95,6 +103,7 @@ class SamplingProvider:
             muriStateFeatures=np.zeros(32,np.float32),muriOracleSourceTick=int(tick),activeTouchHoldSensors=touch_names,lastSingleTapLane=None,motionDirection=0,motionRunLength=0,
             activeHands=min(2,nh+nt),activeHoldHands=min(2,nh),activeSlideHands=min(2,ns),activeSlideCount=int(active.sum().item()),activeTouchHoldHands=min(2,nt),availableHands=available,holdAvailableHands=available,
             maxOuterArity=outer_capacity,
+            allowedTouchPresenceMask=covered_touch.detach().cpu().numpy(),
             allowedHoldDurationMask=hm.detach().cpu().numpy(),allowedSlideDurationMask=sm.detach().cpu().numpy())
         self.timings['snapshotSeconds']+=time.perf_counter()-started
         return result

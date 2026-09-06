@@ -14,14 +14,14 @@ import torch.nn.functional as F
 
 from ..io.codec import Codec, ChartPayload
 
-RULES_ID = 'shared-cuda-rules/1'
+RULES_ID = 'shared-cuda-rules/2'
 QUALITY_NAMES = ('unpredictabilityWeightedInputs1s', 'outerKeyStepsPerSecond', 'slideSegmentsPerSecond', 'unexpectedMotionChangeRate')
 HARD_NAMES = ('SameSensorStack','OuterMultiPress','HoldLaneConflict','DoubleHoldBlocksSlide',
               'TrackEndInput','UnprotectedSlideHeadInput','UnprotectedTrackContact',
               'DoubleInputDuringSlide','WifiWithIndependentInput','DoubleWifi','WifiWithTwoTracks',
               'DoubleStartCompoundTrack','FullyOverlappingTrackWindow','SlideTooFast',
               'HoldBeyondChartEnd','TrackBeyondChartEnd','InvalidTiming','KnownHardFixture',
-              'TouchUnavailableInVersion','TouchHoldSensorUnavailableInVersion','EXUnavailableInVersion','LongBreakUnavailableInVersion')
+              'TouchUnavailableInVersion','TouchHoldSensorUnavailableInVersion','EXUnavailableInVersion','LongBreakUnavailableInVersion','MultiTouch')
 
 
 @dataclass
@@ -72,7 +72,7 @@ class Kernel:
     def __init__(self,codec:Codec):
         self.codec=codec;self.device=codec.device;self._scanner=None
         from .fused import FusedRules
-        self.fused=FusedRules()
+        self.fused=FusedRules(codec)
         self._fixtures={}
         from ..io.fixtures import fixture_events as _fixture_events
         from ..io.symmetry import canonical_event_window
@@ -110,7 +110,7 @@ class Kernel:
         with workspace.lease(64*1024*1024):
             c,starts=_cat(payloads);d=self.device;batch=c['event_batch'];n=len(batch);B=len(payloads)
             hard={key:torch.zeros(n,dtype=torch.bool,device=d) for key in HARD_NAMES}
-            soft={key:torch.zeros(B,dtype=torch.int64,device=d) for key in ('TapOnSlide','SlideHeadTap','Overlap','MultiTouch')}
+            soft={key:torch.zeros(B,dtype=torch.int64,device=d) for key in ('TapOnSlide','SlideHeadTap','Overlap')}
             clean,fixtures=self._exemptions(payloads,starts,bpms)
             def same(a,b):return batch[a[:,None]]==batch[b[None,:]]
             def exempt(a,b):
@@ -128,7 +128,7 @@ class Kernel:
             flag_values,soft_values=self.fused.run(c,clean,ver,limits,8+self.codec.sensors.index('C'),B)
             masks=((flag_values[:,None]>>torch.arange(len(HARD_NAMES),device=d)[None,:])&1).bool()
             hard={name:masks[:,i] for i,name in enumerate(HARD_NAMES)}
-            soft={name:soft_values[:,i] for i,name in enumerate(('TapOnSlide','SlideHeadTap','Overlap','MultiTouch'))}
+            soft={name:soft_values[:,i] for i,name in enumerate(('TapOnSlide','SlideHeadTap','Overlap'))}
             if fixtures.numel():hard['KnownHardFixture'].scatter_(0,fixtures[:,1],True)
             ie=c['input_event'];ib=batch[ie];I=len(ie)
             te=c['track_event'];tb=batch[te];T=len(te)

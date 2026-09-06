@@ -1,4 +1,4 @@
-# maimai Chart Generator 0.3.0
+# maimai Chart Generator 0.3.1
 
 English | [简体中文](README.md)
 
@@ -9,6 +9,7 @@ A native CUDA chart generator for maimai DX Simai charts. The current release us
 - Generates BASIC through Re:MASTER charts from audio, BPM, game version, and target difficulty constants.
 - Keeps Slide Stars and Tracks as separate representations and enforces explicit Star count bounds.
 - Returns HARD failures to a local context window; repeated failures at the same point expand the causal edit scope without regenerating the full song.
+- Hand capacity is a native HARD rule. Before sampling, the runtime combines Hold, Slide, Tap, and Touch occupancy; when both hands are occupied, only a Touch covered by the active Slide hand may remain eligible.
 - Writes `maidata.txt` only after a complete whole-chart permit and an identity-preserving Simai round trip.
 - The Windows GUI entry point is `启动生成器.pyw`.
 
@@ -57,7 +58,7 @@ flowchart TD
 
     L3 --> I[Encode candidates as shared CUDA IR]
     I --> J[4 CHECK: CUDA Harness]
-    J --> J1[Candidate HARD rules]
+    J --> J1[Candidate HARD rules, including dynamic hand capacity]
     J --> J2[Density / speed / direction-change calibration]
     J --> J3[Whole-chart Star bounds and coverage]
 
@@ -79,6 +80,8 @@ flowchart TD
 
 Generator and Harness remain the only runtime responsibility owners, while Generator explicitly separates WHEN, WHAT, and WHERE decisions. Feedback does not restart the whole song: a Star deficit returns to WHEN, an infeasible family returns to WHAT, and lane, route, or hand conflicts return to WHERE first. Only a repeated failure at the same tick expands context and permits a new WHAT decision. Neural state and encoded audio before the edit window remain cached.
 
+Candidate sampling consumes Harness snapshots before committing an event. Established HARD constraints become sampling masks. SOFT findings only rank alternatives, with CLEAN preferred when available. If every sampled realization is HARD, the generator emits a legal rest and later restores any Star deficit at another music anchor, avoiding a large repair window.
+
 Main modules:
 
 - `src/chart_runtime/generator`: planning, contextual V4 inference, structured sampling, caching, and local recovery.
@@ -92,7 +95,7 @@ Main modules:
 - NVIDIA CUDA is required; there is no CPU musical-judgement fallback.
 - Generation is limited to the first 256 bars.
 - Missing low-difficulty calibration is reported explicitly instead of being replaced by a synthetic threshold.
-- The current MultiTouch metric is not a proof of geometric hand merging.
+- Dynamic hand-capacity HARD uses Touch adjacency groups, Slide contact paths, and a 1/180-second release delay; the complete timeline is checked again before publication.
 - Star timing prediction is currently stable, while route and placement quality remain areas for improvement.
 
 ## Licensing
