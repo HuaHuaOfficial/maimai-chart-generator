@@ -2,7 +2,7 @@
 
 [English](README.en.md) | 简体中文
 
-面向 maimai DX Simai 谱面的原生 CUDA 生成器。当前版本使用 contextual V4 模型生成候选，并由同一套 CUDA Harness 检查候选与整谱；只支持随仓库发布的最新模型，不兼容旧 checkpoint。
+面向 maimai DX Simai 谱面的原生 CUDA 生成器。当前版本使用 contextual V4 模型生成候选，并由同一套 CUDA Harness 检查候选与整谱。
 
 ## 功能
 
