@@ -29,32 +29,55 @@ The generator cannot declare its own chart valid. Every candidate is encoded int
 
 ## Architecture
 
-```text
-Audio + BPM + version + target difficulty
-                 │
-                 ▼
-       MERT / structure / anchors / style
-                 │
-                 ▼
-┌────────────────────────────────┐
-│ Generator                      │
-│ Planner → contextual V4        │
-│ → candidate events / recovery  │
-└────────────────┬───────────────┘
-                 │ CUDA IR candidates
-                 ▼
-┌────────────────────────────────┐
-│ CUDA Harness                   │
-│ HARD rules + quality bounds    │
-│ Star bounds + coverage receipt │
-└────────────────┬───────────────┘
-        accept   │   reject / feedback
-                 │          └────► local Generator recovery
-                 ▼
-      Simai write → parse → digest match → publish
+```mermaid
+flowchart TD
+    A[Audio file] --> B[FFmpeg waveform decode]
+    B --> C[Fine-grained log-mel features]
+    B --> D[MERT music representation]
+    C --> E[Beat and transient strength]
+    D --> F[Bar structure and section semantics]
+    P[BPM / version / target difficulty] --> G
+    E --> G[Planner: full-song density and difficulty budget]
+    F --> G
+
+    G --> W[1 WHEN: decide when notes occur]
+    W --> W1[Allocate event counts per bar]
+    W1 --> W2[Anchor model selects exact ticks]
+    W2 --> W3[Joint planner selects Star candidate times]
+
+    W3 --> H[Build causal context window]
+    H --> T[2 WHAT: decide which notes occur]
+    T --> T1[Rest / Tap / Hold / Slide / Touch]
+    T1 --> T2[Arity, duration, Break / EX and modifiers]
+
+    T2 --> L[3 WHERE: decide where notes occur]
+    L --> L1[Select lanes or Touch sensors from context]
+    L1 --> L2[Select Slide start, end, route and geometry]
+    L2 --> L3[Sample candidates using occupancy, hand capacity and motion state]
+
+    L3 --> I[Encode candidates as shared CUDA IR]
+    I --> J[4 CHECK: CUDA Harness]
+    J --> J1[Candidate HARD rules]
+    J --> J2[Density / speed / direction-change calibration]
+    J --> J3[Whole-chart Star bounds and coverage]
+
+    J1 --> K{Accepted?}
+    J2 --> K
+    J3 --> K
+    K -- Yes --> O[Write Simai]
+    O --> Q[Parse again and compare accepted IR digest]
+    Q --> R{Exact match?}
+    R -- Yes --> S[Publish maidata.txt and audio]
+    R -- No --> X[Stop publication and retain error]
+
+    K -- Too few Stars --> W3
+    K -- Infeasible note family --> T
+    K -- Lane / route / hand conflict --> L
+    K -- Same tick fails again --> Y[Expand causal window and release fixed intent]
+    Y --> T
 ```
 
-Generator and Harness are the only runtime responsibility owners. Harness feedback carries the failing tick, related Hold/Slide owners, and pending generation scope. The first recovery edits the smallest causal window. A repeated stop expands the window and releases the fixed intent. Neural state and encoded audio before the edit window remain cached, so recovery is not a full-song restart.
+Generator and Harness remain the only runtime responsibility owners, while Generator explicitly separates WHEN, WHAT, and WHERE decisions. Feedback does not restart the whole song: a Star deficit returns to WHEN, an infeasible family returns to WHAT, and lane, route, or hand conflicts return to WHERE first. Only a repeated failure at the same tick expands context and permits a new WHAT decision. Neural state and encoded audio before the edit window remain cached.
 
 Main modules:
 
