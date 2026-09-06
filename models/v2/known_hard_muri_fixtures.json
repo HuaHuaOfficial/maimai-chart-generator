@@ -1,0 +1,165 @@
+{
+  "schemaVersion": 2,
+  "policy": "Instance-level HARD/absolute fixtures override raw-clear and official D8 precedent. Raw MaiMuriDX type alone is never sufficient.",
+  "fixtures": [
+    {
+      "id":"user_double_hold_blocks_slide_20260906",
+      "severity":"HARD",
+      "source":"user-confirmed generated fragment; shared interval detector",
+      "bpm":180.0,
+      "inote":"(180){8}5,4pp1[4:1],1h[8:3],2h[4:1],,,2bx-6[8:1],3,",
+      "blockingEventCount":4,
+      "reason":"DoubleHoldBlocksSlide: both hands are occupied throughout the first Track movement window"
+    },
+    {
+      "id": "user_sequence_repeated_1to5_queue_early_clear_20260905",
+      "severity": "HARD",
+      "source": "user-adjudicated generated failure; full CPU SlideTooFast witness",
+      "d8Equivalent": true,
+      "bpm": 188.0,
+      "blockingEventCount": 5,
+      "inote": "(188){8}3/8,2,1-5[8:1]/5,7,1-5[8:1],",
+      "eventWindow": [
+        {"tick": 0, "text": "3/8"},
+        {"tick": 48, "text": "2"},
+        {"tick": 96, "text": "1-5[8:1]/5"},
+        {"tick": 144, "text": "7"},
+        {"tick": 192, "text": "1-5[8:1]"}
+      ],
+      "reason": "The two 1-5 judge paths fully overlap; normal-timed handling of the first inevitably grazes and advances the second, so avoiding it requires forced early sliding",
+      "requiredWitnesses": [
+        {
+          "type": "SlideTooFast",
+          "affected": "the later 1-5[8:1]",
+          "cause": "the preceding fully overlapping 1-5[8:1]"
+        }
+      ]
+    },
+    {
+      "id": "generated_slow_slide_cross_clear_001",
+      "severity": "HARD",
+      "source": "user-confirmed playability failure",
+      "d8Equivalent": true,
+      "bpm": 179.15,
+      "blockingEventCount": 8,
+      "inote": "(179.15)\n{8}6>3[4:1],,4-8[4:1],4,6/D7,,6,,\n{8}4/7<4[1:3],,,Ch[4:1]/A2f,8w4[8:1],,,,\n{8}3>8[8:1]/7<4[8:1],,,,3b/7-1v3[12:1],6,5,,",
+      "reason": "slow Slide prematurely cleared by a later faster Track plus multi-hand conflicts",
+      "requiredWitnesses": [
+        {"type": "SlideTooFast", "affected": "7<4[1:3]", "causes": ["8w4[8:1]"], "judgeAreas": ["A5", "A4"]},
+        {"type": "MultiTouch", "minimumHands": 4, "causes": ["6>3[4:1]", "4-8[4:1]", "6", "D7"]},
+        {"type": "MultiTouch", "minimumHands": 3, "causes": ["7<4[1:3]", "3>8[8:1]", "7<4[8:1]"]},
+        {"type": "MultiTouch", "minimumHands": 3, "causes": ["7<4[1:3]", "7-1v3[12:1]", "5"]}
+      ]
+    },
+    {
+      "id": "official_tokiwokoete_absolute_025",
+      "severity": "HARD",
+      "communitySeverity": "absolute",
+      "source": "Minepig Maimai Muri Review part 5",
+      "sourceUrl": "https://www.bilibili.com/opus/976827828362280981",
+      "song": "時空を超えて久しぶり",
+      "time": "0:25",
+      "d8Equivalent": true,
+      "bpm": 145.0,
+      "inote": "(145)\n{8}7-4[8:1],,,56,",
+      "reason": "7-4 Slide tail plus 5/6 double press forms an absolute three-hand configuration"
+    },
+    {
+      "id": "official_genpei_absolute_018",
+      "severity": "HARD",
+      "communitySeverity": "absolute",
+      "source": "Minepig Maimai Muri Review part 5",
+      "sourceUrl": "https://www.bilibili.com/opus/976827828362280981",
+      "song": "源平大戦絵巻 MASTER",
+      "time": "0:18",
+      "d8Equivalent": true,
+      "bpm": 190.0,
+      "inote": "(190)\n{2}1h[4:5],8-3[4:1],4-7[4:1],",
+      "eventWindow": [
+        {"tick": 0, "text": "1h[4:5]"},
+        {"tick": 96, "text": "8-3[4:1]"},
+        {"tick": 288, "text": "4-7[4:1]"}
+      ],
+      "reason": "active Hold plus 8-3 Slide tail plus 4-7 Slide Star forms an absolute three-hand configuration"
+    },
+    {
+      "id": "official_cycle_absolute_057",
+      "severity": "HARD",
+      "communitySeverity": "absolute",
+      "source": "Minepig Maimai Muri Review parts 5 and 6",
+      "sourceUrl": "https://www.bilibili.com/opus/978826006029664264",
+      "song": "CYCLE EXPERT",
+      "time": "0:57",
+      "d8Equivalent": true,
+      "bpm": 135.0,
+      "inote": "(135)\n{2}1/8^5[4:1],5/4^1[4:1],",
+      "eventWindow": [
+        {"tick": 0, "text": "1/8<5[4:1]"},
+        {"tick": 192, "text": "4>1[4:1]/5"}
+      ],
+      "reason": "three-hand configuration combined with exact Slide-tail collision"
+    },
+    {
+      "id": "official_ignite_infinity_hard_103",
+      "severity": "HARD",
+      "communitySeverity": "hard",
+      "source": "Minepig Maimai Muri Review part 5",
+      "sourceUrl": "https://www.bilibili.com/opus/976827828362280981",
+      "song": "Ignite Infinity MASTER",
+      "time": "1:03",
+      "d8Equivalent": true,
+      "bpm": 160.0,
+      "inote": "(160)\n{4}1^4[4:1]/8^5[4:1],1-5[2:1]/8-4[2:1],",
+      "eventWindow": [
+        {"tick": 0, "text": "1>4[4:1]/8<5[4:1]"},
+        {"tick": 96, "text": "1-5[2:1]/8-4[2:1]"}
+      ],
+      "reason": "two Slide pairs form a four-hand configuration"
+    },
+    {
+      "id": "official_neko_hard_055",
+      "severity": "HARD",
+      "communitySeverity": "hard",
+      "source": "Minepig Maimai Muri Review part 5",
+      "sourceUrl": "https://www.bilibili.com/opus/976827828362280981",
+      "song": "ネ！コ！ MASTER",
+      "time": "0:55",
+      "d8Equivalent": true,
+      "sourceBpm": 183.0,
+      "bpm": 182.0,
+      "inote": "(183)\n{8}8-6[8:1],8-2[8:1],8w4[16:3],",
+      "eventWindow": [
+        {"tick": 0, "text": "8-6[8:1]"},
+        {"tick": 48, "text": "8-2[8:1]"},
+        {"tick": 96, "text": "8w4[16:3]"}
+      ],
+      "reason": "8-2 Slide end and 8w4 Wifi start form a three-hand configuration"
+    },
+    {
+      "id": "official_yukigakure_hard_213",
+      "severity": "HARD",
+      "communitySeverity": "hard",
+      "source": "Minepig Maimai Muri Review part 5",
+      "sourceUrl": "https://www.bilibili.com/opus/976827828362280981",
+      "song": "幸隠",
+      "time": "2:13",
+      "d8Equivalent": true,
+      "bpm": 142.0,
+      "inote": "(142)\n{4}3q2[4:1],8-5[8:1],4,",
+      "reason": "Slide tail plus independent Tap forms a three-hand configuration"
+    },
+    {
+      "id": "official_x_touch_pseudotriple_hard_222",
+      "severity": "HARD",
+      "communitySeverity": "hard",
+      "source": "Minepig Maimai Muri Review part 5; exact event recovered from official chart cache",
+      "sourceUrl": "https://www.bilibili.com/opus/976827828362280981",
+      "song": "[X] MASTER",
+      "time": "2:22.67",
+      "d8Equivalent": true,
+      "bpm": 180.0,
+      "inote": "(180)\n{384}Cf/A1,2bx,",
+      "reason": "A1/C Touch double followed only 1/384 note later by 2 Ex-Break-Tap is explicitly classified as a pseudo-double three-hand HARD configuration"
+    }
+  ]
+}

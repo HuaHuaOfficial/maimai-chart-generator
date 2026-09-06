@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "source": "v2_manifest official non-Utage chart spans",
+  "method": "linear total extrapolation outside central duration support",
+  "lowerQuantile": 0.05,
+  "upperQuantile": 0.95,
+  "lowerSeconds": 94.30,
+  "upperSeconds": 154.97,
+  "chartCount": 5967
+}

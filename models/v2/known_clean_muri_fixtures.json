@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "policy": "Exact community-confirmed CLEAN windows override a raw MaiMuriDX warning after HARD and SOFT registries have been checked. D8 equivalence is used only for playability classification.",
+  "fixtures": [
+    {
+      "id": "official_white_christmas_hold_end_slide_start_clean",
+      "severity": "CLEAN",
+      "sourceUrl": "https://www.bilibili.com/opus/976827828362280981",
+      "song": "白圣诞 Re:MASTER",
+      "time": "1:06",
+      "d8Equivalent": true,
+      "bpm": 200.0,
+      "inote": "(200)\n{8}3^1[8:1]/7^1[8:1],3h[8:1]/7h[8:1],",
+      "eventWindow": [
+        {"tick": 0, "text": "3>1[8:1]/7>1[8:1]"},
+        {"tick": 48, "text": "3h[8:1]/7h[8:1]"}
+      ],
+      "reason": "Hold endings connect directly into the two Slide starts as two one-hand hit-hold-slide actions; the article explicitly says this is a double, not a four-hand configuration"
+    },
+    {
+      "id": "official_rooftop_run_overlapping_slides_clean_053",
+      "severity": "CLEAN",
+      "sourceUrl": "https://www.bilibili.com/opus/976827828362280981",
+      "song": "Rooftop Run: Act1 Re:MASTER",
+      "time": "0:53",
+      "d8Equivalent": true,
+      "bpm": 152.0,
+      "inote": "(152)\n{8}6<2[16:5],3,1>5[4:1],1h[8:3],",
+      "reason": "the two Tracks overlap in time and space and can be merged into one action, so the article explicitly does not count the window as a three-hand configuration"
+    },
+    {
+      "id": "official_inochibakkari_one_stroke_clean_052",
+      "severity": "CLEAN",
+      "communitySeverity": "disputed-clean",
+      "sourceUrl": "https://www.bilibili.com/opus/976827828362280981",
+      "song": "命ばっかり MASTER",
+      "time": "0:52",
+      "d8Equivalent": true,
+      "bpm": 128.0,
+      "inote": "(128)\n{4}8>4[4:1],5-8[8:1],2>5[8:1],",
+      "reason": "the preceding Slide and following Slide can be read as one-stroke continuation; the article describes it as not necessarily Muri while noting weaker guidance"
+    },
+    {
+      "id": "official_pandora_paradoxxx_adjacent_double_wifi_clean_ending",
+      "severity": "CLEAN",
+      "communitySeverity": "hard",
+      "projectAdjudication": "CLEAN",
+      "adjudicatedBy": "user",
+      "sourceUrl": "https://www.bilibili.com/opus/976827828362280981",
+      "song": "PANDORA PARADOXXX MASTER",
+      "time": "2:21.47",
+      "d8Equivalent": true,
+      "bpm": 225.0,
+      "inote": "(225)\n{8}4w8[8:13]/5w1[8:13],",
+      "reason": "project owner reviewed the adjacent double-Wifi ending and does not consider this instance Muri; explicit project adjudication overrides the article's HARD label"
+    },
+    {
+      "id": "official_otogema_adjacent_double_wifi_clean_ending",
+      "severity": "CLEAN",
+      "communitySeverity": "hard",
+      "projectAdjudication": "CLEAN",
+      "adjudicatedBy": "user",
+      "sourceUrl": "https://www.bilibili.com/opus/976827828362280981",
+      "song": "OTOGEMA MASTER",
+      "time": "2:13.24",
+      "d8Equivalent": true,
+      "bpm": 145.0,
+      "inote": "(145)\n{8}4bw8[8:1]/5bw1[8:1],",
+      "reason": "project owner reviewed this protected adjacent double-Wifi instance and does not consider it Muri; protection is contextual evidence rather than a universal CLEAN rule"
+    }
+  ]
+}

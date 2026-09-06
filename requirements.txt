@@ -1,0 +1,5 @@
+# Install a CUDA-enabled PyTorch build matching your NVIDIA driver first.
+torch
+transformers>=4.47
+numpy
+cupy-cuda12x>=13.0

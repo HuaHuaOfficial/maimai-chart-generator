@@ -1,0 +1,8065 @@
+{
+  "schemaVersion": 1,
+  "starts": {
+    "1": {
+      "2": {
+        "count": 11284,
+        "minVersion": 0
+      },
+      "3": {
+        "count": 5003,
+        "minVersion": 0
+      },
+      "6": {
+        "count": 1591,
+        "minVersion": 0
+      },
+      "7": {
+        "count": 2898,
+        "minVersion": 0
+      },
+      "9": {
+        "count": 480,
+        "minVersion": 0
+      },
+      "10": {
+        "count": 829,
+        "minVersion": 0
+      },
+      "11": {
+        "count": 429,
+        "minVersion": 0
+      },
+      "12": {
+        "count": 112,
+        "minVersion": 0
+      },
+      "13": {
+        "count": 4061,
+        "minVersion": 0
+      },
+      "14": {
+        "count": 2236,
+        "minVersion": 0
+      },
+      "15": {
+        "count": 406,
+        "minVersion": 0
+      },
+      "16": {
+        "count": 666,
+        "minVersion": 0
+      },
+      "17": {
+        "count": 26,
+        "minVersion": 1
+      },
+      "18": {
+        "count": 34,
+        "minVersion": 0
+      },
+      "21": {
+        "count": 157,
+        "minVersion": 0
+      },
+      "22": {
+        "count": 387,
+        "minVersion": 0
+      },
+      "23": {
+        "count": 133,
+        "minVersion": 0
+      },
+      "24": {
+        "count": 543,
+        "minVersion": 0
+      },
+      "25": {
+        "count": 237,
+        "minVersion": 0
+      },
+      "26": {
+        "count": 468,
+        "minVersion": 0
+      },
+      "27": {
+        "count": 139,
+        "minVersion": 1
+      },
+      "28": {
+        "count": 45,
+        "minVersion": 1
+      },
+      "29": {
+        "count": 283,
+        "minVersion": 0
+      },
+      "30": {
+        "count": 52,
+        "minVersion": 3
+      },
+      "31": {
+        "count": 415,
+        "minVersion": 0
+      },
+      "32": {
+        "count": 258,
+        "minVersion": 1
+      },
+      "34": {
+        "count": 965,
+        "minVersion": 0
+      },
+      "35": {
+        "count": 127,
+        "minVersion": 6
+      },
+      "36": {
+        "count": 257,
+        "minVersion": 0
+      },
+      "38": {
+        "count": 29,
+        "minVersion": 0
+      },
+      "39": {
+        "count": 80,
+        "minVersion": 1
+      },
+      "40": {
+        "count": 737,
+        "minVersion": 0
+      },
+      "41": {
+        "count": 8,
+        "minVersion": 11
+      },
+      "43": {
+        "count": 16,
+        "minVersion": 3
+      },
+      "44": {
+        "count": 31,
+        "minVersion": 0
+      },
+      "45": {
+        "count": 131,
+        "minVersion": 0
+      },
+      "46": {
+        "count": 5,
+        "minVersion": 8
+      },
+      "47": {
+        "count": 4,
+        "minVersion": 8
+      },
+      "48": {
+        "count": 50,
+        "minVersion": 2
+      },
+      "49": {
+        "count": 92,
+        "minVersion": 0
+      },
+      "50": {
+        "count": 113,
+        "minVersion": 1
+      },
+      "51": {
+        "count": 25,
+        "minVersion": 3
+      },
+      "52": {
+        "count": 34,
+        "minVersion": 2
+      },
+      "53": {
+        "count": 6,
+        "minVersion": 6
+      },
+      "54": {
+        "count": 13,
+        "minVersion": 3
+      },
+      "57": {
+        "count": 174,
+        "minVersion": 0
+      },
+      "59": {
+        "count": 11,
+        "minVersion": 4
+      },
+      "60": {
+        "count": 14,
+        "minVersion": 0
+      },
+      "61": {
+        "count": 65,
+        "minVersion": 6
+      },
+      "62": {
+        "count": 108,
+        "minVersion": 0
+      },
+      "63": {
+        "count": 24,
+        "minVersion": 3
+      },
+      "64": {
+        "count": 60,
+        "minVersion": 0
+      },
+      "66": {
+        "count": 13,
+        "minVersion": 9
+      },
+      "68": {
+        "count": 93,
+        "minVersion": 0
+      },
+      "69": {
+        "count": 43,
+        "minVersion": 0
+      },
+      "70": {
+        "count": 32,
+        "minVersion": 6
+      },
+      "71": {
+        "count": 5,
+        "minVersion": 6
+      },
+      "73": {
+        "count": 294,
+        "minVersion": 0
+      },
+      "74": {
+        "count": 19,
+        "minVersion": 5
+      },
+      "75": {
+        "count": 13,
+        "minVersion": 1
+      },
+      "90": {
+        "count": 142,
+        "minVersion": 2
+      },
+      "96": {
+        "count": 64,
+        "minVersion": 0
+      },
+      "97": {
+        "count": 39,
+        "minVersion": 6
+      },
+      "102": {
+        "count": 46,
+        "minVersion": 2
+      },
+      "110": {
+        "count": 25,
+        "minVersion": 13
+      },
+      "113": {
+        "count": 35,
+        "minVersion": 5
+      },
+      "122": {
+        "count": 34,
+        "minVersion": 2
+      },
+      "124": {
+        "count": 4,
+        "minVersion": 15
+      },
+      "125": {
+        "count": 45,
+        "minVersion": 2
+      },
+      "127": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "128": {
+        "count": 25,
+        "minVersion": 17
+      },
+      "129": {
+        "count": 17,
+        "minVersion": 5
+      },
+      "130": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "131": {
+        "count": 6,
+        "minVersion": 21
+      },
+      "137": {
+        "count": 22,
+        "minVersion": 13
+      },
+      "138": {
+        "count": 9,
+        "minVersion": 20
+      },
+      "139": {
+        "count": 6,
+        "minVersion": 19
+      },
+      "140": {
+        "count": 5,
+        "minVersion": 21
+      },
+      "141": {
+        "count": 5,
+        "minVersion": 20
+      },
+      "142": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "143": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "144": {
+        "count": 7,
+        "minVersion": 15
+      },
+      "146": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "150": {
+        "count": 18,
+        "minVersion": 16
+      },
+      "152": {
+        "count": 5,
+        "minVersion": 24
+      },
+      "153": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "155": {
+        "count": 18,
+        "minVersion": 19
+      },
+      "157": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "158": {
+        "count": 3,
+        "minVersion": 20
+      },
+      "167": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "171": {
+        "count": 3,
+        "minVersion": 20
+      },
+      "172": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "173": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "174": {
+        "count": 3,
+        "minVersion": 20
+      },
+      "175": {
+        "count": 5,
+        "minVersion": 19
+      },
+      "184": {
+        "count": 1,
+        "minVersion": 16
+      },
+      "188": {
+        "count": 9,
+        "minVersion": 19
+      },
+      "190": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "193": {
+        "count": 8,
+        "minVersion": 19
+      },
+      "196": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "197": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "198": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "200": {
+        "count": 2,
+        "minVersion": 13
+      },
+      "203": {
+        "count": 3,
+        "minVersion": 23
+      },
+      "204": {
+        "count": 4,
+        "minVersion": 24
+      },
+      "205": {
+        "count": 3,
+        "minVersion": 21
+      },
+      "208": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "210": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "212": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "214": {
+        "count": 7,
+        "minVersion": 19
+      },
+      "218": {
+        "count": 7,
+        "minVersion": 20
+      },
+      "220": {
+        "count": 5,
+        "minVersion": 21
+      },
+      "222": {
+        "count": 4,
+        "minVersion": 19
+      },
+      "223": {
+        "count": 6,
+        "minVersion": 20
+      },
+      "226": {
+        "count": 7,
+        "minVersion": 20
+      },
+      "228": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "229": {
+        "count": 7,
+        "minVersion": 19
+      },
+      "230": {
+        "count": 4,
+        "minVersion": 23
+      },
+      "236": {
+        "count": 5,
+        "minVersion": 19
+      },
+      "240": {
+        "count": 7,
+        "minVersion": 19
+      },
+      "243": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "244": {
+        "count": 3,
+        "minVersion": 16
+      },
+      "247": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "250": {
+        "count": 7,
+        "minVersion": 22
+      },
+      "251": {
+        "count": 6,
+        "minVersion": 22
+      },
+      "252": {
+        "count": 7,
+        "minVersion": 22
+      },
+      "253": {
+        "count": 1,
+        "minVersion": 17
+      },
+      "258": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "263": {
+        "count": 1,
+        "minVersion": 16
+      },
+      "266": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "267": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "268": {
+        "count": 3,
+        "minVersion": 20
+      },
+      "272": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "274": {
+        "count": 3,
+        "minVersion": 20
+      },
+      "278": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "281": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "294": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "296": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "297": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "298": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "303": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "307": {
+        "count": 5,
+        "minVersion": 20
+      },
+      "308": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "316": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "317": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "318": {
+        "count": 5,
+        "minVersion": 21
+      },
+      "324": {
+        "count": 5,
+        "minVersion": 20
+      },
+      "327": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "330": {
+        "count": 4,
+        "minVersion": 23
+      },
+      "333": {
+        "count": 5,
+        "minVersion": 20
+      },
+      "340": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "345": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "353": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "355": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "364": {
+        "count": 4,
+        "minVersion": 21
+      },
+      "367": {
+        "count": 4,
+        "minVersion": 15
+      },
+      "372": {
+        "count": 4,
+        "minVersion": 20
+      },
+      "375": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "378": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "380": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "384": {
+        "count": 4,
+        "minVersion": 19
+      },
+      "385": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "393": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "394": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "396": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "401": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "402": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "404": {
+        "count": 4,
+        "minVersion": 19
+      },
+      "411": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "412": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "418": {
+        "count": 4,
+        "minVersion": 19
+      },
+      "426": {
+        "count": 3,
+        "minVersion": 16
+      },
+      "428": {
+        "count": 4,
+        "minVersion": 24
+      },
+      "432": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "443": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "444": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "450": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "457": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "459": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "461": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "469": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "474": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "488": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "499": {
+        "count": 3,
+        "minVersion": 24
+      },
+      "501": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "503": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "513": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "525": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "530": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "538": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "540": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "549": {
+        "count": 3,
+        "minVersion": 23
+      },
+      "551": {
+        "count": 3,
+        "minVersion": 24
+      },
+      "554": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "563": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "572": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "580": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "581": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "587": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "588": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "592": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "598": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "606": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "622": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "625": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "627": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "628": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "633": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "636": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "639": {
+        "count": 1,
+        "minVersion": 26
+      },
+      "641": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "644": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "646": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "650": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "652": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "664": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "666": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "671": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "672": {
+        "count": 2,
+        "minVersion": 25
+      },
+      "675": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "690": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "692": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "694": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "705": {
+        "count": 1,
+        "minVersion": 26
+      },
+      "714": {
+        "count": 1,
+        "minVersion": 26
+      },
+      "716": {
+        "count": 2,
+        "minVersion": 17
+      },
+      "719": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "729": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "731": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "732": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "751": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "752": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "753": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "754": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "760": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "762": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "766": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "770": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "772": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "780": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "786": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "787": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "802": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "830": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "851": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "862": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "870": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "871": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "873": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "878": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "879": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "880": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "890": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "891": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "893": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "902": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "913": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "915": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "936": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "949": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "966": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "973": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "978": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "982": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "989": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "1005": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "1007": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "1010": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "1014": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "1015": {
+        "count": 1,
+        "minVersion": 22
+      }
+    },
+    "2": {
+      "2": {
+        "count": 8199,
+        "minVersion": 0
+      },
+      "3": {
+        "count": 2349,
+        "minVersion": 0
+      },
+      "5": {
+        "count": 641,
+        "minVersion": 0
+      },
+      "7": {
+        "count": 6384,
+        "minVersion": 0
+      },
+      "9": {
+        "count": 1622,
+        "minVersion": 0
+      },
+      "10": {
+        "count": 4018,
+        "minVersion": 0
+      },
+      "11": {
+        "count": 198,
+        "minVersion": 0
+      },
+      "12": {
+        "count": 134,
+        "minVersion": 0
+      },
+      "13": {
+        "count": 632,
+        "minVersion": 0
+      },
+      "14": {
+        "count": 201,
+        "minVersion": 0
+      },
+      "16": {
+        "count": 157,
+        "minVersion": 0
+      },
+      "18": {
+        "count": 79,
+        "minVersion": 1
+      },
+      "19": {
+        "count": 140,
+        "minVersion": 0
+      },
+      "20": {
+        "count": 15,
+        "minVersion": 0
+      },
+      "21": {
+        "count": 1629,
+        "minVersion": 0
+      },
+      "22": {
+        "count": 457,
+        "minVersion": 0
+      },
+      "23": {
+        "count": 123,
+        "minVersion": 0
+      },
+      "24": {
+        "count": 111,
+        "minVersion": 3
+      },
+      "25": {
+        "count": 71,
+        "minVersion": 2
+      },
+      "26": {
+        "count": 316,
+        "minVersion": 0
+      },
+      "27": {
+        "count": 10,
+        "minVersion": 0
+      },
+      "28": {
+        "count": 265,
+        "minVersion": 2
+      },
+      "29": {
+        "count": 303,
+        "minVersion": 1
+      },
+      "30": {
+        "count": 35,
+        "minVersion": 3
+      },
+      "31": {
+        "count": 198,
+        "minVersion": 1
+      },
+      "32": {
+        "count": 680,
+        "minVersion": 0
+      },
+      "33": {
+        "count": 449,
+        "minVersion": 0
+      },
+      "35": {
+        "count": 249,
+        "minVersion": 0
+      },
+      "36": {
+        "count": 162,
+        "minVersion": 0
+      },
+      "38": {
+        "count": 52,
+        "minVersion": 6
+      },
+      "39": {
+        "count": 81,
+        "minVersion": 2
+      },
+      "41": {
+        "count": 10,
+        "minVersion": 5
+      },
+      "42": {
+        "count": 24,
+        "minVersion": 1
+      },
+      "43": {
+        "count": 46,
+        "minVersion": 0
+      },
+      "44": {
+        "count": 50,
+        "minVersion": 3
+      },
+      "45": {
+        "count": 53,
+        "minVersion": 3
+      },
+      "46": {
+        "count": 8,
+        "minVersion": 3
+      },
+      "47": {
+        "count": 9,
+        "minVersion": 7
+      },
+      "48": {
+        "count": 44,
+        "minVersion": 3
+      },
+      "49": {
+        "count": 24,
+        "minVersion": 2
+      },
+      "50": {
+        "count": 76,
+        "minVersion": 2
+      },
+      "51": {
+        "count": 108,
+        "minVersion": 0
+      },
+      "52": {
+        "count": 50,
+        "minVersion": 0
+      },
+      "53": {
+        "count": 18,
+        "minVersion": 2
+      },
+      "54": {
+        "count": 1,
+        "minVersion": 17
+      },
+      "59": {
+        "count": 33,
+        "minVersion": 3
+      },
+      "60": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "61": {
+        "count": 88,
+        "minVersion": 6
+      },
+      "62": {
+        "count": 24,
+        "minVersion": 6
+      },
+      "64": {
+        "count": 195,
+        "minVersion": 1
+      },
+      "66": {
+        "count": 27,
+        "minVersion": 8
+      },
+      "67": {
+        "count": 296,
+        "minVersion": 0
+      },
+      "68": {
+        "count": 47,
+        "minVersion": 2
+      },
+      "69": {
+        "count": 50,
+        "minVersion": 0
+      },
+      "70": {
+        "count": 25,
+        "minVersion": 5
+      },
+      "71": {
+        "count": 14,
+        "minVersion": 6
+      },
+      "74": {
+        "count": 117,
+        "minVersion": 0
+      },
+      "75": {
+        "count": 17,
+        "minVersion": 7
+      },
+      "76": {
+        "count": 67,
+        "minVersion": 1
+      },
+      "78": {
+        "count": 253,
+        "minVersion": 0
+      },
+      "82": {
+        "count": 151,
+        "minVersion": 1
+      },
+      "84": {
+        "count": 172,
+        "minVersion": 2
+      },
+      "95": {
+        "count": 23,
+        "minVersion": 2
+      },
+      "107": {
+        "count": 34,
+        "minVersion": 0
+      },
+      "109": {
+        "count": 75,
+        "minVersion": 0
+      },
+      "110": {
+        "count": 19,
+        "minVersion": 16
+      },
+      "112": {
+        "count": 70,
+        "minVersion": 5
+      },
+      "114": {
+        "count": 66,
+        "minVersion": 3
+      },
+      "120": {
+        "count": 17,
+        "minVersion": 6
+      },
+      "124": {
+        "count": 2,
+        "minVersion": 25
+      },
+      "127": {
+        "count": 11,
+        "minVersion": 19
+      },
+      "128": {
+        "count": 8,
+        "minVersion": 20
+      },
+      "131": {
+        "count": 18,
+        "minVersion": 17
+      },
+      "135": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "137": {
+        "count": 7,
+        "minVersion": 19
+      },
+      "138": {
+        "count": 15,
+        "minVersion": 20
+      },
+      "139": {
+        "count": 4,
+        "minVersion": 20
+      },
+      "140": {
+        "count": 8,
+        "minVersion": 21
+      },
+      "141": {
+        "count": 12,
+        "minVersion": 19
+      },
+      "142": {
+        "count": 7,
+        "minVersion": 15
+      },
+      "144": {
+        "count": 8,
+        "minVersion": 19
+      },
+      "146": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "150": {
+        "count": 3,
+        "minVersion": 23
+      },
+      "152": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "157": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "158": {
+        "count": 14,
+        "minVersion": 19
+      },
+      "165": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "166": {
+        "count": 16,
+        "minVersion": 19
+      },
+      "170": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "171": {
+        "count": 12,
+        "minVersion": 19
+      },
+      "172": {
+        "count": 3,
+        "minVersion": 25
+      },
+      "173": {
+        "count": 13,
+        "minVersion": 21
+      },
+      "174": {
+        "count": 8,
+        "minVersion": 22
+      },
+      "175": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "176": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "183": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "184": {
+        "count": 5,
+        "minVersion": 16
+      },
+      "189": {
+        "count": 1,
+        "minVersion": 26
+      },
+      "190": {
+        "count": 10,
+        "minVersion": 19
+      },
+      "192": {
+        "count": 9,
+        "minVersion": 20
+      },
+      "198": {
+        "count": 3,
+        "minVersion": 21
+      },
+      "203": {
+        "count": 6,
+        "minVersion": 19
+      },
+      "205": {
+        "count": 3,
+        "minVersion": 17
+      },
+      "207": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "216": {
+        "count": 4,
+        "minVersion": 24
+      },
+      "220": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "224": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "227": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "228": {
+        "count": 5,
+        "minVersion": 22
+      },
+      "229": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "233": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "238": {
+        "count": 5,
+        "minVersion": 20
+      },
+      "244": {
+        "count": 4,
+        "minVersion": 23
+      },
+      "245": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "247": {
+        "count": 1,
+        "minVersion": 26
+      },
+      "253": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "255": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "258": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "265": {
+        "count": 6,
+        "minVersion": 19
+      },
+      "267": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "268": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "270": {
+        "count": 6,
+        "minVersion": 19
+      },
+      "272": {
+        "count": 4,
+        "minVersion": 19
+      },
+      "279": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "281": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "283": {
+        "count": 6,
+        "minVersion": 19
+      },
+      "286": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "287": {
+        "count": 1,
+        "minVersion": 17
+      },
+      "289": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "290": {
+        "count": 5,
+        "minVersion": 15
+      },
+      "293": {
+        "count": 2,
+        "minVersion": 26
+      },
+      "295": {
+        "count": 6,
+        "minVersion": 15
+      },
+      "299": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "303": {
+        "count": 2,
+        "minVersion": 26
+      },
+      "304": {
+        "count": 4,
+        "minVersion": 20
+      },
+      "305": {
+        "count": 5,
+        "minVersion": 23
+      },
+      "306": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "308": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "309": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "326": {
+        "count": 5,
+        "minVersion": 21
+      },
+      "334": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "337": {
+        "count": 4,
+        "minVersion": 23
+      },
+      "344": {
+        "count": 5,
+        "minVersion": 22
+      },
+      "345": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "350": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "351": {
+        "count": 5,
+        "minVersion": 20
+      },
+      "355": {
+        "count": 4,
+        "minVersion": 23
+      },
+      "358": {
+        "count": 5,
+        "minVersion": 19
+      },
+      "369": {
+        "count": 4,
+        "minVersion": 21
+      },
+      "370": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "374": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "375": {
+        "count": 3,
+        "minVersion": 20
+      },
+      "390": {
+        "count": 4,
+        "minVersion": 20
+      },
+      "391": {
+        "count": 4,
+        "minVersion": 22
+      },
+      "392": {
+        "count": 4,
+        "minVersion": 20
+      },
+      "396": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "401": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "406": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "408": {
+        "count": 3,
+        "minVersion": 23
+      },
+      "409": {
+        "count": 4,
+        "minVersion": 19
+      },
+      "410": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "411": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "412": {
+        "count": 1,
+        "minVersion": 16
+      },
+      "413": {
+        "count": 2,
+        "minVersion": 25
+      },
+      "414": {
+        "count": 4,
+        "minVersion": 20
+      },
+      "417": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "419": {
+        "count": 1,
+        "minVersion": 26
+      },
+      "423": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "426": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "427": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "431": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "442": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "455": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "457": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "466": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "467": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "470": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "474": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "475": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "476": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "488": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "492": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "496": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "500": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "503": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "512": {
+        "count": 2,
+        "minVersion": 25
+      },
+      "514": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "517": {
+        "count": 3,
+        "minVersion": 24
+      },
+      "519": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "521": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "527": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "530": {
+        "count": 2,
+        "minVersion": 17
+      },
+      "538": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "541": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "547": {
+        "count": 3,
+        "minVersion": 23
+      },
+      "560": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "568": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "569": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "570": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "577": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "579": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "591": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "594": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "595": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "599": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "600": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "603": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "612": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "616": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "629": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "633": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "634": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "640": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "645": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "653": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "656": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "667": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "668": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "696": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "697": {
+        "count": 2,
+        "minVersion": 26
+      },
+      "701": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "705": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "706": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "707": {
+        "count": 2,
+        "minVersion": 26
+      },
+      "708": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "710": {
+        "count": 1,
+        "minVersion": 26
+      },
+      "711": {
+        "count": 2,
+        "minVersion": 26
+      },
+      "727": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "733": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "734": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "747": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "756": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "761": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "762": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "764": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "765": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "766": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "774": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "775": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "786": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "790": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "797": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "799": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "827": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "840": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "842": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "845": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "847": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "852": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "853": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "859": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "881": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "883": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "894": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "897": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "900": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "910": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "919": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "925": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "928": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "943": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "957": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "960": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "969": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "972": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "986": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "988": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "991": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "998": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "1012": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "1013": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "1023": {
+        "count": 1,
+        "minVersion": 22
+      }
+    },
+    "3": {
+      "2": {
+        "count": 987,
+        "minVersion": 0
+      },
+      "4": {
+        "count": 1325,
+        "minVersion": 0
+      },
+      "5": {
+        "count": 4741,
+        "minVersion": 0
+      },
+      "7": {
+        "count": 2191,
+        "minVersion": 0
+      },
+      "9": {
+        "count": 1900,
+        "minVersion": 0
+      },
+      "10": {
+        "count": 253,
+        "minVersion": 1
+      },
+      "11": {
+        "count": 252,
+        "minVersion": 3
+      },
+      "13": {
+        "count": 103,
+        "minVersion": 0
+      },
+      "14": {
+        "count": 2046,
+        "minVersion": 0
+      },
+      "15": {
+        "count": 8,
+        "minVersion": 12
+      },
+      "16": {
+        "count": 2563,
+        "minVersion": 0
+      },
+      "17": {
+        "count": 57,
+        "minVersion": 5
+      },
+      "18": {
+        "count": 392,
+        "minVersion": 0
+      },
+      "19": {
+        "count": 83,
+        "minVersion": 1
+      },
+      "21": {
+        "count": 133,
+        "minVersion": 0
+      },
+      "22": {
+        "count": 781,
+        "minVersion": 0
+      },
+      "23": {
+        "count": 6,
+        "minVersion": 0
+      },
+      "24": {
+        "count": 68,
+        "minVersion": 1
+      },
+      "25": {
+        "count": 18,
+        "minVersion": 4
+      },
+      "26": {
+        "count": 186,
+        "minVersion": 2
+      },
+      "27": {
+        "count": 48,
+        "minVersion": 1
+      },
+      "28": {
+        "count": 254,
+        "minVersion": 1
+      },
+      "29": {
+        "count": 313,
+        "minVersion": 0
+      },
+      "31": {
+        "count": 43,
+        "minVersion": 3
+      },
+      "32": {
+        "count": 126,
+        "minVersion": 3
+      },
+      "33": {
+        "count": 95,
+        "minVersion": 0
+      },
+      "35": {
+        "count": 38,
+        "minVersion": 6
+      },
+      "36": {
+        "count": 76,
+        "minVersion": 3
+      },
+      "38": {
+        "count": 64,
+        "minVersion": 2
+      },
+      "39": {
+        "count": 31,
+        "minVersion": 1
+      },
+      "41": {
+        "count": 50,
+        "minVersion": 5
+      },
+      "42": {
+        "count": 134,
+        "minVersion": 1
+      },
+      "43": {
+        "count": 256,
+        "minVersion": 0
+      },
+      "44": {
+        "count": 104,
+        "minVersion": 7
+      },
+      "46": {
+        "count": 21,
+        "minVersion": 1
+      },
+      "47": {
+        "count": 44,
+        "minVersion": 3
+      },
+      "48": {
+        "count": 196,
+        "minVersion": 0
+      },
+      "49": {
+        "count": 27,
+        "minVersion": 5
+      },
+      "50": {
+        "count": 37,
+        "minVersion": 6
+      },
+      "51": {
+        "count": 302,
+        "minVersion": 2
+      },
+      "53": {
+        "count": 178,
+        "minVersion": 0
+      },
+      "54": {
+        "count": 16,
+        "minVersion": 3
+      },
+      "57": {
+        "count": 86,
+        "minVersion": 0
+      },
+      "59": {
+        "count": 178,
+        "minVersion": 0
+      },
+      "60": {
+        "count": 17,
+        "minVersion": 3
+      },
+      "61": {
+        "count": 113,
+        "minVersion": 6
+      },
+      "62": {
+        "count": 23,
+        "minVersion": 0
+      },
+      "63": {
+        "count": 26,
+        "minVersion": 3
+      },
+      "64": {
+        "count": 77,
+        "minVersion": 0
+      },
+      "65": {
+        "count": 106,
+        "minVersion": 1
+      },
+      "66": {
+        "count": 17,
+        "minVersion": 0
+      },
+      "68": {
+        "count": 65,
+        "minVersion": 6
+      },
+      "70": {
+        "count": 18,
+        "minVersion": 6
+      },
+      "71": {
+        "count": 24,
+        "minVersion": 4
+      },
+      "74": {
+        "count": 36,
+        "minVersion": 2
+      },
+      "75": {
+        "count": 21,
+        "minVersion": 6
+      },
+      "77": {
+        "count": 181,
+        "minVersion": 1
+      },
+      "81": {
+        "count": 52,
+        "minVersion": 0
+      },
+      "92": {
+        "count": 121,
+        "minVersion": 0
+      },
+      "94": {
+        "count": 88,
+        "minVersion": 1
+      },
+      "98": {
+        "count": 102,
+        "minVersion": 1
+      },
+      "105": {
+        "count": 43,
+        "minVersion": 6
+      },
+      "108": {
+        "count": 78,
+        "minVersion": 0
+      },
+      "110": {
+        "count": 6,
+        "minVersion": 19
+      },
+      "119": {
+        "count": 55,
+        "minVersion": 0
+      },
+      "121": {
+        "count": 39,
+        "minVersion": 4
+      },
+      "128": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "131": {
+        "count": 11,
+        "minVersion": 19
+      },
+      "132": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "135": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "136": {
+        "count": 34,
+        "minVersion": 1
+      },
+      "140": {
+        "count": 7,
+        "minVersion": 19
+      },
+      "141": {
+        "count": 5,
+        "minVersion": 22
+      },
+      "142": {
+        "count": 15,
+        "minVersion": 19
+      },
+      "144": {
+        "count": 4,
+        "minVersion": 19
+      },
+      "147": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "148": {
+        "count": 3,
+        "minVersion": 21
+      },
+      "149": {
+        "count": 5,
+        "minVersion": 20
+      },
+      "159": {
+        "count": 8,
+        "minVersion": 19
+      },
+      "163": {
+        "count": 16,
+        "minVersion": 19
+      },
+      "165": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "169": {
+        "count": 6,
+        "minVersion": 19
+      },
+      "170": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "172": {
+        "count": 6,
+        "minVersion": 19
+      },
+      "175": {
+        "count": 6,
+        "minVersion": 22
+      },
+      "176": {
+        "count": 4,
+        "minVersion": 19
+      },
+      "177": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "179": {
+        "count": 1,
+        "minVersion": 13
+      },
+      "181": {
+        "count": 10,
+        "minVersion": 20
+      },
+      "183": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "184": {
+        "count": 4,
+        "minVersion": 23
+      },
+      "186": {
+        "count": 5,
+        "minVersion": 19
+      },
+      "187": {
+        "count": 1,
+        "minVersion": 26
+      },
+      "189": {
+        "count": 3,
+        "minVersion": 21
+      },
+      "193": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "198": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "200": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "207": {
+        "count": 1,
+        "minVersion": 26
+      },
+      "208": {
+        "count": 7,
+        "minVersion": 21
+      },
+      "209": {
+        "count": 9,
+        "minVersion": 19
+      },
+      "211": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "212": {
+        "count": 6,
+        "minVersion": 22
+      },
+      "214": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "217": {
+        "count": 1,
+        "minVersion": 16
+      },
+      "228": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "233": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "237": {
+        "count": 3,
+        "minVersion": 20
+      },
+      "243": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "255": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "259": {
+        "count": 6,
+        "minVersion": 19
+      },
+      "262": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "264": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "267": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "274": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "275": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "276": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "286": {
+        "count": 4,
+        "minVersion": 22
+      },
+      "289": {
+        "count": 5,
+        "minVersion": 19
+      },
+      "298": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "300": {
+        "count": 6,
+        "minVersion": 23
+      },
+      "306": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "309": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "311": {
+        "count": 4,
+        "minVersion": 19
+      },
+      "319": {
+        "count": 5,
+        "minVersion": 19
+      },
+      "320": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "322": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "329": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "339": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "346": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "347": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "349": {
+        "count": 5,
+        "minVersion": 19
+      },
+      "350": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "357": {
+        "count": 5,
+        "minVersion": 19
+      },
+      "360": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "363": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "374": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "381": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "383": {
+        "count": 4,
+        "minVersion": 21
+      },
+      "386": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "389": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "394": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "399": {
+        "count": 3,
+        "minVersion": 20
+      },
+      "403": {
+        "count": 4,
+        "minVersion": 22
+      },
+      "417": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "419": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "421": {
+        "count": 4,
+        "minVersion": 19
+      },
+      "422": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "432": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "436": {
+        "count": 2,
+        "minVersion": 25
+      },
+      "445": {
+        "count": 3,
+        "minVersion": 21
+      },
+      "446": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "453": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "454": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "455": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "456": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "478": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "481": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "484": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "485": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "486": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "489": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "498": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "502": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "506": {
+        "count": 3,
+        "minVersion": 24
+      },
+      "512": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "514": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "515": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "518": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "520": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "528": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "532": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "539": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "541": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "542": {
+        "count": 3,
+        "minVersion": 20
+      },
+      "552": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "553": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "554": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "559": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "566": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "580": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "584": {
+        "count": 2,
+        "minVersion": 13
+      },
+      "585": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "586": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "590": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "623": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "628": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "630": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "643": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "654": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "665": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "670": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "677": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "712": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "717": {
+        "count": 2,
+        "minVersion": 26
+      },
+      "719": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "720": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "725": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "728": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "738": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "740": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "746": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "755": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "778": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "779": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "806": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "813": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "824": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "848": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "849": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "856": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "864": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "865": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "867": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "869": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "886": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "889": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "896": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "914": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "918": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "920": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "921": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "932": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "933": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "935": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "939": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "945": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "947": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "953": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "963": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "964": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "965": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "980": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "984": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "993": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "994": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "999": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "1009": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "1016": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "1022": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "1025": {
+        "count": 1,
+        "minVersion": 22
+      }
+    },
+    "4": {
+      "4": {
+        "count": 4288,
+        "minVersion": 0
+      },
+      "5": {
+        "count": 4742,
+        "minVersion": 0
+      },
+      "7": {
+        "count": 479,
+        "minVersion": 0
+      },
+      "8": {
+        "count": 1074,
+        "minVersion": 0
+      },
+      "9": {
+        "count": 1848,
+        "minVersion": 0
+      },
+      "10": {
+        "count": 711,
+        "minVersion": 0
+      },
+      "12": {
+        "count": 20,
+        "minVersion": 0
+      },
+      "13": {
+        "count": 30,
+        "minVersion": 2
+      },
+      "14": {
+        "count": 174,
+        "minVersion": 3
+      },
+      "16": {
+        "count": 496,
+        "minVersion": 0
+      },
+      "17": {
+        "count": 77,
+        "minVersion": 1
+      },
+      "18": {
+        "count": 2748,
+        "minVersion": 0
+      },
+      "19": {
+        "count": 427,
+        "minVersion": 0
+      },
+      "20": {
+        "count": 307,
+        "minVersion": 3
+      },
+      "21": {
+        "count": 1320,
+        "minVersion": 0
+      },
+      "22": {
+        "count": 229,
+        "minVersion": 1
+      },
+      "23": {
+        "count": 81,
+        "minVersion": 2
+      },
+      "24": {
+        "count": 161,
+        "minVersion": 1
+      },
+      "25": {
+        "count": 1,
+        "minVersion": 13
+      },
+      "26": {
+        "count": 253,
+        "minVersion": 2
+      },
+      "27": {
+        "count": 93,
+        "minVersion": 0
+      },
+      "28": {
+        "count": 137,
+        "minVersion": 0
+      },
+      "29": {
+        "count": 140,
+        "minVersion": 0
+      },
+      "30": {
+        "count": 8,
+        "minVersion": 4
+      },
+      "32": {
+        "count": 50,
+        "minVersion": 0
+      },
+      "33": {
+        "count": 68,
+        "minVersion": 1
+      },
+      "35": {
+        "count": 33,
+        "minVersion": 5
+      },
+      "36": {
+        "count": 118,
+        "minVersion": 2
+      },
+      "38": {
+        "count": 82,
+        "minVersion": 1
+      },
+      "39": {
+        "count": 3,
+        "minVersion": 0
+      },
+      "41": {
+        "count": 466,
+        "minVersion": 0
+      },
+      "42": {
+        "count": 240,
+        "minVersion": 0
+      },
+      "44": {
+        "count": 103,
+        "minVersion": 1
+      },
+      "45": {
+        "count": 26,
+        "minVersion": 1
+      },
+      "46": {
+        "count": 36,
+        "minVersion": 1
+      },
+      "47": {
+        "count": 200,
+        "minVersion": 0
+      },
+      "48": {
+        "count": 238,
+        "minVersion": 0
+      },
+      "49": {
+        "count": 218,
+        "minVersion": 0
+      },
+      "50": {
+        "count": 45,
+        "minVersion": 6
+      },
+      "51": {
+        "count": 46,
+        "minVersion": 3
+      },
+      "52": {
+        "count": 8,
+        "minVersion": 6
+      },
+      "53": {
+        "count": 70,
+        "minVersion": 6
+      },
+      "54": {
+        "count": 40,
+        "minVersion": 0
+      },
+      "55": {
+        "count": 516,
+        "minVersion": 0
+      },
+      "57": {
+        "count": 57,
+        "minVersion": 0
+      },
+      "59": {
+        "count": 203,
+        "minVersion": 0
+      },
+      "60": {
+        "count": 32,
+        "minVersion": 3
+      },
+      "61": {
+        "count": 91,
+        "minVersion": 0
+      },
+      "62": {
+        "count": 22,
+        "minVersion": 1
+      },
+      "63": {
+        "count": 105,
+        "minVersion": 0
+      },
+      "64": {
+        "count": 34,
+        "minVersion": 0
+      },
+      "66": {
+        "count": 37,
+        "minVersion": 6
+      },
+      "68": {
+        "count": 22,
+        "minVersion": 1
+      },
+      "69": {
+        "count": 122,
+        "minVersion": 0
+      },
+      "70": {
+        "count": 22,
+        "minVersion": 1
+      },
+      "71": {
+        "count": 91,
+        "minVersion": 1
+      },
+      "74": {
+        "count": 15,
+        "minVersion": 5
+      },
+      "75": {
+        "count": 100,
+        "minVersion": 1
+      },
+      "83": {
+        "count": 186,
+        "minVersion": 0
+      },
+      "88": {
+        "count": 149,
+        "minVersion": 5
+      },
+      "93": {
+        "count": 117,
+        "minVersion": 0
+      },
+      "99": {
+        "count": 40,
+        "minVersion": 0
+      },
+      "103": {
+        "count": 45,
+        "minVersion": 5
+      },
+      "104": {
+        "count": 38,
+        "minVersion": 2
+      },
+      "106": {
+        "count": 53,
+        "minVersion": 2
+      },
+      "115": {
+        "count": 16,
+        "minVersion": 9
+      },
+      "126": {
+        "count": 27,
+        "minVersion": 2
+      },
+      "132": {
+        "count": 7,
+        "minVersion": 19
+      },
+      "133": {
+        "count": 36,
+        "minVersion": 1
+      },
+      "135": {
+        "count": 25,
+        "minVersion": 19
+      },
+      "141": {
+        "count": 6,
+        "minVersion": 19
+      },
+      "142": {
+        "count": 3,
+        "minVersion": 23
+      },
+      "144": {
+        "count": 2,
+        "minVersion": 25
+      },
+      "148": {
+        "count": 3,
+        "minVersion": 21
+      },
+      "149": {
+        "count": 4,
+        "minVersion": 17
+      },
+      "159": {
+        "count": 6,
+        "minVersion": 15
+      },
+      "162": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "163": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "165": {
+        "count": 14,
+        "minVersion": 17
+      },
+      "168": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "169": {
+        "count": 3,
+        "minVersion": 25
+      },
+      "170": {
+        "count": 2,
+        "minVersion": 13
+      },
+      "172": {
+        "count": 4,
+        "minVersion": 22
+      },
+      "175": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "176": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "177": {
+        "count": 3,
+        "minVersion": 24
+      },
+      "179": {
+        "count": 5,
+        "minVersion": 21
+      },
+      "181": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "182": {
+        "count": 7,
+        "minVersion": 23
+      },
+      "183": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "184": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "185": {
+        "count": 1,
+        "minVersion": 17
+      },
+      "186": {
+        "count": 5,
+        "minVersion": 19
+      },
+      "187": {
+        "count": 10,
+        "minVersion": 19
+      },
+      "189": {
+        "count": 7,
+        "minVersion": 21
+      },
+      "191": {
+        "count": 4,
+        "minVersion": 20
+      },
+      "193": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "195": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "198": {
+        "count": 3,
+        "minVersion": 13
+      },
+      "201": {
+        "count": 1,
+        "minVersion": 26
+      },
+      "206": {
+        "count": 8,
+        "minVersion": 19
+      },
+      "207": {
+        "count": 6,
+        "minVersion": 19
+      },
+      "210": {
+        "count": 5,
+        "minVersion": 19
+      },
+      "211": {
+        "count": 3,
+        "minVersion": 20
+      },
+      "213": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "219": {
+        "count": 7,
+        "minVersion": 19
+      },
+      "220": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "225": {
+        "count": 5,
+        "minVersion": 20
+      },
+      "232": {
+        "count": 8,
+        "minVersion": 22
+      },
+      "233": {
+        "count": 4,
+        "minVersion": 23
+      },
+      "234": {
+        "count": 8,
+        "minVersion": 19
+      },
+      "239": {
+        "count": 7,
+        "minVersion": 19
+      },
+      "246": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "248": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "253": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "257": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "260": {
+        "count": 7,
+        "minVersion": 20
+      },
+      "268": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "275": {
+        "count": 5,
+        "minVersion": 21
+      },
+      "281": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "284": {
+        "count": 5,
+        "minVersion": 20
+      },
+      "286": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "294": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "298": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "302": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "309": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "315": {
+        "count": 4,
+        "minVersion": 20
+      },
+      "320": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "325": {
+        "count": 4,
+        "minVersion": 20
+      },
+      "327": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "329": {
+        "count": 3,
+        "minVersion": 20
+      },
+      "330": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "332": {
+        "count": 3,
+        "minVersion": 21
+      },
+      "337": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "338": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "339": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "342": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "347": {
+        "count": 3,
+        "minVersion": 20
+      },
+      "350": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "363": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "366": {
+        "count": 4,
+        "minVersion": 19
+      },
+      "380": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "381": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "382": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "386": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "387": {
+        "count": 3,
+        "minVersion": 25
+      },
+      "389": {
+        "count": 3,
+        "minVersion": 21
+      },
+      "397": {
+        "count": 4,
+        "minVersion": 22
+      },
+      "405": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "416": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "422": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "429": {
+        "count": 3,
+        "minVersion": 21
+      },
+      "434": {
+        "count": 3,
+        "minVersion": 21
+      },
+      "436": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "441": {
+        "count": 3,
+        "minVersion": 21
+      },
+      "446": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "453": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "472": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "474": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "479": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "481": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "485": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "486": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "489": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "501": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "502": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "514": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "533": {
+        "count": 3,
+        "minVersion": 16
+      },
+      "534": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "543": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "544": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "561": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "565": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "570": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "576": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "582": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "596": {
+        "count": 2,
+        "minVersion": 16
+      },
+      "608": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "618": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "626": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "634": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "637": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "654": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "658": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "662": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "668": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "674": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "678": {
+        "count": 2,
+        "minVersion": 25
+      },
+      "686": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "688": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "689": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "700": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "708": {
+        "count": 1,
+        "minVersion": 26
+      },
+      "718": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "720": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "723": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "739": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "743": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "744": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "748": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "752": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "765": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "768": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "781": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "785": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "792": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "794": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "798": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "808": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "818": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "820": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "822": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "826": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "828": {
+        "count": 2,
+        "minVersion": 13
+      },
+      "829": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "833": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "836": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "839": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "843": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "854": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "858": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "872": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "874": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "875": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "888": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "911": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "912": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "916": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "922": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "927": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "937": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "941": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "944": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "951": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "952": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "976": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "996": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "1001": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "1004": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "1021": {
+        "count": 1,
+        "minVersion": 22
+      }
+    },
+    "5": {
+      "4": {
+        "count": 4850,
+        "minVersion": 0
+      },
+      "5": {
+        "count": 3987,
+        "minVersion": 0
+      },
+      "6": {
+        "count": 514,
+        "minVersion": 1
+      },
+      "8": {
+        "count": 2063,
+        "minVersion": 0
+      },
+      "9": {
+        "count": 1031,
+        "minVersion": 0
+      },
+      "10": {
+        "count": 32,
+        "minVersion": 0
+      },
+      "11": {
+        "count": 21,
+        "minVersion": 2
+      },
+      "12": {
+        "count": 689,
+        "minVersion": 0
+      },
+      "14": {
+        "count": 1,
+        "minVersion": 17
+      },
+      "15": {
+        "count": 179,
+        "minVersion": 1
+      },
+      "16": {
+        "count": 77,
+        "minVersion": 3
+      },
+      "17": {
+        "count": 555,
+        "minVersion": 0
+      },
+      "18": {
+        "count": 435,
+        "minVersion": 0
+      },
+      "19": {
+        "count": 2641,
+        "minVersion": 0
+      },
+      "20": {
+        "count": 1456,
+        "minVersion": 0
+      },
+      "21": {
+        "count": 309,
+        "minVersion": 1
+      },
+      "22": {
+        "count": 100,
+        "minVersion": 2
+      },
+      "23": {
+        "count": 209,
+        "minVersion": 0
+      },
+      "24": {
+        "count": 161,
+        "minVersion": 0
+      },
+      "25": {
+        "count": 272,
+        "minVersion": 0
+      },
+      "26": {
+        "count": 4,
+        "minVersion": 12
+      },
+      "27": {
+        "count": 118,
+        "minVersion": 0
+      },
+      "28": {
+        "count": 42,
+        "minVersion": 7
+      },
+      "29": {
+        "count": 78,
+        "minVersion": 3
+      },
+      "30": {
+        "count": 51,
+        "minVersion": 0
+      },
+      "31": {
+        "count": 44,
+        "minVersion": 3
+      },
+      "32": {
+        "count": 12,
+        "minVersion": 4
+      },
+      "35": {
+        "count": 183,
+        "minVersion": 0
+      },
+      "36": {
+        "count": 3,
+        "minVersion": 8
+      },
+      "38": {
+        "count": 482,
+        "minVersion": 0
+      },
+      "39": {
+        "count": 110,
+        "minVersion": 2
+      },
+      "41": {
+        "count": 70,
+        "minVersion": 1
+      },
+      "43": {
+        "count": 184,
+        "minVersion": 0
+      },
+      "44": {
+        "count": 22,
+        "minVersion": 6
+      },
+      "45": {
+        "count": 64,
+        "minVersion": 0
+      },
+      "46": {
+        "count": 225,
+        "minVersion": 0
+      },
+      "47": {
+        "count": 221,
+        "minVersion": 0
+      },
+      "48": {
+        "count": 29,
+        "minVersion": 2
+      },
+      "49": {
+        "count": 188,
+        "minVersion": 0
+      },
+      "50": {
+        "count": 96,
+        "minVersion": 0
+      },
+      "51": {
+        "count": 13,
+        "minVersion": 3
+      },
+      "52": {
+        "count": 51,
+        "minVersion": 0
+      },
+      "53": {
+        "count": 39,
+        "minVersion": 6
+      },
+      "54": {
+        "count": 244,
+        "minVersion": 0
+      },
+      "56": {
+        "count": 514,
+        "minVersion": 0
+      },
+      "57": {
+        "count": 24,
+        "minVersion": 2
+      },
+      "59": {
+        "count": 38,
+        "minVersion": 3
+      },
+      "60": {
+        "count": 52,
+        "minVersion": 0
+      },
+      "61": {
+        "count": 42,
+        "minVersion": 2
+      },
+      "62": {
+        "count": 22,
+        "minVersion": 6
+      },
+      "63": {
+        "count": 160,
+        "minVersion": 0
+      },
+      "64": {
+        "count": 26,
+        "minVersion": 2
+      },
+      "66": {
+        "count": 59,
+        "minVersion": 1
+      },
+      "68": {
+        "count": 18,
+        "minVersion": 1
+      },
+      "69": {
+        "count": 87,
+        "minVersion": 0
+      },
+      "70": {
+        "count": 26,
+        "minVersion": 5
+      },
+      "71": {
+        "count": 128,
+        "minVersion": 0
+      },
+      "74": {
+        "count": 14,
+        "minVersion": 9
+      },
+      "75": {
+        "count": 79,
+        "minVersion": 1
+      },
+      "80": {
+        "count": 234,
+        "minVersion": 0
+      },
+      "85": {
+        "count": 163,
+        "minVersion": 5
+      },
+      "89": {
+        "count": 144,
+        "minVersion": 0
+      },
+      "96": {
+        "count": 42,
+        "minVersion": 0
+      },
+      "97": {
+        "count": 63,
+        "minVersion": 2
+      },
+      "102": {
+        "count": 45,
+        "minVersion": 6
+      },
+      "113": {
+        "count": 34,
+        "minVersion": 4
+      },
+      "122": {
+        "count": 17,
+        "minVersion": 9
+      },
+      "129": {
+        "count": 24,
+        "minVersion": 2
+      },
+      "132": {
+        "count": 25,
+        "minVersion": 19
+      },
+      "134": {
+        "count": 35,
+        "minVersion": 5
+      },
+      "135": {
+        "count": 5,
+        "minVersion": 19
+      },
+      "142": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "143": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "149": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "153": {
+        "count": 5,
+        "minVersion": 17
+      },
+      "156": {
+        "count": 3,
+        "minVersion": 21
+      },
+      "157": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "159": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "161": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "167": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "168": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "169": {
+        "count": 3,
+        "minVersion": 23
+      },
+      "170": {
+        "count": 3,
+        "minVersion": 23
+      },
+      "174": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "176": {
+        "count": 2,
+        "minVersion": 25
+      },
+      "177": {
+        "count": 2,
+        "minVersion": 15
+      },
+      "178": {
+        "count": 13,
+        "minVersion": 19
+      },
+      "181": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "183": {
+        "count": 7,
+        "minVersion": 23
+      },
+      "185": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "186": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "191": {
+        "count": 5,
+        "minVersion": 20
+      },
+      "195": {
+        "count": 5,
+        "minVersion": 19
+      },
+      "199": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "200": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "202": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "204": {
+        "count": 3,
+        "minVersion": 20
+      },
+      "205": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "206": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "207": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "216": {
+        "count": 4,
+        "minVersion": 21
+      },
+      "219": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "223": {
+        "count": 1,
+        "minVersion": 13
+      },
+      "231": {
+        "count": 7,
+        "minVersion": 19
+      },
+      "235": {
+        "count": 4,
+        "minVersion": 22
+      },
+      "237": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "238": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "241": {
+        "count": 6,
+        "minVersion": 19
+      },
+      "245": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "246": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "248": {
+        "count": 1,
+        "minVersion": 26
+      },
+      "251": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "253": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "255": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "261": {
+        "count": 5,
+        "minVersion": 20
+      },
+      "271": {
+        "count": 6,
+        "minVersion": 21
+      },
+      "277": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "281": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "285": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "291": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "293": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "294": {
+        "count": 4,
+        "minVersion": 22
+      },
+      "306": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "310": {
+        "count": 5,
+        "minVersion": 21
+      },
+      "311": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "315": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "321": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "322": {
+        "count": 4,
+        "minVersion": 20
+      },
+      "325": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "328": {
+        "count": 4,
+        "minVersion": 20
+      },
+      "329": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "336": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "341": {
+        "count": 5,
+        "minVersion": 22
+      },
+      "345": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "356": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "362": {
+        "count": 5,
+        "minVersion": 19
+      },
+      "363": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "370": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "377": {
+        "count": 4,
+        "minVersion": 21
+      },
+      "381": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "385": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "393": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "395": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "398": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "412": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "415": {
+        "count": 4,
+        "minVersion": 19
+      },
+      "417": {
+        "count": 2,
+        "minVersion": 25
+      },
+      "430": {
+        "count": 3,
+        "minVersion": 21
+      },
+      "433": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "435": {
+        "count": 3,
+        "minVersion": 20
+      },
+      "437": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "438": {
+        "count": 3,
+        "minVersion": 21
+      },
+      "440": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "449": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "458": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "459": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "460": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "470": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "471": {
+        "count": 3,
+        "minVersion": 20
+      },
+      "477": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "479": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "480": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "491": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "492": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "493": {
+        "count": 2,
+        "minVersion": 17
+      },
+      "495": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "504": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "519": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "524": {
+        "count": 3,
+        "minVersion": 24
+      },
+      "535": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "536": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "540": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "543": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "544": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "550": {
+        "count": 3,
+        "minVersion": 23
+      },
+      "555": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "582": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "592": {
+        "count": 1,
+        "minVersion": 13
+      },
+      "597": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "601": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "605": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "609": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "613": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "614": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "616": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "618": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "620": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "631": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "635": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "638": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "649": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "673": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "681": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "682": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "687": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "704": {
+        "count": 2,
+        "minVersion": 26
+      },
+      "721": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "722": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "737": {
+        "count": 2,
+        "minVersion": 17
+      },
+      "742": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "743": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "745": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "756": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "759": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "763": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "769": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "773": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "782": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "784": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "789": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "790": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "801": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "817": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "819": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "825": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "834": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "837": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "838": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "846": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "855": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "857": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "868": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "882": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "892": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "903": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "931": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "948": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "968": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "970": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "971": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "977": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "987": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "990": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "1002": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "1003": {
+        "count": 1,
+        "minVersion": 22
+      }
+    },
+    "6": {
+      "3": {
+        "count": 997,
+        "minVersion": 0
+      },
+      "4": {
+        "count": 4687,
+        "minVersion": 0
+      },
+      "5": {
+        "count": 1252,
+        "minVersion": 0
+      },
+      "6": {
+        "count": 2188,
+        "minVersion": 0
+      },
+      "8": {
+        "count": 2002,
+        "minVersion": 0
+      },
+      "11": {
+        "count": 94,
+        "minVersion": 0
+      },
+      "12": {
+        "count": 225,
+        "minVersion": 1
+      },
+      "13": {
+        "count": 250,
+        "minVersion": 0
+      },
+      "14": {
+        "count": 3,
+        "minVersion": 17
+      },
+      "15": {
+        "count": 1981,
+        "minVersion": 0
+      },
+      "16": {
+        "count": 56,
+        "minVersion": 5
+      },
+      "17": {
+        "count": 2598,
+        "minVersion": 0
+      },
+      "18": {
+        "count": 73,
+        "minVersion": 1
+      },
+      "19": {
+        "count": 406,
+        "minVersion": 0
+      },
+      "20": {
+        "count": 132,
+        "minVersion": 0
+      },
+      "21": {
+        "count": 1,
+        "minVersion": 17
+      },
+      "22": {
+        "count": 10,
+        "minVersion": 0
+      },
+      "23": {
+        "count": 757,
+        "minVersion": 0
+      },
+      "24": {
+        "count": 250,
+        "minVersion": 2
+      },
+      "25": {
+        "count": 200,
+        "minVersion": 2
+      },
+      "26": {
+        "count": 12,
+        "minVersion": 4
+      },
+      "27": {
+        "count": 345,
+        "minVersion": 0
+      },
+      "28": {
+        "count": 10,
+        "minVersion": 6
+      },
+      "29": {
+        "count": 41,
+        "minVersion": 3
+      },
+      "30": {
+        "count": 115,
+        "minVersion": 3
+      },
+      "31": {
+        "count": 100,
+        "minVersion": 0
+      },
+      "33": {
+        "count": 34,
+        "minVersion": 3
+      },
+      "35": {
+        "count": 110,
+        "minVersion": 2
+      },
+      "36": {
+        "count": 38,
+        "minVersion": 1
+      },
+      "38": {
+        "count": 43,
+        "minVersion": 2
+      },
+      "39": {
+        "count": 63,
+        "minVersion": 3
+      },
+      "41": {
+        "count": 55,
+        "minVersion": 5
+      },
+      "42": {
+        "count": 254,
+        "minVersion": 0
+      },
+      "43": {
+        "count": 125,
+        "minVersion": 1
+      },
+      "44": {
+        "count": 22,
+        "minVersion": 9
+      },
+      "45": {
+        "count": 101,
+        "minVersion": 0
+      },
+      "46": {
+        "count": 196,
+        "minVersion": 0
+      },
+      "47": {
+        "count": 23,
+        "minVersion": 3
+      },
+      "48": {
+        "count": 22,
+        "minVersion": 1
+      },
+      "49": {
+        "count": 36,
+        "minVersion": 3
+      },
+      "50": {
+        "count": 193,
+        "minVersion": 0
+      },
+      "51": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "52": {
+        "count": 295,
+        "minVersion": 0
+      },
+      "53": {
+        "count": 30,
+        "minVersion": 6
+      },
+      "54": {
+        "count": 183,
+        "minVersion": 0
+      },
+      "59": {
+        "count": 11,
+        "minVersion": 5
+      },
+      "60": {
+        "count": 89,
+        "minVersion": 2
+      },
+      "61": {
+        "count": 21,
+        "minVersion": 0
+      },
+      "62": {
+        "count": 66,
+        "minVersion": 6
+      },
+      "64": {
+        "count": 10,
+        "minVersion": 5
+      },
+      "66": {
+        "count": 102,
+        "minVersion": 0
+      },
+      "67": {
+        "count": 86,
+        "minVersion": 1
+      },
+      "68": {
+        "count": 17,
+        "minVersion": 0
+      },
+      "69": {
+        "count": 26,
+        "minVersion": 5
+      },
+      "70": {
+        "count": 45,
+        "minVersion": 1
+      },
+      "71": {
+        "count": 28,
+        "minVersion": 6
+      },
+      "74": {
+        "count": 30,
+        "minVersion": 10
+      },
+      "75": {
+        "count": 17,
+        "minVersion": 7
+      },
+      "76": {
+        "count": 192,
+        "minVersion": 1
+      },
+      "82": {
+        "count": 53,
+        "minVersion": 2
+      },
+      "87": {
+        "count": 150,
+        "minVersion": 0
+      },
+      "95": {
+        "count": 84,
+        "minVersion": 1
+      },
+      "101": {
+        "count": 96,
+        "minVersion": 1
+      },
+      "107": {
+        "count": 48,
+        "minVersion": 6
+      },
+      "118": {
+        "count": 59,
+        "minVersion": 2
+      },
+      "120": {
+        "count": 37,
+        "minVersion": 0
+      },
+      "123": {
+        "count": 48,
+        "minVersion": 2
+      },
+      "130": {
+        "count": 13,
+        "minVersion": 15
+      },
+      "132": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "135": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "139": {
+        "count": 8,
+        "minVersion": 19
+      },
+      "143": {
+        "count": 4,
+        "minVersion": 21
+      },
+      "149": {
+        "count": 6,
+        "minVersion": 19
+      },
+      "151": {
+        "count": 21,
+        "minVersion": 2
+      },
+      "152": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "153": {
+        "count": 4,
+        "minVersion": 19
+      },
+      "156": {
+        "count": 9,
+        "minVersion": 20
+      },
+      "158": {
+        "count": 1,
+        "minVersion": 26
+      },
+      "159": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "160": {
+        "count": 16,
+        "minVersion": 17
+      },
+      "161": {
+        "count": 3,
+        "minVersion": 24
+      },
+      "162": {
+        "count": 16,
+        "minVersion": 19
+      },
+      "167": {
+        "count": 3,
+        "minVersion": 23
+      },
+      "168": {
+        "count": 8,
+        "minVersion": 19
+      },
+      "169": {
+        "count": 4,
+        "minVersion": 15
+      },
+      "170": {
+        "count": 5,
+        "minVersion": 17
+      },
+      "174": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "176": {
+        "count": 3,
+        "minVersion": 23
+      },
+      "177": {
+        "count": 7,
+        "minVersion": 19
+      },
+      "182": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "185": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "191": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "192": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "195": {
+        "count": 4,
+        "minVersion": 19
+      },
+      "197": {
+        "count": 6,
+        "minVersion": 23
+      },
+      "200": {
+        "count": 5,
+        "minVersion": 20
+      },
+      "202": {
+        "count": 5,
+        "minVersion": 23
+      },
+      "213": {
+        "count": 7,
+        "minVersion": 19
+      },
+      "217": {
+        "count": 4,
+        "minVersion": 20
+      },
+      "225": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "231": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "235": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "236": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "241": {
+        "count": 1,
+        "minVersion": 26
+      },
+      "242": {
+        "count": 7,
+        "minVersion": 20
+      },
+      "247": {
+        "count": 4,
+        "minVersion": 20
+      },
+      "261": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "262": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "264": {
+        "count": 4,
+        "minVersion": 24
+      },
+      "266": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "273": {
+        "count": 6,
+        "minVersion": 19
+      },
+      "276": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "280": {
+        "count": 6,
+        "minVersion": 19
+      },
+      "285": {
+        "count": 5,
+        "minVersion": 19
+      },
+      "288": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "291": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "292": {
+        "count": 6,
+        "minVersion": 19
+      },
+      "293": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "303": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "304": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "308": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "309": {
+        "count": 1,
+        "minVersion": 16
+      },
+      "314": {
+        "count": 5,
+        "minVersion": 19
+      },
+      "316": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "321": {
+        "count": 3,
+        "minVersion": 21
+      },
+      "323": {
+        "count": 5,
+        "minVersion": 20
+      },
+      "327": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "328": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "334": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "336": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "338": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "339": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "356": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "378": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "382": {
+        "count": 3,
+        "minVersion": 20
+      },
+      "388": {
+        "count": 4,
+        "minVersion": 19
+      },
+      "393": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "395": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "398": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "399": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "400": {
+        "count": 4,
+        "minVersion": 22
+      },
+      "407": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "410": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "425": {
+        "count": 4,
+        "minVersion": 23
+      },
+      "437": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "440": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "447": {
+        "count": 3,
+        "minVersion": 21
+      },
+      "449": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "451": {
+        "count": 3,
+        "minVersion": 21
+      },
+      "468": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "476": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "482": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "483": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "496": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "504": {
+        "count": 2,
+        "minVersion": 25
+      },
+      "507": {
+        "count": 3,
+        "minVersion": 23
+      },
+      "511": {
+        "count": 3,
+        "minVersion": 23
+      },
+      "519": {
+        "count": 1,
+        "minVersion": 26
+      },
+      "526": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "528": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "535": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "538": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "540": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "541": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "557": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "564": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "565": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "567": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "574": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "575": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "595": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "620": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "624": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "627": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "629": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "632": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "642": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "651": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "655": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "657": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "663": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "679": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "680": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "683": {
+        "count": 2,
+        "minVersion": 25
+      },
+      "685": {
+        "count": 2,
+        "minVersion": 25
+      },
+      "689": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "699": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "702": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "703": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "710": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "722": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "724": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "726": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "732": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "735": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "741": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "747": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "749": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "757": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "771": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "773": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "777": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "783": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "791": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "795": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "797": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "801": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "803": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "807": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "810": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "815": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "823": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "831": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "850": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "861": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "866": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "884": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "885": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "898": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "905": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "906": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "917": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "926": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "930": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "940": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "950": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "956": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "959": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "962": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "975": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "981": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "992": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "1008": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "1019": {
+        "count": 1,
+        "minVersion": 22
+      }
+    },
+    "7": {
+      "2": {
+        "count": 2205,
+        "minVersion": 0
+      },
+      "3": {
+        "count": 7977,
+        "minVersion": 0
+      },
+      "4": {
+        "count": 691,
+        "minVersion": 0
+      },
+      "6": {
+        "count": 6270,
+        "minVersion": 0
+      },
+      "8": {
+        "count": 1708,
+        "minVersion": 0
+      },
+      "10": {
+        "count": 113,
+        "minVersion": 1
+      },
+      "11": {
+        "count": 586,
+        "minVersion": 2
+      },
+      "12": {
+        "count": 3871,
+        "minVersion": 0
+      },
+      "13": {
+        "count": 166,
+        "minVersion": 0
+      },
+      "15": {
+        "count": 214,
+        "minVersion": 0
+      },
+      "17": {
+        "count": 139,
+        "minVersion": 0
+      },
+      "18": {
+        "count": 143,
+        "minVersion": 0
+      },
+      "19": {
+        "count": 81,
+        "minVersion": 2
+      },
+      "20": {
+        "count": 1585,
+        "minVersion": 0
+      },
+      "21": {
+        "count": 9,
+        "minVersion": 0
+      },
+      "22": {
+        "count": 87,
+        "minVersion": 0
+      },
+      "23": {
+        "count": 433,
+        "minVersion": 0
+      },
+      "24": {
+        "count": 250,
+        "minVersion": 2
+      },
+      "25": {
+        "count": 322,
+        "minVersion": 0
+      },
+      "26": {
+        "count": 71,
+        "minVersion": 2
+      },
+      "27": {
+        "count": 315,
+        "minVersion": 1
+      },
+      "28": {
+        "count": 97,
+        "minVersion": 2
+      },
+      "29": {
+        "count": 4,
+        "minVersion": 0
+      },
+      "30": {
+        "count": 667,
+        "minVersion": 0
+      },
+      "31": {
+        "count": 421,
+        "minVersion": 0
+      },
+      "32": {
+        "count": 34,
+        "minVersion": 0
+      },
+      "33": {
+        "count": 149,
+        "minVersion": 2
+      },
+      "35": {
+        "count": 46,
+        "minVersion": 6
+      },
+      "36": {
+        "count": 90,
+        "minVersion": 2
+      },
+      "38": {
+        "count": 12,
+        "minVersion": 2
+      },
+      "39": {
+        "count": 151,
+        "minVersion": 0
+      },
+      "41": {
+        "count": 39,
+        "minVersion": 2
+      },
+      "42": {
+        "count": 56,
+        "minVersion": 0
+      },
+      "43": {
+        "count": 32,
+        "minVersion": 1
+      },
+      "44": {
+        "count": 253,
+        "minVersion": 0
+      },
+      "46": {
+        "count": 54,
+        "minVersion": 3
+      },
+      "47": {
+        "count": 27,
+        "minVersion": 2
+      },
+      "48": {
+        "count": 13,
+        "minVersion": 4
+      },
+      "49": {
+        "count": 8,
+        "minVersion": 3
+      },
+      "50": {
+        "count": 19,
+        "minVersion": 2
+      },
+      "51": {
+        "count": 42,
+        "minVersion": 0
+      },
+      "52": {
+        "count": 92,
+        "minVersion": 3
+      },
+      "53": {
+        "count": 77,
+        "minVersion": 4
+      },
+      "54": {
+        "count": 26,
+        "minVersion": 1
+      },
+      "57": {
+        "count": 44,
+        "minVersion": 2
+      },
+      "59": {
+        "count": 1,
+        "minVersion": 15
+      },
+      "60": {
+        "count": 217,
+        "minVersion": 1
+      },
+      "61": {
+        "count": 17,
+        "minVersion": 6
+      },
+      "62": {
+        "count": 55,
+        "minVersion": 6
+      },
+      "63": {
+        "count": 55,
+        "minVersion": 0
+      },
+      "65": {
+        "count": 290,
+        "minVersion": 0
+      },
+      "66": {
+        "count": 68,
+        "minVersion": 6
+      },
+      "68": {
+        "count": 23,
+        "minVersion": 6
+      },
+      "70": {
+        "count": 116,
+        "minVersion": 0
+      },
+      "71": {
+        "count": 14,
+        "minVersion": 7
+      },
+      "74": {
+        "count": 20,
+        "minVersion": 6
+      },
+      "75": {
+        "count": 10,
+        "minVersion": 6
+      },
+      "77": {
+        "count": 77,
+        "minVersion": 1
+      },
+      "79": {
+        "count": 236,
+        "minVersion": 0
+      },
+      "81": {
+        "count": 156,
+        "minVersion": 1
+      },
+      "86": {
+        "count": 161,
+        "minVersion": 1
+      },
+      "91": {
+        "count": 126,
+        "minVersion": 2
+      },
+      "94": {
+        "count": 25,
+        "minVersion": 2
+      },
+      "105": {
+        "count": 42,
+        "minVersion": 3
+      },
+      "110": {
+        "count": 15,
+        "minVersion": 17
+      },
+      "111": {
+        "count": 71,
+        "minVersion": 5
+      },
+      "116": {
+        "count": 60,
+        "minVersion": 0
+      },
+      "121": {
+        "count": 13,
+        "minVersion": 6
+      },
+      "124": {
+        "count": 10,
+        "minVersion": 20
+      },
+      "127": {
+        "count": 12,
+        "minVersion": 19
+      },
+      "128": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "130": {
+        "count": 18,
+        "minVersion": 17
+      },
+      "132": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "138": {
+        "count": 3,
+        "minVersion": 23
+      },
+      "139": {
+        "count": 4,
+        "minVersion": 21
+      },
+      "140": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "143": {
+        "count": 11,
+        "minVersion": 19
+      },
+      "145": {
+        "count": 1,
+        "minVersion": 26
+      },
+      "146": {
+        "count": 8,
+        "minVersion": 20
+      },
+      "147": {
+        "count": 20,
+        "minVersion": 19
+      },
+      "148": {
+        "count": 9,
+        "minVersion": 23
+      },
+      "149": {
+        "count": 4,
+        "minVersion": 19
+      },
+      "152": {
+        "count": 9,
+        "minVersion": 20
+      },
+      "153": {
+        "count": 7,
+        "minVersion": 22
+      },
+      "156": {
+        "count": 6,
+        "minVersion": 22
+      },
+      "157": {
+        "count": 14,
+        "minVersion": 19
+      },
+      "160": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "161": {
+        "count": 10,
+        "minVersion": 19
+      },
+      "164": {
+        "count": 17,
+        "minVersion": 20
+      },
+      "167": {
+        "count": 4,
+        "minVersion": 21
+      },
+      "168": {
+        "count": 5,
+        "minVersion": 20
+      },
+      "179": {
+        "count": 6,
+        "minVersion": 20
+      },
+      "180": {
+        "count": 12,
+        "minVersion": 19
+      },
+      "182": {
+        "count": 3,
+        "minVersion": 24
+      },
+      "185": {
+        "count": 3,
+        "minVersion": 21
+      },
+      "191": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "194": {
+        "count": 10,
+        "minVersion": 20
+      },
+      "197": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "199": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "201": {
+        "count": 6,
+        "minVersion": 22
+      },
+      "202": {
+        "count": 3,
+        "minVersion": 23
+      },
+      "211": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "212": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "214": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "215": {
+        "count": 9,
+        "minVersion": 19
+      },
+      "217": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "221": {
+        "count": 8,
+        "minVersion": 19
+      },
+      "223": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "225": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "226": {
+        "count": 1,
+        "minVersion": 17
+      },
+      "227": {
+        "count": 5,
+        "minVersion": 20
+      },
+      "230": {
+        "count": 3,
+        "minVersion": 20
+      },
+      "236": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "243": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "248": {
+        "count": 3,
+        "minVersion": 23
+      },
+      "249": {
+        "count": 7,
+        "minVersion": 19
+      },
+      "255": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "257": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "263": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "266": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "269": {
+        "count": 5,
+        "minVersion": 17
+      },
+      "276": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "277": {
+        "count": 5,
+        "minVersion": 19
+      },
+      "279": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "288": {
+        "count": 5,
+        "minVersion": 13
+      },
+      "290": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "296": {
+        "count": 4,
+        "minVersion": 20
+      },
+      "297": {
+        "count": 4,
+        "minVersion": 15
+      },
+      "298": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "299": {
+        "count": 4,
+        "minVersion": 19
+      },
+      "301": {
+        "count": 4,
+        "minVersion": 19
+      },
+      "313": {
+        "count": 5,
+        "minVersion": 19
+      },
+      "331": {
+        "count": 5,
+        "minVersion": 21
+      },
+      "332": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "334": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "335": {
+        "count": 5,
+        "minVersion": 20
+      },
+      "336": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "338": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "340": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "348": {
+        "count": 5,
+        "minVersion": 19
+      },
+      "352": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "354": {
+        "count": 5,
+        "minVersion": 25
+      },
+      "359": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "360": {
+        "count": 2,
+        "minVersion": 25
+      },
+      "361": {
+        "count": 5,
+        "minVersion": 19
+      },
+      "368": {
+        "count": 3,
+        "minVersion": 21
+      },
+      "379": {
+        "count": 4,
+        "minVersion": 21
+      },
+      "380": {
+        "count": 2,
+        "minVersion": 13
+      },
+      "387": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "398": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "406": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "407": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "411": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "413": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "419": {
+        "count": 2,
+        "minVersion": 13
+      },
+      "420": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "423": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "424": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "427": {
+        "count": 3,
+        "minVersion": 24
+      },
+      "443": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "448": {
+        "count": 3,
+        "minVersion": 21
+      },
+      "452": {
+        "count": 3,
+        "minVersion": 21
+      },
+      "454": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "456": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "460": {
+        "count": 1,
+        "minVersion": 26
+      },
+      "462": {
+        "count": 3,
+        "minVersion": 21
+      },
+      "463": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "464": {
+        "count": 3,
+        "minVersion": 21
+      },
+      "465": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "468": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "469": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "470": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "472": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "482": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "493": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "494": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "498": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "500": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "503": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "505": {
+        "count": 3,
+        "minVersion": 20
+      },
+      "510": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "513": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "516": {
+        "count": 3,
+        "minVersion": 24
+      },
+      "518": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "521": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "522": {
+        "count": 1,
+        "minVersion": 26
+      },
+      "523": {
+        "count": 3,
+        "minVersion": 23
+      },
+      "529": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "531": {
+        "count": 2,
+        "minVersion": 17
+      },
+      "532": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "534": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "539": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "546": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "548": {
+        "count": 3,
+        "minVersion": 23
+      },
+      "553": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "558": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "561": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "562": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "574": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "576": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "583": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "588": {
+        "count": 1,
+        "minVersion": 26
+      },
+      "589": {
+        "count": 2,
+        "minVersion": 15
+      },
+      "594": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "599": {
+        "count": 1,
+        "minVersion": 26
+      },
+      "602": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "614": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "615": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "619": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "639": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "640": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "646": {
+        "count": 1,
+        "minVersion": 26
+      },
+      "647": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "660": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "663": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "676": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "695": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "709": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "713": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "727": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "733": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "734": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "735": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "736": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "746": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "748": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "758": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "776": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "793": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "796": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "800": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "804": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "811": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "817": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "818": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "835": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "844": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "863": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "876": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "887": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "895": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "899": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "934": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "938": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "942": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "946": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "954": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "955": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "958": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "961": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "985": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "1000": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "1017": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "1020": {
+        "count": 1,
+        "minVersion": 22
+      }
+    },
+    "8": {
+      "2": {
+        "count": 4692,
+        "minVersion": 0
+      },
+      "3": {
+        "count": 10734,
+        "minVersion": 0
+      },
+      "6": {
+        "count": 2993,
+        "minVersion": 0
+      },
+      "7": {
+        "count": 1439,
+        "minVersion": 0
+      },
+      "8": {
+        "count": 555,
+        "minVersion": 0
+      },
+      "10": {
+        "count": 110,
+        "minVersion": 0
+      },
+      "11": {
+        "count": 4251,
+        "minVersion": 0
+      },
+      "12": {
+        "count": 746,
+        "minVersion": 0
+      },
+      "13": {
+        "count": 352,
+        "minVersion": 0
+      },
+      "14": {
+        "count": 373,
+        "minVersion": 0
+      },
+      "15": {
+        "count": 1936,
+        "minVersion": 0
+      },
+      "16": {
+        "count": 29,
+        "minVersion": 2
+      },
+      "17": {
+        "count": 567,
+        "minVersion": 1
+      },
+      "19": {
+        "count": 35,
+        "minVersion": 0
+      },
+      "20": {
+        "count": 122,
+        "minVersion": 0
+      },
+      "22": {
+        "count": 131,
+        "minVersion": 0
+      },
+      "23": {
+        "count": 375,
+        "minVersion": 0
+      },
+      "24": {
+        "count": 76,
+        "minVersion": 1
+      },
+      "25": {
+        "count": 447,
+        "minVersion": 0
+      },
+      "26": {
+        "count": 209,
+        "minVersion": 0
+      },
+      "27": {
+        "count": 278,
+        "minVersion": 1
+      },
+      "28": {
+        "count": 484,
+        "minVersion": 1
+      },
+      "29": {
+        "count": 121,
+        "minVersion": 0
+      },
+      "30": {
+        "count": 323,
+        "minVersion": 1
+      },
+      "32": {
+        "count": 50,
+        "minVersion": 0
+      },
+      "33": {
+        "count": 315,
+        "minVersion": 0
+      },
+      "35": {
+        "count": 33,
+        "minVersion": 6
+      },
+      "36": {
+        "count": 66,
+        "minVersion": 1
+      },
+      "37": {
+        "count": 789,
+        "minVersion": 0
+      },
+      "38": {
+        "count": 12,
+        "minVersion": 9
+      },
+      "39": {
+        "count": 228,
+        "minVersion": 0
+      },
+      "41": {
+        "count": 34,
+        "minVersion": 0
+      },
+      "42": {
+        "count": 22,
+        "minVersion": 0
+      },
+      "44": {
+        "count": 74,
+        "minVersion": 6
+      },
+      "45": {
+        "count": 263,
+        "minVersion": 0
+      },
+      "46": {
+        "count": 56,
+        "minVersion": 3
+      },
+      "47": {
+        "count": 71,
+        "minVersion": 1
+      },
+      "48": {
+        "count": 3,
+        "minVersion": 8
+      },
+      "49": {
+        "count": 1,
+        "minVersion": 3
+      },
+      "50": {
+        "count": 11,
+        "minVersion": 6
+      },
+      "51": {
+        "count": 25,
+        "minVersion": 3
+      },
+      "52": {
+        "count": 17,
+        "minVersion": 3
+      },
+      "53": {
+        "count": 122,
+        "minVersion": 1
+      },
+      "54": {
+        "count": 13,
+        "minVersion": 3
+      },
+      "57": {
+        "count": 118,
+        "minVersion": 0
+      },
+      "58": {
+        "count": 493,
+        "minVersion": 0
+      },
+      "59": {
+        "count": 8,
+        "minVersion": 3
+      },
+      "60": {
+        "count": 49,
+        "minVersion": 0
+      },
+      "61": {
+        "count": 10,
+        "minVersion": 7
+      },
+      "62": {
+        "count": 121,
+        "minVersion": 0
+      },
+      "63": {
+        "count": 44,
+        "minVersion": 2
+      },
+      "64": {
+        "count": 6,
+        "minVersion": 0
+      },
+      "66": {
+        "count": 59,
+        "minVersion": 6
+      },
+      "68": {
+        "count": 92,
+        "minVersion": 3
+      },
+      "69": {
+        "count": 19,
+        "minVersion": 4
+      },
+      "70": {
+        "count": 39,
+        "minVersion": 0
+      },
+      "71": {
+        "count": 9,
+        "minVersion": 1
+      },
+      "72": {
+        "count": 303,
+        "minVersion": 0
+      },
+      "74": {
+        "count": 34,
+        "minVersion": 6
+      },
+      "75": {
+        "count": 9,
+        "minVersion": 6
+      },
+      "99": {
+        "count": 59,
+        "minVersion": 0
+      },
+      "100": {
+        "count": 98,
+        "minVersion": 2
+      },
+      "103": {
+        "count": 41,
+        "minVersion": 2
+      },
+      "104": {
+        "count": 47,
+        "minVersion": 2
+      },
+      "106": {
+        "count": 31,
+        "minVersion": 6
+      },
+      "110": {
+        "count": 6,
+        "minVersion": 16
+      },
+      "115": {
+        "count": 50,
+        "minVersion": 0
+      },
+      "117": {
+        "count": 59,
+        "minVersion": 3
+      },
+      "124": {
+        "count": 29,
+        "minVersion": 17
+      },
+      "126": {
+        "count": 18,
+        "minVersion": 9
+      },
+      "127": {
+        "count": 20,
+        "minVersion": 16
+      },
+      "128": {
+        "count": 7,
+        "minVersion": 19
+      },
+      "130": {
+        "count": 5,
+        "minVersion": 23
+      },
+      "131": {
+        "count": 3,
+        "minVersion": 21
+      },
+      "137": {
+        "count": 4,
+        "minVersion": 22
+      },
+      "138": {
+        "count": 6,
+        "minVersion": 22
+      },
+      "139": {
+        "count": 7,
+        "minVersion": 20
+      },
+      "140": {
+        "count": 7,
+        "minVersion": 22
+      },
+      "141": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "143": {
+        "count": 6,
+        "minVersion": 20
+      },
+      "144": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "145": {
+        "count": 23,
+        "minVersion": 16
+      },
+      "146": {
+        "count": 12,
+        "minVersion": 15
+      },
+      "147": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "148": {
+        "count": 7,
+        "minVersion": 20
+      },
+      "152": {
+        "count": 4,
+        "minVersion": 21
+      },
+      "153": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "154": {
+        "count": 18,
+        "minVersion": 19
+      },
+      "157": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "161": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "167": {
+        "count": 6,
+        "minVersion": 19
+      },
+      "172": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "175": {
+        "count": 1,
+        "minVersion": 26
+      },
+      "185": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "188": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "192": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "196": {
+        "count": 9,
+        "minVersion": 19
+      },
+      "199": {
+        "count": 8,
+        "minVersion": 20
+      },
+      "201": {
+        "count": 3,
+        "minVersion": 23
+      },
+      "204": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "208": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "210": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "211": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "217": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "218": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "222": {
+        "count": 4,
+        "minVersion": 23
+      },
+      "224": {
+        "count": 6,
+        "minVersion": 21
+      },
+      "230": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "235": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "237": {
+        "count": 4,
+        "minVersion": 23
+      },
+      "243": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "245": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "246": {
+        "count": 4,
+        "minVersion": 24
+      },
+      "254": {
+        "count": 7,
+        "minVersion": 19
+      },
+      "256": {
+        "count": 7,
+        "minVersion": 19
+      },
+      "257": {
+        "count": 3,
+        "minVersion": 15
+      },
+      "258": {
+        "count": 2,
+        "minVersion": 25
+      },
+      "259": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "261": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "262": {
+        "count": 4,
+        "minVersion": 13
+      },
+      "263": {
+        "count": 4,
+        "minVersion": 23
+      },
+      "266": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "267": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "269": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "274": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "278": {
+        "count": 4,
+        "minVersion": 20
+      },
+      "279": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "282": {
+        "count": 6,
+        "minVersion": 22
+      },
+      "284": {
+        "count": 1,
+        "minVersion": 26
+      },
+      "287": {
+        "count": 5,
+        "minVersion": 19
+      },
+      "296": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "297": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "301": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "302": {
+        "count": 5,
+        "minVersion": 19
+      },
+      "303": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "305": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "312": {
+        "count": 5,
+        "minVersion": 21
+      },
+      "316": {
+        "count": 3,
+        "minVersion": 21
+      },
+      "317": {
+        "count": 3,
+        "minVersion": 21
+      },
+      "332": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "336": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "340": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "342": {
+        "count": 4,
+        "minVersion": 16
+      },
+      "343": {
+        "count": 5,
+        "minVersion": 19
+      },
+      "346": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "352": {
+        "count": 4,
+        "minVersion": 15
+      },
+      "353": {
+        "count": 3,
+        "minVersion": 23
+      },
+      "359": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "365": {
+        "count": 4,
+        "minVersion": 21
+      },
+      "368": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "371": {
+        "count": 4,
+        "minVersion": 21
+      },
+      "373": {
+        "count": 4,
+        "minVersion": 21
+      },
+      "376": {
+        "count": 4,
+        "minVersion": 21
+      },
+      "378": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "386": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "402": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "405": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "408": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "416": {
+        "count": 3,
+        "minVersion": 20
+      },
+      "420": {
+        "count": 1,
+        "minVersion": 26
+      },
+      "423": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "424": {
+        "count": 3,
+        "minVersion": 23
+      },
+      "433": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "439": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "442": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "450": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "460": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "461": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "473": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "482": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "487": {
+        "count": 3,
+        "minVersion": 20
+      },
+      "489": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "490": {
+        "count": 3,
+        "minVersion": 22
+      },
+      "494": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "495": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "497": {
+        "count": 3,
+        "minVersion": 23
+      },
+      "498": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "500": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "508": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "509": {
+        "count": 3,
+        "minVersion": 25
+      },
+      "510": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "521": {
+        "count": 1,
+        "minVersion": 26
+      },
+      "522": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "526": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "531": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "537": {
+        "count": 3,
+        "minVersion": 19
+      },
+      "545": {
+        "count": 3,
+        "minVersion": 20
+      },
+      "546": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "556": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "560": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "571": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "573": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "578": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "579": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "581": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "593": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "604": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "607": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "610": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "611": {
+        "count": 2,
+        "minVersion": 21
+      },
+      "613": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "617": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "621": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "624": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "630": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "631": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "632": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "635": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "644": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "648": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "650": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "653": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "659": {
+        "count": 2,
+        "minVersion": 22
+      },
+      "661": {
+        "count": 2,
+        "minVersion": 25
+      },
+      "669": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "673": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "681": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "684": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "687": {
+        "count": 1,
+        "minVersion": 25
+      },
+      "691": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "693": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "698": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "700": {
+        "count": 1,
+        "minVersion": 26
+      },
+      "714": {
+        "count": 1,
+        "minVersion": 20
+      },
+      "715": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "718": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "730": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "749": {
+        "count": 1,
+        "minVersion": 19
+      },
+      "750": {
+        "count": 2,
+        "minVersion": 19
+      },
+      "767": {
+        "count": 2,
+        "minVersion": 20
+      },
+      "776": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "787": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "788": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "793": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "799": {
+        "count": 1,
+        "minVersion": 23
+      },
+      "800": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "804": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "805": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "809": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "812": {
+        "count": 2,
+        "minVersion": 23
+      },
+      "814": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "816": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "820": {
+        "count": 1,
+        "minVersion": 24
+      },
+      "821": {
+        "count": 2,
+        "minVersion": 24
+      },
+      "832": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "841": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "860": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "877": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "901": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "904": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "907": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "908": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "909": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "923": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "924": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "929": {
+        "count": 1,
+        "minVersion": 21
+      },
+      "967": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "974": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "979": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "983": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "995": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "997": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "1006": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "1011": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "1018": {
+        "count": 1,
+        "minVersion": 22
+      },
+      "1024": {
+        "count": 1,
+        "minVersion": 22
+      }
+    }
+  }
+}
