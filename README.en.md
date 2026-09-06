@@ -21,6 +21,49 @@ A native CUDA chart generator for maimai DX Simai charts. The current release us
 
 FFmpeg and MajdataViewX are not bundled. If MajdataViewX is installed at `tools/MajdataViewX-v6.2.0`, the Preview button will use it; otherwise the built-in chart preview is used. Built-in audio playback is available when `ffplay` is on PATH.
 
+## How it works
+
+Audio is decoded into log-mel features and represented by MERT. A structure model produces bar-level musical structure and difficulty density, while the anchor model combines BPM, structure, target difficulty, and game version to select candidate times. The contextual V4 renderer then generates note families, lanes, routes, durations, and modifiers causally while carrying previous-event, lane-occupancy, hand-capacity, slide-motion, and geometry state.
+
+The generator cannot declare its own chart valid. Every candidate is encoded into the shared CUDA IR and evaluated by the same Harness used for complete charts. HARD conflicts are rejected. Difficulties with calibration also receive short-window density, motion-speed, and direction-change checks. After whole-chart acceptance, the IR is serialized to Simai, parsed again, and required to retain the exact accepted content digest before publication.
+
+## Architecture
+
+```text
+Audio + BPM + version + target difficulty
+                 │
+                 ▼
+       MERT / structure / anchors / style
+                 │
+                 ▼
+┌────────────────────────────────┐
+│ Generator                      │
+│ Planner → contextual V4        │
+│ → candidate events / recovery  │
+└────────────────┬───────────────┘
+                 │ CUDA IR candidates
+                 ▼
+┌────────────────────────────────┐
+│ CUDA Harness                   │
+│ HARD rules + quality bounds    │
+│ Star bounds + coverage receipt │
+└────────────────┬───────────────┘
+        accept   │   reject / feedback
+                 │          └────► local Generator recovery
+                 ▼
+      Simai write → parse → digest match → publish
+```
+
+Generator and Harness are the only runtime responsibility owners. Harness feedback carries the failing tick, related Hold/Slide owners, and pending generation scope. The first recovery edits the smallest causal window. A repeated stop expands the window and releases the fixed intent. Neural state and encoded audio before the edit window remain cached, so recovery is not a full-song restart.
+
+Main modules:
+
+- `src/chart_runtime/generator`: planning, contextual V4 inference, structured sampling, caching, and local recovery.
+- `src/chart_runtime/harness`: shared CUDA rules, candidate batching, quality features, feedback, and publication permits.
+- `src/chart_runtime/io`: lossless event representation, Simai I/O, audio, and timing.
+- `src/chart_runtime/runtime`: session contracts, immutable payloads, and CUDA resource management.
+- `src/chart_runtime/app`: preparation, parallel difficulty generation, GUI, and preview entry points.
+
 ## Current boundaries
 
 - NVIDIA CUDA is required; there is no CPU musical-judgement fallback.
