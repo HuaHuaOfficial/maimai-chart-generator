@@ -38,7 +38,9 @@ class HarnessBackend:
             last=history[-1];payload=last.proposal.chart.payload;meta=last.evaluation.witnesses.data
             base=last.proposal.chart.ref;events=payload.events;issues=meta['issues'];ticks=np.asarray(sorted(events))
             phase='stars' if not issues and meta['stars']<(self.minimum_stars or 0) else 'repair'
-            upper_stars=max(self.base_stars or 0,int(self.conditions['official_stars']))
+            upper_stars=(int(self.conditions['star_target_stars'])
+                         if self.conditions['star_control']
+                         else max(self.base_stars or 0,int(self.conditions['official_stars'])))
             if not issues and self.conditions['star_control'] and meta['stars']>upper_stars:phase='reduce_stars'
             target=set()
             if not last.proposal.complete:
@@ -92,7 +94,11 @@ class HarnessBackend:
         stars=result.star_counts.detach().cpu().tolist()
         if self.minimum_stars is None and proposals[0].complete:
             self.base_stars=stars[0]
-            self.minimum_stars=self.base_stars+math.ceil(max(0,int(c['official_stars'])-self.base_stars)*float(c['star_gap_ratio'])) if c['star_control'] else 0
+            # The user parameter is now a direct target ratio against the
+            # calibrated official reference.  Keep exact lower/upper bounds
+            # for controlled difficulties so the slider has a deterministic
+            # meaning independent of the model's first draft.
+            self.minimum_stars=int(c['star_target_stars']) if c['star_control'] else 0
         verdicts=[]
         hc,qc,sc=result.summaries();hc=hc.detach().cpu().tolist();qc=qc.detach().cpu().tolist();sc=sc.detach().cpu().tolist()
         for b,proposal in enumerate(proposals):
@@ -109,11 +115,19 @@ class HarnessBackend:
                 columns=proposal.chart.payload.columns
                 track_ticks=columns['event_tick'][columns['track_event']].unique().detach().cpu().tolist()
                 issues.extend({'tick':tick,'reason':'quality:contact_budget','severity':'QUALITY'} for tick in track_ticks)
-            upper_stars=max(self.base_stars or 0,int(c['official_stars']))
+            upper_stars=(int(c['star_target_stars'])
+                         if c['star_control']
+                         else max(self.base_stars or 0,int(c['official_stars'])))
             accepted=proposal.complete and not issues and stars[b]>=(self.minimum_stars or 0) and (not c['star_control'] or stars[b]<=upper_stars)
             evidence=torch.cat((torch.stack([m[mask] for m in result.hard.values()],1).to(torch.float64),result.quality[mask].to(torch.float64),result.features[mask]),1)
             meta={'issues':issues,'hard_counts':dict(zip(result.hard,hc[b])),'quality_counts':dict(zip(QUALITY_NAMES,qc[b])),
-                  'soft':soft,'soft_budget':soft_budget,'stars':stars[b],'minimum_stars':self.minimum_stars,'maximum_stars':upper_stars if c['star_control'] else None,'base_stars':self.base_stars,
+                  'soft':soft,'soft_budget':soft_budget,'stars':stars[b],
+                  'minimum_stars':self.minimum_stars,
+                  'maximum_stars':upper_stars if c['star_control'] else None,
+                  'target_stars':int(c['star_target_stars']) if c['star_control'] else None,
+                  'target_ratio':float(c['star_target_ratio']) if c['star_control'] else None,
+                  'official_stars':int(c['official_stars']),
+                  'base_stars':self.base_stars,
                   'quality_calibration':'available' if self.calibration else 'not_available_for_this_slot',
                   'rules_id':RULES_ID,'coverage':'registered mechanisms and supported complete path tables',
                   'cpu_per_object_checks':False}

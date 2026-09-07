@@ -401,7 +401,12 @@ def prepare_request(
         "version": version_name,
         "clock_count": 4,
         "difficultyWorkloadMode": workload_mode,
-        "jointStarGapRatio": float(np.clip(extra.get("jointStarGapRatio", 0.5), 0.0, 1.0)),
+        # This is a direct target ratio against the calibrated official-star
+        # reference.  It is deliberately not a "fill the gap from the first
+        # draft" ratio: the first draft is model-dependent and made the GUI
+        # slider ineffective whenever the model already landed near the
+        # reference count.
+        "starTargetRatio": float(np.clip(extra.get("starTargetRatio", 0.5), 0.0, 1.0)),
         "chartEndSeconds": min(float(duration - beat_offset), float(ticks_to_seconds(np.asarray([total_ticks]), bpm_ticks, bpm_values)[0])),
         **{f"lv_{slot}": value for slot, value in levels.items()},
     }

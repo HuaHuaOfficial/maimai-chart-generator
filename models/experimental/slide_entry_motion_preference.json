@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "definition": "single Slide entry immediately after three pure single Taps whose last two circular deltas are the same adjacent direction",
+  "sourceCharts": 2927,
+  "sourcePatterns": 3733,
+  "preferenceQuantile": 0.8,
+  "minimumRunLength": 3,
+  "semantics": "candidate WHERE ranking only; applies only to a single Slide after a three-event adjacent single-Tap directional run; never changes WHAT and never rejects a chart",
+  "slots": {
+    "4": {
+      "count": 667,
+      "step80": 1.0,
+      "jerk80": 3.4849999999999484
+    },
+    "5": {
+      "count": 2757,
+      "step80": 2.0,
+      "jerk80": 8.533333333333333
+    },
+    "6": {
+      "count": 309,
+      "step80": 2.0,
+      "jerk80": 13.799999999999471
+    }
+  }
+}

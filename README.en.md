@@ -1,4 +1,4 @@
-# maimai Chart Generator 0.3.1
+# maimai Chart Generator 0.4.0
 
 English | [简体中文](README.md)
 
@@ -7,7 +7,7 @@ A native CUDA chart generator for maimai DX Simai charts. The current release us
 ## Features
 
 - Generates BASIC through Re:MASTER charts from audio, BPM, game version, and target difficulty constants.
-- Keeps Slide Stars and Tracks as separate representations and enforces explicit Star count bounds.
+- Keeps Slide Stars and Tracks as separate representations and enforces explicit Star count bounds. The GUI Star target ratio directly means target Stars divided by the calibrated official-chart reference: 0 requests no Stars and 1 requests the reference count; it is no longer a first-draft gap-fill ratio.
 - Returns HARD failures to a local context window; repeated failures at the same point expand the causal edit scope without regenerating the full song.
 - Hand capacity is a native HARD rule. Before sampling, the runtime combines Hold, Slide, Tap, and Touch occupancy; when both hands are occupied, only a Touch covered by the active Slide hand may remain eligible.
 - Writes `maidata.txt` only after a complete whole-chart permit and an identity-preserving Simai round trip.
@@ -25,6 +25,8 @@ FFmpeg and MajdataViewX are not bundled. If MajdataViewX is installed at `tools/
 ## How it works
 
 Audio is decoded into log-mel features and represented by MERT. A structure model produces bar-level musical structure and difficulty density, while the anchor model combines BPM, structure, target difficulty, and game version to select candidate times. The contextual V4 renderer then generates note families, lanes, routes, durations, and modifiers causally while carrying previous-event, lane-occupancy, hand-capacity, slide-motion, and geometry state.
+
+After anchoring, EXPERT, MASTER, and Re:MASTER use all `JointEventPlanModel` heads—`arity / stars / holds / touches / tap_slide`—to select WHAT jointly. Their output becomes a position-free `EventIntent`, and each difficulty is restricted to configurations observed in its own official-chart training split. V4 then chooses lanes, Touch sensors, Slide routes, durations, and modifiers. BASIC and ADVANCED currently retain combined V4 WHAT and WHERE generation.
 
 The generator cannot declare its own chart valid. Every candidate is encoded into the shared CUDA IR and evaluated by the same Harness used for complete charts. HARD conflicts are rejected. Difficulties with calibration also receive short-window density, motion-speed, and direction-change checks. After whole-chart acceptance, the IR is serialized to Simai, parsed again, and required to retain the exact accepted content digest before publication.
 

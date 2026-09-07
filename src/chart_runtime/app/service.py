@@ -20,6 +20,7 @@ from ..generator.renderer import RenderContext
 from ..generator.backend import GeneratorBackend
 from ..harness.backend import HarnessBackend
 from ..harness.calibration import load_calibration
+from ..harness.star_policy import target_stars
 
 
 def _official_stars(root,ds,bpm,event_count):
@@ -40,15 +41,21 @@ def generate(**kwargs):
     workers=max(1,min(2,workers,len(prepared['slot_inputs'])))
     root_src=Path(__file__).resolve().parents[1]
     rule_files=('harness/kernel.py','harness/backend.py','harness/fused.py','harness/slide_queue.py','harness/sampling.py','harness/durations.py','io/codec.py','io/symmetry.py','io/durations.py')
+    preference_assets=(root/'models/experimental/one_hand_motion_preference.json',root/'models/experimental/slide_entry_motion_preference.json')
+    calibration_bytes=(root/'models/experimental/contextual_calibration.npz').read_bytes()+b''.join(asset.read_bytes() for asset in preference_assets if asset.is_file())
     definition=Definition('chart-ir/1',sha256(b''.join((root_src/name).read_bytes() for name in rule_files)).hexdigest(),sha256((root_src/'harness/features.py').read_bytes()).hexdigest(),
-                          sha256((root/'models/experimental/contextual_calibration.npz').read_bytes()).hexdigest(),sha256((root/'models/v2/playability_tables.json').read_bytes()).hexdigest())
+                          sha256(calibration_bytes).hexdigest(),sha256((root/'models/v2/playability_tables.json').read_bytes()).hexdigest())
     def run_slot(item):
         slot,ds,style=item;codec=Codec(root);codecs[slot]=codec
         request_id=str(uuid.uuid4());calibration=load_calibration(str(root),prepared['version_id'],slot,round(ds*10),prepared['bpm'])
+        star_target_ratio=float(prepared['metadata']['starTargetRatio'])
+        official_stars=_official_stars(root,ds,prepared['bpm'],len(prepared['anchors'][slot]))
+        star_control=bool(prepared['experimental'] and slot>=4)
+        star_target_stars=target_stars(official_stars, star_target_ratio) if star_control else None
         conditions={'bpm':prepared['bpm'],'end_seconds':prepared['end_seconds'],
                     'bt':prepared['bpm_ticks'],'bv':prepared['bpm_values'],
-                    'official_stars':_official_stars(root,ds,prepared['bpm'],len(prepared['anchors'][slot])),
-                    'star_gap_ratio':float(extra.get('jointStarGapRatio',.5)),'star_control':bool(prepared['experimental'] and slot>=4)}
+                    'official_stars':official_stars,'star_target_ratio':star_target_ratio,
+                    'star_target_stars':star_target_stars,'star_control':star_control}
         request=GenerationRequest(request_id,prepared['version_id'],slot,round(ds*10),prepared['seed']+slot*65537,definition,Envelope(conditions,torch.tensor([ds,prepared['bpm']],device='cuda'),'generation-conditions/1'))
         ctx=RenderContext(root,prepared['anchors'][slot],prepared['mel'],prepared['structure'],prepared['bpm_ticks'],prepared['bpm_values'],prepared['version_id'],slot,ds,
                           prepared['metadata'],torch.device('cuda'),prepared['spec'].renderer_checkpoint,style,.85,request.seed,prepared['factor_session'],progress)

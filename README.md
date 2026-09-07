@@ -1,4 +1,4 @@
-# maimai Chart Generator 0.3.1
+# maimai Chart Generator 0.4.0
 
 [English](README.en.md) | 简体中文
 
@@ -7,7 +7,7 @@
 ## 功能
 
 - 从音频、BPM、版本和目标定数生成 BASIC～Re:MASTER 谱面。
-- 保留 Slide Star 与 Track 的独立表示，并控制星星数量上下限。
+- 保留 Slide Star 与 Track 的独立表示，并控制星星数量上下限。GUI 的“星星目标比例”直接表示目标星星数相对校准官谱参考星星数的比例：0 为不要求星星，1 为官谱参考数；它不是从首个草稿向官谱数补差的比例。
 - HARD 问题返回局部上下文重生成；相同阻塞点重复失败时扩大因果窗口，不重新生成整首。
 - 手数限制是原生 HARD：候选生成前先计算 Hold、Slide、Tap 与 Touch 的占手状态；双手已满时，只允许落在当前 Slide 手掌覆盖区内的随滑 Touch。
 - 只有完整整谱许可且 Simai 回读与许可稿一致时才写出 `maidata.txt`。
@@ -25,6 +25,8 @@ MajdataViewX 和 FFmpeg 均不随仓库提供。若自行把 MajdataViewX 放到
 ## 实现原理
 
 音频首先被解码为 log-mel 特征，并由 MERT 提取音乐表征。结构模型把整首音乐压缩为小节级结构与难度密度；锚点模型结合 BPM、歌曲结构、目标定数和版本选择候选时刻。contextual V4 renderer 按时间顺序生成音符类型、键位、轨迹、时值和修饰符，并维护前序事件、占用键位、手部容量、滑条运动及几何状态。
+
+EXPERT、MASTER、Re:MASTER 在锚点之后由 `JointEventPlanModel` 的 `arity / stars / holds / touches / tap_slide` heads 联合选择 WHAT。输出被压缩为不含键位和路线的 `EventIntent`；各难度只能使用自身训练集官谱中实际出现过的配置。V4 根据该 intent 选择键位、Touch 传感器、Slide 路线、时值和修饰。BASIC、ADVANCED 当前仍由 V4 联合生成 WHAT 与 WHERE。
 
 生成器不自行宣布谱面可用。每个候选都会编码为统一 CUDA IR，交给 Harness 使用与整谱相同的规则检查。HARD 冲突直接拒绝；具备校准的难度还会检查短时密度、运动速度和方向变化。整谱通过后，系统再把 IR 写为 Simai、重新解析，并要求内容摘要与获准草稿完全一致，之后才发布输出。
 

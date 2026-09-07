@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "definition": "free-hand outer transitions while exactly one Hold/Touch Hold note remains active; train split only",
+  "sourceCharts": 2927,
+  "sourceTransitions": 41147,
+  "preferenceQuantile": 0.9,
+  "semantics": "candidate WHERE ranking only; never a HARD/full-chart rejection threshold; adjacent same-direction rotation is exempt",
+  "slots": {
+    "4": {
+      "count": 19525,
+      "speed90": 7.333333333333125,
+      "jerk90": 7.24999999999997,
+      "step90": 3.0
+    },
+    "5": {
+      "count": 19188,
+      "speed90": 14.676666666667503,
+      "jerk90": 6.500000000000023,
+      "step90": 2.0
+    },
+    "6": {
+      "count": 2434,
+      "speed90": 21.000000000004775,
+      "jerk90": 7.925000000000049,
+      "step90": 2.0
+    }
+  }
+}

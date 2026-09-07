@@ -6,6 +6,7 @@ path; the Harness remains the only source of candidate musical judgements.
 """
 
 from __future__ import annotations
+from .intent import EventIntent,IntentChoices
 
 from dataclasses import dataclass
 from pathlib import Path
@@ -393,8 +394,10 @@ def _sample_anchor(
     shared_geometry: torch.Tensor,
     route_cache: dict[tuple[int, int], tuple[int, ...]],
 ) -> tuple[str, dict, dict]:
-    max_attempts = 32
-    fixed_intent = copy_representation(planned_intent) if planned_intent is not None else None
+    options=(planned_intent.candidates if isinstance(planned_intent,IntentChoices)
+             else (EventIntent.from_representation(planned_intent),) if planned_intent is not None else ())
+    max_attempts=8 if isinstance(planned_intent,IntentChoices) else 32
+    fixed_intent = options[0] if options else None
     revisions = 0
     batch_sizes: list[int] = []
     last_decisions: list[dict] = []
@@ -458,7 +461,8 @@ def _sample_anchor(
             for text, rep in proposals
         ]
 
-    while revisions < 2:
+    while revisions < (len(options) if options and allow_intent_revision else 1 if options else 2):
+        if options:fixed_intent=options[revisions]
         proposals: list[tuple[str, dict]] = []
         first_text, first_rep = _candidate(
             head=head,
@@ -487,7 +491,7 @@ def _sample_anchor(
         if decisions[0]["severity"] == "SOFT":
             best_soft = (proposals[0][0], proposals[0][1], decisions[0])
         if fixed_intent is None:
-            fixed_intent = copy_representation(first_rep)
+            fixed_intent = EventIntent.from_representation(first_rep)
         while len(proposals) < 4:
             proposals.append(
                 _candidate(
@@ -547,9 +551,13 @@ def _sample_anchor(
                 if decision["severity"] == "SOFT" and (best_soft is None or int(decision.get('soft_cost',0))<int(best_soft[2].get('soft_cost',0))):
                     best_soft = (proposal[0],proposal[1],decision)
             proposals.extend(new)
+        # SOFT means the requested WHAT is realizable.  It may trigger more
+        # WHERE samples, but must never promote a lower-ranked WHAT.  Only an
+        # all-HARD realization set proves this WHAT infeasible enough to move
+        # to another IntentChoices candidate.
+        if planned_intent is not None and best_soft is not None:
+            return best_soft
         if planned_intent is not None and not allow_intent_revision:
-            if best_soft is not None:
-                return best_soft
             raise RenderFailure(
                 "explicit intent exhausted 32 provider-judged realizations",
                 stage="provider_sampling",
@@ -808,7 +816,7 @@ def render(
                     chosen_text, chosen_representation = text, copy_representation(representation)
                 else:
                     planned = (
-                        copy_representation(intent_plan[absolute_tick])
+                        intent_plan[absolute_tick]
                         if intent_plan is not None and absolute_tick in intent_plan
                         else None
                     )
@@ -832,6 +840,12 @@ def render(
                         shared_adapted=shared_adapted,
                         shared_geometry=shared_geometry,
                     )
+                    if planned is not None:
+                        choices=planned.candidates if isinstance(planned,IntentChoices) else (EventIntent.from_representation(planned),)
+                        realized=intent_signature(chosen_representation)
+                        index=next((i for i,value in enumerate(choices) if intent_signature(value)==realized),-1)
+                        histogram=cache.setdefault('what_choice_histogram',{})
+                        histogram[str(index)]=int(histogram.get(str(index),0))+1
                     if chosen_text:
                         try:
                             chosen_representation = text_representation(chosen_text, vocab)

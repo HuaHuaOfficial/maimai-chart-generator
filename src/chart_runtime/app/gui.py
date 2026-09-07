@@ -35,7 +35,7 @@ BACKEND_OPTIONS = {"CUDA 原生后端":"cuda"}
 class ChartGeneratorApp(tk.Tk):
     def __init__(self) -> None:
         super().__init__()
-        self.title("maimai Chart Runtime 0.3 · 原生生成")
+        self.title("maimai Chart Runtime 0.4")
         self.geometry("1000x820")
         self.minsize(820, 700)
         self.messages: queue.Queue[tuple[str, str]] = queue.Queue()
@@ -82,7 +82,7 @@ class ChartGeneratorApp(tk.Tk):
         self.threshold = tk.StringVar(value="0.80")
         self.focus = tk.StringVar(value="平衡（旋律+节奏）")
         self.backend = tk.StringVar(value="CUDA 原生后端")
-        self.star_gap_ratio = tk.DoubleVar(value=0.5)
+        self.star_target_ratio = tk.DoubleVar(value=0.5)
         fields = [
             ("曲名", ttk.Entry(frame, textvariable=self.title_value)),
             ("版本", ttk.Combobox(frame, textvariable=self.version, state="readonly", values=[f"{i} | {n}" for i, n in VERSIONS])),
@@ -95,10 +95,10 @@ class ChartGeneratorApp(tk.Tk):
             ttk.Label(frame, text=label).grid(row=row, column=0, sticky="w", pady=4)
             widget.grid(row=row, column=1, columnspan=2, sticky="ew", padx=8)
             row += 1
-        ttk.Label(frame, text="星星比例").grid(row=row, column=0, sticky="w", pady=4)
+        ttk.Label(frame, text="星星目标比例（相对官谱参考）").grid(row=row, column=0, sticky="w", pady=4)
         star_frame=ttk.Frame(frame);star_frame.grid(row=row,column=1,columnspan=2,sticky="ew",padx=8);star_frame.columnconfigure(1,weight=1)
         ttk.Label(star_frame,text="少").grid(row=0,column=0,padx=(0,6))
-        ttk.Scale(star_frame,from_=0.0,to=1.0,variable=self.star_gap_ratio,orient="horizontal").grid(row=0,column=1,sticky="ew")
+        ttk.Scale(star_frame,from_=0.0,to=1.0,variable=self.star_target_ratio,orient="horizontal").grid(row=0,column=1,sticky="ew")
         ttk.Label(star_frame,text="多").grid(row=0,column=2,padx=(6,0))
         row += 1
         ttk.Label(frame,text="生成模型").grid(row=row,column=0,sticky="w",pady=4)
@@ -226,7 +226,7 @@ class ChartGeneratorApp(tk.Tk):
             threshold = float(self.threshold.get())
             extra["mappingFocus"] = FOCUS_MODES[self.focus.get()]
             extra["difficultyWorkloadMode"] = "auto"
-            extra["jointStarGapRatio"] = float(self.star_gap_ratio.get())
+            extra["starTargetRatio"] = float(self.star_target_ratio.get())
             extra['contextualRepair'] = True
             inference_backend = BACKEND_OPTIONS[self.backend.get()]
             model_path = self._resolve_model_path(self.model_path.get())

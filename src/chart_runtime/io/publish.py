@@ -7,7 +7,7 @@ from .simai import render_compact_maidata,parse_maidata,parse_inote_ticks
 
 def publish(prepared,results,codecs,folder):
     from ..app.preparation import _write_track_mp3
-    folder=Path(folder);lines=[f"&title={prepared['title']}",f"&artist={prepared['metadata']['artist']}",f"&first={prepared['beat_offset']:g}",f"&wholebpm={prepared['bpm']:g}",f"&versionid={prepared['version_id']}",f"&version={prepared['version_name']}",'&clock_count=4','&chartgenerator=ChartRuntime-0.3.1','']
+    folder=Path(folder);lines=[f"&title={prepared['title']}",f"&artist={prepared['metadata']['artist']}",f"&first={prepared['beat_offset']:g}",f"&wholebpm={prepared['bpm']:g}",f"&versionid={prepared['version_id']}",f"&version={prepared['version_name']}",'&clock_count=4','&chartgenerator=ChartRuntime-0.4.0','']
     records=[]
     for slot,entry in sorted(results.items()):
         result,backend,generator,request=entry;chart=result.chart;permit=result.permit
@@ -29,7 +29,9 @@ def publish(prepared,results,codecs,folder):
     pending=folder/'maidata.pending.txt';pending.write_text('\n'.join(lines),encoding='utf8')
     audio_pending=folder/'track.pending.mp3';_write_track_mp3(prepared['audio_path'],audio_pending,prepared['ffmpeg'])
     audio_pending.replace(folder/'track.mp3')
-    document={'schemaVersion':4,'release':'0.3.1','title':prepared['title'],'versionId':prepared['version_id'],'versionName':prepared['version_name'],'bpm':prepared['bpm'],'first':prepared['beat_offset'],
+    document={'schemaVersion':4,'release':'0.4.0','title':prepared['title'],'versionId':prepared['version_id'],'versionName':prepared['version_name'],'bpm':prepared['bpm'],'first':prepared['beat_offset'],
+              'starControl':{'parameter':'starTargetRatio','value':float(prepared['metadata']['starTargetRatio']),
+                             'semantics':'target Stars divided by calibrated official-chart reference; controlled difficulties use exact target bounds'},
               'levels':{str(k):v for k,v in prepared['levels'].items()},'audioDurationSeconds':prepared['duration'],'roundedTotalTicks':prepared['total_ticks'],'endSeconds':prepared['end_seconds'],
               'charts':records,'timings':prepared['timings'],'outputDir':str(folder),'inferenceBackend':prepared['acceleration_info'],'cpuMusicalChecks':False}
     (folder/'metadata.pending.json').write_text(json.dumps(document,ensure_ascii=False,indent=2),encoding='utf8')

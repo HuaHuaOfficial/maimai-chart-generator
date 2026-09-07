@@ -14,6 +14,7 @@ from typing import Any, Mapping
 
 import numpy as np
 import torch
+from .intent import EventIntent
 
 from chart_runtime.io.audio import FRAME_SECONDS
 from chart_runtime.io.factors import SHAPE_RE, factor_event, note_route
@@ -69,6 +70,7 @@ def empty_representation(touch_count: int) -> dict[str, np.ndarray]:
 
 
 def copy_representation(rep: Mapping[str, Any]) -> dict[str, np.ndarray]:
+    if isinstance(rep,EventIntent):return rep
     return {
         key: value.copy() if isinstance(value, np.ndarray) else np.asarray(value).copy()
         for key, value in rep.items()
@@ -76,6 +78,7 @@ def copy_representation(rep: Mapping[str, Any]) -> dict[str, np.ndarray]:
 
 
 def intent_signature(rep: Mapping[str, Any]) -> tuple:
+    if isinstance(rep,EventIntent):return rep.button_arity,tuple(sorted(rep.button_families)),rep.touch_count
     arity = int(rep["button_arity"])
     families = tuple(sorted(int(value) for value in rep["button_family"][:arity]))
     return arity, families, int(np.count_nonzero(rep["touch_presence"]))
@@ -418,12 +421,18 @@ def decode_structured_factor_event_fast(
     running = adapted + one_value(head.arity_embedding, int(rep["button_arity"]))
     summary = torch.zeros_like(running)
     duration_ids = duration_ids_for_family(snapshot, 1, len(vocab["durations"]))
+    remaining_intent_families=list(EventIntent.from_representation(intent_override).button_families) if intent_override is not None else []
     for note_index in range(2):
         note_hidden = running + summary
         active_note = note_index < int(rep["button_arity"])
         if active_note:
             if intent_override is not None:
-                family = int(intent_override["button_family"][note_index])
+                # WHAT supplies an unordered family multiset. V4 assigns that
+                # multiset to realized lanes using its learned family logits.
+                family_logits=head.family_head[note_index](note_hidden)[0,-1].float()
+                allowed_families=sorted(set(remaining_intent_families))
+                family=choose_allowed(family_logits,allowed_families,sampling_temperature,rng,sampling_top_p)
+                remaining_intent_families.remove(family)
             else:
                 family_logits = head.family_head[note_index](note_hidden)[0, -1].float()
                 family_logits[3] = -torch.inf
@@ -529,9 +538,25 @@ def decode_structured_factor_event_fast(
     )
     touch_active = torch.zeros(head.c.touch_positions, dtype=torch.bool, device=device)
     if intent_override is not None:
-        touch_active = torch.as_tensor(
-            intent_override["touch_presence"], device=device, dtype=torch.bool
-        )
+        intent=EventIntent.from_representation(intent_override)
+        count=intent.touch_count
+        if count:
+            # WHAT fixes only cardinality. WHERE resamples sensors from its
+            # learned logits; no sensor bit mask crosses the intent boundary.
+            logits=head.touch_presence(event_context)[0,-1].float()
+            probabilities=torch.softmax(logits/max(.1,sampling_temperature),-1).cpu().numpy().astype(np.float64)
+            probabilities=np.maximum(probabilities,1e-12);probabilities/=probabilities.sum()
+            covered_touch=torch.as_tensor(snapshot.get('allowedTouchPresenceMask',np.zeros(head.c.touch_positions,np.bool_)),device=device,dtype=torch.bool)
+            covered_np=covered_touch.cpu().numpy()
+            for _ in range(32):
+                selected=rng.choice(len(probabilities),size=count,replace=False,p=probabilities)
+                candidate=np.zeros(len(probabilities),np.bool_);candidate[selected]=True
+                if state.touch_group_count(candidate&~covered_np)<=touch_group_budget:
+                    touch_active=torch.from_numpy(candidate).to(device);break
+            else:
+                # Preserve WHAT cardinality. Harness will reject this WHERE
+                # realization and the next realization resamples sensors.
+                touch_active=torch.from_numpy(candidate).to(device)
     elif version_id >= 13:
         covered_touch = torch.as_tensor(snapshot.get('allowedTouchPresenceMask',np.zeros(head.c.touch_positions,np.bool_)),device=device,dtype=torch.bool)
         if not touch_group_budget and not bool(covered_touch.any()):
