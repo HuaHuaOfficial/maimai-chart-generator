@@ -5,9 +5,9 @@ import json
 from .simai import render_compact_maidata,parse_maidata,parse_inote_ticks
 
 
-def publish(prepared,results,codecs,folder):
-    from ..app.preparation import _write_track_mp3
-    folder=Path(folder);lines=[f"&title={prepared['title']}",f"&artist={prepared['metadata']['artist']}",f"&first={prepared['beat_offset']:g}",f"&wholebpm={prepared['bpm']:g}",f"&versionid={prepared['version_id']}",f"&version={prepared['version_name']}",'&clock_count=4','&chartgenerator=ChartRuntime-0.4.0','']
+def publish(prepared,results,codecs,folder,release_folder):
+    from ..app.preparation import _write_track_mp3,_write_cover_png,_write_bga_mp4
+    folder=Path(folder);lines=[f"&title={prepared['title']}",f"&artist={prepared['metadata']['artist']}",f"&first={prepared['beat_offset']:g}",f"&wholebpm={prepared['bpm']:g}",f"&versionid={prepared['version_id']}",f"&version={prepared['version_name']}",'&clock_count=4','&chartgenerator=ChartRuntime-1.0.0','']
     records=[]
     for slot,entry in sorted(results.items()):
         result,backend,generator,request=entry;chart=result.chart;permit=result.permit
@@ -23,18 +23,19 @@ def publish(prepared,results,codecs,folder):
         lines.extend((f'&lv_{slot}={prepared["levels"][slot]:.1f}',f'&des_{slot}=ChartRuntime {prepared["spec"].label}',f'&inote_{slot}={inote}',''))
         meta=backend.results[chart.ref]
         records.append({'difficultySlot':slot,'internalLevel':prepared['levels'][slot],'events':len(events),'contentDigest':chart.ref.content_digest,'receiptId':permit.receipt_id,
-                        'definition':vars(request.definition),'harness':meta,'generationPhases':generator.timings,'feedbackRounds':len(result.observations),
+                        'definition':vars(request.definition),'harness':meta,'generationPhases':generator.timings,'feedbackRounds':max(0,len(result.observations)-1),
                         'architectureActors':['generator','harness']})
     folder.mkdir(parents=True,exist_ok=True)
     pending=folder/'maidata.pending.txt';pending.write_text('\n'.join(lines),encoding='utf8')
     audio_pending=folder/'track.pending.mp3';_write_track_mp3(prepared['audio_path'],audio_pending,prepared['ffmpeg'])
     audio_pending.replace(folder/'track.mp3')
-    document={'schemaVersion':4,'release':'0.4.0','title':prepared['title'],'versionId':prepared['version_id'],'versionName':prepared['version_name'],'bpm':prepared['bpm'],'first':prepared['beat_offset'],
-              'starControl':{'parameter':'starTargetRatio','value':float(prepared['metadata']['starTargetRatio']),
-                             'semantics':'target Stars divided by calibrated official-chart reference; controlled difficulties use exact target bounds'},
+    cover_pending=folder/'bg.pending.png';_write_cover_png(prepared['cover_path'],cover_pending,prepared['ffmpeg'])
+    cover_pending.replace(folder/'bg.png')
+    bga_pending=folder/'bg.pending.mp4';_write_bga_mp4(prepared['bga_path'],bga_pending)
+    bga_pending.replace(folder/'bg.mp4')
+    document={'schemaVersion':4,'release':'1.0.0','title':prepared['title'],'versionId':prepared['version_id'],'versionName':prepared['version_name'],'bpm':prepared['bpm'],'first':prepared['beat_offset'],
+              'whatQuotas':{'starScale':float(prepared['metadata']['whatStarScale']),'arity2Scale':float(prepared['metadata']['whatArity2Scale']),'holdScale':float(prepared['metadata']['whatHoldScale']),'touchScale':float(prepared['metadata']['whatTouchScale']),'touchHoldScale':float(prepared['metadata']['whatTouchHoldScale']),'variation':float(prepared['metadata']['whatVariation']),'semantics':'1.0 is the typical official-chart distribution at displayed DS; scales are relative odds in one normalized WHAT configuration distribution, so changing them may also change notes/event and effective difficulty; Stars are never post-filled'},
               'levels':{str(k):v for k,v in prepared['levels'].items()},'audioDurationSeconds':prepared['duration'],'roundedTotalTicks':prepared['total_ticks'],'endSeconds':prepared['end_seconds'],
-              'charts':records,'timings':prepared['timings'],'outputDir':str(folder),'inferenceBackend':prepared['acceleration_info'],'cpuMusicalChecks':False}
-    (folder/'metadata.pending.json').write_text(json.dumps(document,ensure_ascii=False,indent=2),encoding='utf8')
-    (folder/'metadata.pending.json').replace(folder/'metadata.json')
+              'songId':prepared['song_id'],'charts':records,'timings':prepared['timings'],'outputDir':str(folder),'releaseDir':str(release_folder),'inferenceBackend':prepared['acceleration_info'],'cpuMusicalChecks':False}
     pending.replace(folder/'maidata.txt')
     return document

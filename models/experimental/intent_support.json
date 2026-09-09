@@ -1,9 +1,185 @@
 {
-  "schemaVersion": 1,
-  "source": "joint_event_plan_v1 train split",
+  "schemaVersion": 2,
+  "source": {
+    "datasetIndex": "D:\\maimai\\chart_ai\\cache\\dataset_index.json",
+    "datasetIndexSha256": "f3aab4a7d2c9fab37bf2b702aaf0fe1f7ac2c61239b6462297b0f8fe849cf821",
+    "split": "train"
+  },
   "slots": {
+    "2": {
+      "trainingSongs": 1385,
+      "configurations": [
+        [
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          2
+        ],
+        [
+          0,
+          0,
+          0,
+          3
+        ],
+        [
+          0,
+          0,
+          0,
+          4
+        ],
+        [
+          0,
+          0,
+          0,
+          5
+        ],
+        [
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          1,
+          0
+        ],
+        [
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          2,
+          0,
+          2,
+          0
+        ],
+        [
+          2,
+          1,
+          0,
+          0
+        ],
+        [
+          2,
+          2,
+          0,
+          0
+        ]
+      ]
+    },
+    "3": {
+      "trainingSongs": 1385,
+      "configurations": [
+        [
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          2
+        ],
+        [
+          0,
+          0,
+          0,
+          3
+        ],
+        [
+          0,
+          0,
+          0,
+          4
+        ],
+        [
+          0,
+          0,
+          0,
+          5
+        ],
+        [
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          1,
+          0
+        ],
+        [
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          2,
+          0,
+          2,
+          0
+        ],
+        [
+          2,
+          1,
+          0,
+          0
+        ],
+        [
+          2,
+          1,
+          1,
+          0
+        ],
+        [
+          2,
+          2,
+          0,
+          0
+        ]
+      ]
+    },
     "4": {
-      "trainingSongs": 1378,
+      "trainingSongs": 1385,
       "configurations": [
         [
           0,
@@ -200,7 +376,7 @@
       ]
     },
     "5": {
-      "trainingSongs": 1378,
+      "trainingSongs": 1385,
       "configurations": [
         [
           0,
@@ -559,7 +735,7 @@
       ]
     },
     "6": {
-      "trainingSongs": 139,
+      "trainingSongs": 140,
       "configurations": [
         [
           0,

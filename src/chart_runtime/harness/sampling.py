@@ -9,6 +9,8 @@ from ..io.timing import ticks_to_seconds
 from ..io.durations import hold_seconds, slide_seconds
 from .durations import typed_duration_values
 from .fused import TIME_EPSILON, INPUT_RELEASE_SECONDS
+from .snapshot_fast import SnapshotTracker
+from .source_head import TRACK_LIFECYCLE
 
 
 def representation_text(rep,vocab):
@@ -31,8 +33,10 @@ class SamplingProvider:
         self.kernel=kernel;self.codec=kernel.codec;self.tables=self.codec.tables;self.vocab=vocab
         self.bt=np.asarray(bt);self.bv=np.asarray(bv);self.version=version;self.slot=slot;self.end_seconds=end_seconds;self.calibration=calibration
         self.history={};self.references={};self.decisions=[];self.tick=0;self.max_cuda_matrix_elements=0
-        self.device=self.codec.device;self._payload=None;self._durations={}
+        self.device=self.codec.device;self._payload=None;self._durations={};self._duration_arrays_cpu={}
         self._reference_payload=None
+        self._fast_snapshot=SnapshotTracker(vocab,self.tables,self.bt,self.bv)
+        self._fast_snapshot_enabled=True
         pref_path=self.codec.root/'models/experimental/one_hand_motion_preference.json'
         if pref_path.is_file():
             document=json.loads(pref_path.read_text(encoding='utf8'))
@@ -56,9 +60,26 @@ class SamplingProvider:
     def bind_references(self,reference_events):
         self.references={int(t):str(x.get('text','')) if isinstance(x,dict) else str(x) for t,x in (reference_events or {}).items()}
         self._reference_payload=self.codec.encode(self.references,self.bt,self.bv)
+        c=self._reference_payload.columns
+        if len(c['track_event']):
+            self._source_head_reference_rows=np.column_stack(tuple(c[name].detach().cpu().numpy() for name in ('track_shoot','track_end','track_head'))+
+                (c['event_tick'][c['track_event']].detach().cpu().numpy(),))
+        else:self._source_head_reference_rows=np.empty((0,4),np.float64)
+        if len(c['track_event']):
+            self._track_tail_reference_rows=np.column_stack((c['track_shoot'].detach().cpu().numpy(),c['track_end'].detach().cpu().numpy(),c['track_tail'].detach().cpu().numpy(),c['event_tick'][c['track_event']].detach().cpu().numpy()))
+        else:self._track_tail_reference_rows=np.empty((0,4),np.float64)
+        if self.references:
+            ticks=np.asarray(sorted(self.references),np.int64);times=ticks_to_seconds(ticks,self.bt,self.bv);tap_rows=[]
+            for tick,at in zip(ticks,times):
+                for note in self.codec.parse_event(self.references[int(tick)]):
+                    if note['family']=='tap':tap_rows.append((float(at),int(note['start'])-1,int(tick)))
+            self._fixed_tap_rows=np.asarray(tap_rows,np.float64).reshape(-1,3)
+        else:self._fixed_tap_rows=np.empty((0,3),np.float64)
+        if self.references:self._fast_snapshot_enabled=False
 
     def seed_history(self,events):
         self.history=dict(events);self._payload=None
+        if self.history:self._fast_snapshot_enabled=False
 
     def _context(self,moment,horizon):
         reference={}
@@ -66,7 +87,7 @@ class SamplingProvider:
             c=self._reference_payload.columns;times=c['event_time'];selected=(times>=moment-2)&(times<=horizon+2)
             live=(c['input_end']+.2>=moment)&(c['input_start']<=horizon+2)
             selected.scatter_(0,c['input_event'][live],True)
-            tracks=(c['track_end']+.2>=moment)&(c['track_start']<=horizon+2)
+            tracks=(c['track_end']+TRACK_LIFECYCLE.retention_seconds>=moment)&(c['track_start']<=horizon+2)
             selected.scatter_(0,c['track_event'][tracks],True)
             ids=selected.nonzero(as_tuple=True)[0]
             if ids.numel():
@@ -78,6 +99,26 @@ class SamplingProvider:
     def snapshot(self,tick,enforce_recent=True):
         started=time.perf_counter()
         self.tick=int(tick);at=float(ticks_to_seconds(np.asarray([tick]),self.bt,self.bv)[0]);bpm=float(self.bv[max(0,np.searchsorted(self.bt,tick,side='right')-1)])
+        if self._fast_snapshot_enabled:
+            if bpm not in self._durations:self._durations[bpm]=typed_duration_values(tuple(self.vocab['durations']),bpm)
+            if bpm not in self._duration_arrays_cpu:self._duration_arrays_cpu[bpm]=tuple(x.detach().cpu().numpy() for x in self._durations[bpm])
+            result=self._fast_snapshot.snapshot(tick,bpm,self._duration_arrays_cpu[bpm],self.end_seconds)
+            keep=self._fast_snapshot.prune(at);self.history={t:self.history[t] for t in keep if t in self.history}
+            lifecycle=TRACK_LIFECYCLE.snapshot_masks(self,at)
+            prior=result.get('allowedOuterStartMask');lifecycle['allowedOuterStartMask']=lifecycle['allowedOuterStartMask'] if prior is None else np.asarray(prior,bool)&lifecycle['allowedOuterStartMask']
+            lifecycle['allowedTapStartMask']&=lifecycle['allowedOuterStartMask'];result.update(lifecycle)
+            result['allowedSlideHeadDurationMask']=TRACK_LIFECYCLE.slide_mask(self,at,*self._duration_arrays_cpu[bpm][1:])
+            self._one_hand_state=None
+            if result.get('oneHandHoldConstraint') and 'freeHandLastLane' in result:
+                self._one_hand_state={'last_lane':result['freeHandLastLane'],'last_time':result['freeHandLastTime'],
+                    'previous_delta':result.get('freeHandPreviousDelta'),'constraint_start':result.get('oneHandConstraintStart')}
+            self._tap_run_state=None
+            if int(result.get('motionRunLength',0))>=3:
+                self._tap_run_state={'last_lane':result['lastSingleTapLane'],'last_time':result['tapRunLastTime'],
+                    'direction':result['motionDirection'],'run_length':result['motionRunLength']}
+            self.timings['fastSnapshotCount']=int(self.timings.get('fastSnapshotCount',0))+1
+            self.timings['snapshotSeconds']+=time.perf_counter()-started
+            return result
         if self._payload is None:self._payload=self.codec.encode(self.history,self.bt,self.bv)
         c=self._payload.columns;ie=c['input_event'];held=c['input_hold']&(c['input_start']<=at)&(c['input_end']>at+1e-7)
         outerheld=held&c['input_outer'];touchheld=held&~c['input_outer']
@@ -144,7 +185,7 @@ class SamplingProvider:
         if len(c['event_tick']):
             needed=c['event_time']>=at-2
             needed.scatter_(0,c['input_event'][c['input_end']+.2>=at],True)
-            needed.scatter_(0,c['track_event'][c['track_end']+.2>=at],True)
+            needed.scatter_(0,c['track_event'][c['track_end']+TRACK_LIFECYCLE.retention_seconds>=at],True)
             needed[-8:]=True
             lower=(needed.nonzero(as_tuple=True)[0].min()-8).clamp_min(0)
             keys=c['event_tick'][torch.arange(len(c['event_tick']),device=self.device)>=lower].detach().cpu().tolist()
@@ -165,10 +206,19 @@ class SamplingProvider:
             result.update(freeHandLastLane=self._one_hand_state['last_lane'],freeHandLastTime=self._one_hand_state['last_time'],
                           freeHandPreviousDelta=self._one_hand_state['previous_delta'],oneHandConstraintStart=self._one_hand_state['constraint_start'])
         self.timings['snapshotSeconds']+=time.perf_counter()-started
+        lifecycle=TRACK_LIFECYCLE.snapshot_masks(self,at)
+        prior=result.get('allowedOuterStartMask');lifecycle['allowedOuterStartMask']=lifecycle['allowedOuterStartMask'] if prior is None else np.asarray(prior,bool)&lifecycle['allowedOuterStartMask']
+        lifecycle['allowedTapStartMask']&=lifecycle['allowedOuterStartMask'];result.update(lifecycle)
+        if bpm not in self._duration_arrays_cpu:
+            self._duration_arrays_cpu[bpm]=tuple(x.detach().cpu().numpy() for x in self._durations[bpm])
+        result['allowedSlideHeadDurationMask']=TRACK_LIFECYCLE.slide_mask(self,at,*self._duration_arrays_cpu[bpm][1:])
+        causal_budget=getattr(self,'causal_budget',None)
+        if causal_budget is not None:result.update(causal_budget.limits(int(tick)))
         return result
 
     def update(self,tick,representation,bpm):
         text=representation_text(representation,self.vocab)
+        if self._fast_snapshot_enabled:self._fast_snapshot.append(int(tick),representation,float(bpm))
         if text:self.history[int(tick)]=text
         self._payload=None
 
@@ -191,12 +241,20 @@ class SamplingProvider:
 
     def check_batch(self,reps,moment,bpm):
         if not reps:self.decisions=[];return []
+        causal_budget=getattr(self,'causal_budget',None)
+        if causal_budget is not None:causal_budget.reserve(int(self.tick),len(reps))
         started=time.perf_counter();self.timings['candidateBatches']+=1;self.timings['candidates']+=len(reps)
         at_bpm=float(bpm)
         if at_bpm not in self._durations:self._durations[at_bpm]=typed_duration_values(tuple(self.vocab['durations']),at_bpm)
         hd,wait,move=self._durations[at_bpm]
-        durations=torch.as_tensor([int(rep['button_duration'][j]) for rep in reps for j in range(int(rep['button_arity']))],device=self.device,dtype=torch.int64)
-        extent=float(torch.maximum(hd[durations],wait[durations]+move[durations]).nan_to_num().max().item()) if durations.numel() else 0.
+        if at_bpm not in self._duration_arrays_cpu:
+            self._duration_arrays_cpu[at_bpm]=tuple(x.detach().cpu().numpy() for x in (hd,wait,move))
+        h_cpu,w_cpu,m_cpu=self._duration_arrays_cpu[at_bpm]
+        ids=[int(rep['button_duration'][j]) for rep in reps for j in range(int(rep['button_arity']))]
+        extent=float(np.nan_to_num(np.maximum(h_cpu[ids],w_cpu[ids]+m_cpu[ids])).max()) if ids else 0.
+        # Long Touch Holds also extend the future dependency window.
+        touch_ids=[int(rep['touch_duration'][j]) for rep in reps for j in np.flatnonzero(rep['touch_presence']) if int(rep['touch_duration'][j])]
+        if touch_ids:extent=max(extent,float(np.nan_to_num(h_cpu[touch_ids]).max()))
         context=self._context(moment,moment+extent);context.pop(self.tick,None)
         baseline=self.codec.encode(context,self.bt,self.bv)
         drafts=[baseline]+[self.codec.encode({**context,**({self.tick:representation_text(rep,self.vocab)} if representation_text(rep,self.vocab) else {})},self.bt,self.bv) for rep in reps]
@@ -222,7 +280,11 @@ class SamplingProvider:
         qc=torch.zeros((count,4),device=self.device,dtype=torch.int64)
         qc.index_add_(0,result.event_batch,new_quality.T.to(torch.int64));qc=qc[1:]
         hc=torch.cat((hc,qc),1);reasons+=['quality:'+name for name in ('burst','motion_speed','track_speed','motion_change')]
-        passed=(hc.sum(1)==0);soft=torch.stack(list(result.soft.values()),1);extra=(soft[1:,:3]-soft[:1,:3]).clamp_min(0).sum(1)
+        passed=(hc.sum(1)==0);soft=torch.stack(list(result.soft.values()),1)
+        contact_extra=(soft[1:,:min(3,soft.shape[1])]-soft[:1,:min(3,soft.shape[1])]).clamp_min(0).sum(1)
+        slide_hand_extra=((soft[1:,3]-soft[:1,3]).clamp_min(0) if getattr(self,'slide_hand_order_enabled',False) and soft.shape[1]>3
+                          else torch.zeros(len(reps),device=self.device,dtype=torch.int64))
+        extra=contact_extra+slide_hand_extra
         # A Slide entry preference is deliberately narrow: it activates only
         # after three immediately preceding pure single Taps form an adjacent
         # directional run.  This catches abrupt Star pickup without flattening
@@ -258,14 +320,17 @@ class SamplingProvider:
             one_hand_preference=(speed/speed_limit-1.).clamp_min(0.)+(jerk/jerk_limit-1.).clamp_min(0.)+(step/step_limit-1.).clamp_min(0.)
             one_hand_preference=torch.where((arity==1)&~smooth,one_hand_preference,torch.zeros_like(one_hand_preference))
         one_hand_milli=(one_hand_preference*1000.).round().to(torch.int64)
-        records=hc.detach().cpu().tolist();passes=passed.detach().cpu().tolist();softs=extra.detach().cpu().tolist();slide_costs=slide_entry_milli.detach().cpu().tolist();one_hand_costs=one_hand_milli.detach().cpu().tolist()
-        for row,ok,soft_count,slide_cost,one_hand_cost in zip(records,passes,softs,slide_costs,one_hand_costs):
+        packed=torch.cat((hc,passed[:,None].to(torch.int64),extra[:,None],slide_hand_extra[:,None],slide_entry_milli[:,None],one_hand_milli[:,None]),dim=1).detach().cpu().tolist()
+        records=[row[:-5] for row in packed];passes=[bool(row[-5]) for row in packed]
+        softs=[row[-4] for row in packed];slide_hand_costs=[row[-3] for row in packed];slide_costs=[row[-2] for row in packed];one_hand_costs=[row[-1] for row in packed]
+        for row,ok,soft_count,slide_hand_cost,slide_cost,one_hand_cost in zip(records,passes,softs,slide_hand_costs,slide_costs,one_hand_costs):
             hard_reason='+'.join(name for name,n in zip(reasons,row) if n)
             advisory=[]
-            if soft_count:advisory.append('ContactAdvisory')
+            if soft_count-slide_hand_cost:advisory.append('ContactAdvisory')
+            if slide_hand_cost:advisory.append('SlideHandOrder')
             if one_hand_cost:advisory.append('OneHandMotionPreference')
             if slide_cost:advisory.append('SlideEntryMotionPreference')
-            decision={'severity':'HARD' if not ok else 'SOFT' if advisory else 'CLEAN','evidence_status':'shared_cuda_kernel','replace_if_alternative':bool(advisory),'reason':hard_reason or '+'.join(advisory) or 'Clear','scope':'candidate_delta','soft_cost':int(soft_count)*1000000+int(one_hand_cost)*100+int(slide_cost),'contact_soft_cost':int(soft_count),'one_hand_motion_cost':int(one_hand_cost),'one_hand_preference_quantile':self.one_hand_preference_quantile,'slide_entry_motion_cost':int(slide_cost),'slide_entry_preference_quantile':self.slide_entry_preference_quantile}
+            decision={'severity':'HARD' if not ok else 'SOFT' if advisory else 'CLEAN','evidence_status':'shared_cuda_kernel','replace_if_alternative':bool(advisory),'reason':hard_reason or '+'.join(advisory) or 'Clear','scope':'candidate_delta','soft_cost':int(soft_count)*1000000+int(one_hand_cost)*100+int(slide_cost),'contact_soft_cost':int(soft_count-slide_hand_cost),'slide_hand_order_cost':int(slide_hand_cost),'slide_hand_order_clearance_seconds':float(self.kernel.fused.slide_hand_order_seconds),'slide_hand_order_max_attempts':int(self.kernel.fused.slide_hand_order_max_attempts),'slide_hand_order_try_next_what':bool(self.kernel.fused.slide_hand_order_try_next_what),'slide_hand_order_max_what_attempts':int(self.kernel.fused.slide_hand_order_max_what_attempts),'one_hand_motion_cost':int(one_hand_cost),'one_hand_preference_quantile':self.one_hand_preference_quantile,'slide_entry_motion_cost':int(slide_cost),'slide_entry_preference_quantile':self.slide_entry_preference_quantile}
             self.decisions.append(decision);output.append((ok,decision['reason'],'same full-chart Kernel; bounded context'))
         self.timings['decisionSeconds']+=time.perf_counter()-started
         return output

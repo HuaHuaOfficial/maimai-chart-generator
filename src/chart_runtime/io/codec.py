@@ -80,8 +80,9 @@ class Codec:
                 keys[canonical] = len(keys)
             self.paths[key] = keys[canonical]
 
+    @staticmethod
     @lru_cache(maxsize=32768)
-    def parse_event(self, text):
+    def parse_event(text):
         normalized = '/'.join(semantic_notes(text))
         notes = factor_event(normalized)['notes']
         for note in notes:
@@ -186,15 +187,28 @@ class Codec:
         floats = {'event_time','event_track_speed','input_start','input_end','track_start','track_shoot','track_end','track_early','contact_time','action_start','action_end'}
         bools = {'input_outer','input_hold','input_ex','track_wifi'}
         with torch.inference_mode(False):
-            tensors = {}
-            for key, values in data.items():
-                if key in ('queue_masks','queue_skip'):
-                    values = [v+[0]*(max_areas-len(v)) for v in values]
-                dtype = torch.float64 if key in floats else torch.bool if key in bools else torch.int64
-                tensor = torch.tensor(values, dtype=dtype, device=self.device)
-                if key == 'event_lanes': tensor = tensor.reshape(-1,max_lanes)
-                if key in ('queue_masks','queue_skip'): tensor = tensor.reshape(-1,max_areas)
-                tensors[key] = tensor
+            if getattr(self, 'packed_transfers', True):
+                from .tensor_pack import numpy_columns_to_device
+                arrays = {}
+                for key, values in data.items():
+                    if key in ('queue_masks','queue_skip'):
+                        values = [v+[0]*(max_areas-len(v)) for v in values]
+                    dtype = np.float64 if key in floats else np.bool_ if key in bools else np.int64
+                    value = np.asarray(values, dtype=dtype)
+                    if key == 'event_lanes': value = value.reshape(-1,max_lanes)
+                    if key in ('queue_masks','queue_skip'): value = value.reshape(-1,max_areas)
+                    arrays[key] = value
+                tensors = numpy_columns_to_device(arrays, self.device)
+            else:
+                tensors = {}
+                for key, values in data.items():
+                    if key in ('queue_masks','queue_skip'):
+                        values = [v+[0]*(max_areas-len(v)) for v in values]
+                    dtype = torch.float64 if key in floats else torch.bool if key in bools else torch.int64
+                    tensor = torch.tensor(values, dtype=dtype, device=self.device)
+                    if key == 'event_lanes': tensor = tensor.reshape(-1,max_lanes)
+                    if key in ('queue_masks','queue_skip'): tensor = tensor.reshape(-1,max_areas)
+                    tensors[key] = tensor
             tensors['event_time_ns'] = (tensors['event_time']*1e9).round().to(torch.int64)
         digest = sha256(json.dumps((source, list(map(int,bt)), list(map(float,bv))),ensure_ascii=False,separators=(',',':')).encode()).hexdigest()
         return ChartPayload(source, MappingProxyType(tensors), digest, self.path_digest,

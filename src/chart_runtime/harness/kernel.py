@@ -11,13 +11,14 @@ import math
 from pathlib import Path
 import torch
 import torch.nn.functional as F
+from .source_head import TRACK_LIFECYCLE
 
 from ..io.codec import Codec, ChartPayload
 
-RULES_ID = 'shared-cuda-rules/2'
+RULES_ID = TRACK_LIFECYCLE.rules_id
 QUALITY_NAMES = ('unpredictabilityWeightedInputs1s', 'outerKeyStepsPerSecond', 'slideSegmentsPerSecond', 'unexpectedMotionChangeRate')
 HARD_NAMES = ('SameSensorStack','OuterMultiPress','HoldLaneConflict','DoubleHoldBlocksSlide',
-              'TrackEndInput','UnprotectedSlideHeadInput','UnprotectedTrackContact',
+              'TrackEndInput','UnprotectedSlideHeadInput','TapOnSlideCritical',
               'DoubleInputDuringSlide','WifiWithIndependentInput','DoubleWifi','WifiWithTwoTracks',
               'DoubleStartCompoundTrack','FullyOverlappingTrackWindow','SlideTooFast',
               'HoldBeyondChartEnd','TrackBeyondChartEnd','InvalidTiming','KnownHardFixture',
@@ -51,8 +52,12 @@ def _cat(payloads):
         payload.assert_unmodified();c=payload.columns
         for key,value in c.items():
             if key=='event_time_ns':continue
-            if key.endswith('_event'):value=value+offsets['event']
-            elif key in ('contact_track','queue_track'):value=value+offsets['track']
+            if key.endswith('_event') and offsets['event']:
+                value=value+offsets['event']
+            elif key in ('contact_track','queue_track') and offsets['track']:
+                value=value+offsets['track']
+            elif key=='action_track' and offsets['track']:
+                value=torch.where(value>=0,value+offsets['track'],value)
             columns.setdefault(key,[]).append(value)
         count=c['event_tick'].numel()
         batch_ids.append(torch.full((count,),b,dtype=torch.int64,device=c['event_tick'].device))
@@ -61,8 +66,8 @@ def _cat(payloads):
         if values[0].ndim==2:
             width=max(x.shape[1] for x in values)
             fill=-1 if key=='event_lanes' else 0
-            values=[F.pad(x,(0,width-x.shape[1]),value=fill) for x in values]
-        columns[key]=torch.cat(values)
+            values=[F.pad(x,(0,width-x.shape[1]),value=fill) if x.shape[1]!=width else x for x in values]
+        columns[key]=values[0] if len(values)==1 else torch.cat(values)
     columns['event_batch']=torch.cat(batch_ids)
     columns['action_batch']=torch.cat([torch.full((len(p.columns['action_start']),),b,device=p.columns['event_tick'].device,dtype=torch.int64) for b,p in enumerate(payloads)])
     return columns,cumulative
@@ -104,13 +109,27 @@ class Kernel:
 
     @torch.no_grad()
     def evaluate(self,payloads,*,versions,end_seconds,bpms,thresholds=None,tolerances=None,features=True):
+        B=len(payloads)
+        if not B or any(len(x)!=B for x in (versions,end_seconds,bpms)):
+            raise ValueError('Batch metadata lengths must match the payload count')
+        if any(not math.isfinite(float(x)) or float(x)<=0 for x in bpms):
+            raise ValueError('BPM must be finite and positive')
+        if any(not math.isfinite(float(x)) or float(x)<0 for x in end_seconds):
+            raise ValueError('Chart ends must be finite and nonnegative')
+        if thresholds is not None and (len(thresholds)!=B or any(x is not None and (len(x)!=4 or any(not math.isfinite(float(v)) or float(v)<=0 for v in x)) for x in thresholds)):
+            raise ValueError('Malformed quality thresholds')
+        for payload in payloads:
+            if payload.definition_id!=self.codec.path_digest:
+                raise ValueError('Payload path-table definition mismatch')
+            if payload.columns['event_tick'].device!=self.device:
+                raise ValueError('Payload belongs to another device')
         from .features import compute_features,violation_masks
         from ..runtime.resources import get_workspace
         workspace=get_workspace(str(self.device))
         with workspace.lease(64*1024*1024):
             c,starts=_cat(payloads);d=self.device;batch=c['event_batch'];n=len(batch);B=len(payloads)
             hard={key:torch.zeros(n,dtype=torch.bool,device=d) for key in HARD_NAMES}
-            soft={key:torch.zeros(B,dtype=torch.int64,device=d) for key in ('TapOnSlide','SlideHeadTap','Overlap')}
+            soft={key:torch.zeros(B,dtype=torch.int64,device=d) for key in ('TapOnSlide','SlideHeadTap','Overlap','SlideHandOrder')}
             clean,fixtures=self._exemptions(payloads,starts,bpms)
             def same(a,b):return batch[a[:,None]]==batch[b[None,:]]
             def exempt(a,b):
@@ -128,7 +147,7 @@ class Kernel:
             flag_values,soft_values=self.fused.run(c,clean,ver,limits,8+self.codec.sensors.index('C'),B)
             masks=((flag_values[:,None]>>torch.arange(len(HARD_NAMES),device=d)[None,:])&1).bool()
             hard={name:masks[:,i] for i,name in enumerate(HARD_NAMES)}
-            soft={name:soft_values[:,i] for i,name in enumerate(('TapOnSlide','SlideHeadTap','Overlap'))}
+            soft={name:soft_values[:,i] for i,name in enumerate(('TapOnSlide','SlideHeadTap','Overlap','SlideHandOrder'))}
             if fixtures.numel():hard['KnownHardFixture'].scatter_(0,fixtures[:,1],True)
             ie=c['input_event'];ib=batch[ie];I=len(ie)
             te=c['track_event'];tb=batch[te];T=len(te)

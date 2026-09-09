@@ -16,24 +16,16 @@ class ModelSpec:
     renderer_checkpoint:Path
 
 
-def available_models(root):
+def native_model_spec(root):
     base=Path(root)/'models'
-    return (ModelSpec('native','原生联合生成 · CUDA Harness',base/'planner_v33.pt',base/'renderer_v4_contextual.pt'),)
-
-
-def model_spec_from_renderer_path(root,path):
-    spec=available_models(root)[0];value=Path(path)
-    if not value.is_absolute():value=Path(root)/value
-    if value.resolve()!=spec.renderer_checkpoint.resolve():
-        raise ValueError('此发布包只运行清单中的最新原生模型，不支持旧 checkpoint')
-    return spec
+    return ModelSpec('native','原生联合生成 · CUDA Harness',base/'planner_v33.pt',base/'renderer_v4_contextual.pt')
 
 
 _LOCK=threading.Lock()
 _CACHE={}
 
 
-def load_models(spec,device,backend='cuda'):
+def load_models(spec,device):
     paths=(spec.planner_checkpoint,spec.renderer_checkpoint)
     key=(tuple((str(p.resolve()),p.stat().st_mtime_ns,p.stat().st_size) for p in paths),str(device))
     with _LOCK:

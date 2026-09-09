@@ -7,6 +7,9 @@ import numpy as np
 
 GROUP_BY_SLOT = {2: 0, 3: 1, 4: 2, 5: 3, 6: 3}
 RHYTHM_DIVISIONS = (1, 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64, 96, 128, 192, 384)
+# Orchestration switches are not musical conditioning.  Keeping them out of
+# the frozen renderer token stream preserves the released stable path.
+RUNTIME_METADATA_KEYS = frozenset({"causalSearchMode"})
 
 def metadata_tokens(chart: dict, count: int = 32, vocab: int = 4096) -> np.ndarray:
     values = []

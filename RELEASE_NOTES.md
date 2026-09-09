@@ -1,23 +1,43 @@
-# Chart Runtime 0.4.0
+# maimai Chart Studio 1.0.0
 
-## Star control
+## Formal release boundary
 
-`starTargetRatio` is now the direct target-Star ratio against the calibrated official-chart reference. On controlled EXPERT, MASTER, and Re:MASTER charts, the CUDA Harness uses the resulting integer as both lower and upper Star bounds; the Generator adds or removes Star candidates through the normal feedback loop.
+1.0.0 is the first formal package built from the current native production runtime. It removes the historical release surface instead of carrying compatibility selectors forward.
 
-## WHAT / WHERE separation
+## One five-difficulty planning hierarchy
 
-EXPERT, MASTER, and Re:MASTER now use `JointEventPlanModel` to choose geometry-free `EventIntent` values before V4 realization. Candidate SOFT findings only rerank or resample WHERE for the current WHAT; a lower-ranked WHAT is considered only when every realization of the current WHAT is HARD.
+- The joint WHAT planner now has dedicated BASIC, ADVANCED, EXPERT, MASTER, and Re:MASTER heads.
+- Existing EXPERT/MASTER/Re:MASTER tensors are migrated exactly and remain unchanged; BASIC/ADVANCED are trained as new heads in the same architecture.
+- Runtime intent support and version-aware official-chart profiles cover all five slots.
+- The old factorized WHAT fallback is not included.
 
-## Hand-transition preference
+## Fixed native model and backend
 
-Two train-derived SOFT WHERE preferences were added without changing HARD legality. During Hold or Touch Hold occupancy, the free hand is ranked by displacement and direction-change cost while smooth adjacent same-direction rotation is explicitly preserved. A narrow Slide-entry preference also catches abrupt Slide pickup after a three-Tap adjacent directional run.
+- Removed arbitrary model checkpoint selection from the API and UI.
+- Removed `auto`/TensorRT backend inputs. CUDA is the sole supported runtime.
+- Removed the deprecated `starTargetRatio` alias and unversioned WHAT-profile compatibility path.
+- Missing `artist` now resolves to the GUI's explicit empty string, preventing metadata-conditioning drift between GUI and scripted requests.
 
-The Home Street Re:MASTER regression keeps the Slide at tick 27072 while reducing local `motionSpeed` from 14.13 to 7.07 and `motionChange` from 21.2 to 0. High-motion Slide coverage is unchanged at 26/109 before and after the final narrow policy.
+## Output package
+
+Successful generations use `乐曲名-YYYYMMDD_HHMMSS/自定义歌曲ID/`. The song-ID directory contains `maidata.txt`, `track.mp3`, `bg.mp4`, and `bg.png`; `元数据.json` is stored in the outer timestamped directory.
+
+## Current Harness
+
+The release includes shared CUDA rules for complete Slide contacts and queues, version capability, dynamic hand accounting, 180 Hz release semantics, source-head Tap/Hold lifecycle, Track tail windows, and bounded causal recovery. The full-chart Harness and bound permit remain the publication authority.
+
+## Claim boundary
+
+The current version-conditioned joint profile has not been shown to suppress Touch-on-Slide: in the matched Koi comparison, its conditional ratio was not lower than the earlier profile. The confirmed historical discrepancy was request-identity drift caused by omitting `artist`; 1.0.0 does not add a Touch-on-Slide reward.
 
 ## Validation
 
-- Native five-difficulty A/B at `starTargetRatio=0.5`: controlled Stars 58/94/86 against references 117/189/172.
-- Native five-difficulty A/B at `starTargetRatio=1.0`: controlled Stars 117/189/172.
-- Final Home Street Re:MASTER end-to-end run: accepted, HARD=0, quality=0.
-- Intent contract tests: 3/3 passed; Star policy tests: 2/2 passed; Python compilation passed.
-- Simai re-read digests match accepted CUDA IR before publication.
+- BASIC/ADVANCED low-head validation loss improved from 2.047 to 1.187.
+- The migrated EXPERT/MASTER/Re:MASTER weights and real-bar logits have maximum absolute difference 0.0 from the prior production checkpoint.
+- A single Home Street run generated all five difficulties with zero feedback rounds, HARD=0, and QUALITY=0 for every chart.
+- The clean release tree independently generated BASIC 5.0 with HARD=0 and QUALITY=0.
+- Python compilation, Web UI syntax, joint/sequence/track tests, CUDA Slide queue, CUDA incremental Muri, motion, compound routes, versioned percentile, and causal recovery checks passed.
+
+## Release contents
+
+Only runtime source, the fixed model/assets, launcher, user documentation, dependency manifest, and legal notices are shipped. Experiments, generated outputs, backups, tools, caches, failed rankers, old interfaces, and stage-by-stage Markdown records are excluded.

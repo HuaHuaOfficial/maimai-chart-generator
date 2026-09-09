@@ -1,17 +1,19 @@
-# 0.4.0 release boundary
+# maimai Chart Studio 1.0.0 package boundary
 
-The end-user archive contains only:
+The release contains only:
 
-- `启动生成器.pyw` and `src/chart_runtime/`;
-- the single native model set and its required runtime assets under `models/`;
-- installation/readme/release notes and license notices.
+- `启动生成器.pyw`;
+- `src/chart_runtime/`, excluding bytecode and unused historical modules;
+- the fixed production model chain and required inference/calibration assets under `models/`;
+- `README.md`, `README.en.md`, `RELEASE_NOTES.md`, `PACKAGE_CONTENTS.md`;
+- `requirements.txt`, `LICENSE`, `NOTICE`, and `THIRD_PARTY_NOTICES.md`.
 
-The archive intentionally excludes:
+The release excludes:
 
-- `tools/` (including FFmpeg, MajdataViewX, replay and audit scripts);
-- `tests/`, `.git/`, `.gitignore`, and `.gitattributes`;
-- `logs/`, `generated/`, `star_ratio_validation/`, caches and bytecode.
+- `backups/`, `generated/`, `logs/`, `.work/`, tests, experiments, audits, and caches;
+- optional editor/viewer/FFmpeg binaries under `tools/` or `.tools/`;
+- historical deployment receipts and stage-specific Markdown files;
+- obsolete checkpoint selectors, backend selectors, unversioned profile adapters, unused timed-window prototypes, and failed ranker candidates;
+- `.git/` from the downloadable archive.
 
-FFmpeg is an external runtime prerequisite and must be installed on `PATH`.
-MajdataViewX is optional and may be installed separately at
-`tools/MajdataViewX-v6.2.0` after extraction.
+FFmpeg is an external prerequisite on `PATH`. MiaCode and MajdataViewX are optional external tools.

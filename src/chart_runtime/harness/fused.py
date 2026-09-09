@@ -1,12 +1,44 @@
 """Fused execution of the common rule definitions for every scope/batch."""
 from __future__ import annotations
+from hashlib import sha256
+import json
+from pathlib import Path
 import numpy as np
 import torch
+from .source_head import TRACK_LIFECYCLE
 
 TIME_EPSILON=1e-7
-INPUT_RELEASE_SECONDS=1/60
+# MaiMuriDX judges releases on a 180 Hz tick.  Keep an input occupied until
+# the end of the current judge tick so nanosecond-separated UP events cannot
+# create an artificial handoff between two actions.
+INPUT_RELEASE_SECONDS=1/180
+TAP_ON_SLIDE_SOFT_SECONDS=.2
+SLIDE_HAND_ORDER_SECONDS=.3
 
-SOURCE=r'''
+
+def load_muri_policy(root):
+    path=Path(root)/'models/experimental/muri_policy.json'
+    document=json.loads(path.read_text(encoding='utf8')) if path.is_file() else {}
+    policy=(document.get('slideHandOrder') or {}) if isinstance(document,dict) else {}
+    clearance_ms=float(policy.get('outerTapClearanceMilliseconds',300))
+    attempts=int(policy.get('maxSameWhatAttempts',3))
+    what_attempts=int(policy.get('maxAlternativeWhatAttempts',1))
+    suppression=str(policy.get('suppression','STRONG')).upper()
+    if document and document.get('schema')!='chart-runtime-muri-policy/1':raise ValueError('Unsupported muri policy schema')
+    if policy.get('classification','SOFT')!='SOFT':raise ValueError('slideHandOrder classification must remain SOFT')
+    if policy.get('sameOuterPadOnly',True) is not True:raise ValueError('slideHandOrder must remain same-outer-pad only')
+    if policy.get('touchAllowed',True) is not True:raise ValueError('slideHandOrder must keep Touch allowed')
+    if not 0<=clearance_ms<=1000:raise ValueError('slideHandOrder clearance must be 0..1000 ms')
+    if not 1<=attempts<=8:raise ValueError('slideHandOrder maxSameWhatAttempts must be 1..8')
+    if not 0<=what_attempts<=3:raise ValueError('slideHandOrder maxAlternativeWhatAttempts must be 0..3')
+    if suppression not in ('ADVISORY','STRONG'):raise ValueError('slideHandOrder suppression must be ADVISORY or STRONG')
+    try_next=bool(policy.get('tryNextDeclaredWhat',False))
+    return {'schema':'chart-runtime-muri-policy/1','path':str(path),'sha256':sha256(path.read_bytes()).hexdigest() if path.is_file() else None,
+            'slideHandOrder':{'enabledGlobally':bool(policy.get('enabledGlobally',policy.get('enabledInCausalMode',True))),'classification':'SOFT','sameOuterPadOnly':True,
+                              'touchAllowed':True,'outerTapClearanceMilliseconds':clearance_ms,'maxSameWhatAttempts':attempts,
+                              'suppression':suppression,'tryNextDeclaredWhat':try_next,'maxAlternativeWhatAttempts':what_attempts}}
+
+SOURCE_TEMPLATE=TRACK_LIFECYCLE.cuda_predicate+r'''
 typedef long long ll;
 typedef unsigned long long ull;
 __device__ bool exempt(ll a,ll b,const ll* spans,int S) {
@@ -20,16 +52,19 @@ __device__ void mark(ull* flags,int r,ll a,ll b,const ll* clean,int C,bool excep
 }
 // Rule positions match kernel.HARD_NAMES and are checked by a source manifest.
 extern "C" __global__ void inputs(
- const ll* event,const ll* note,const ll* sensor,const bool* outer,const bool* hold,const bool* ex,
+ const ll* event,const ll* note,const ll* sensor,const ll* ipad,const bool* outer,const bool* hold,const bool* ex,
  const double* start,const double* end,const ll* batch,
  const ll* te,const ll* tn,const ll* th,const ll* tt,const double* tshoot,const double* tend,const bool* wifi,
  const ll* clean,int C,const double* limit,ull* flags,ll* soft,int I,int T) {
  int i=blockIdx.x*blockDim.x+threadIdx.x;if(i>=I)return;
  ll e=event[i],b=batch[e];double at=start[i];
+ bool is_tap=outer[i]&&!hold[i];
+ bool source_head_input=outer[i]&&(is_tap||hold[i]);
+ for(int t=0;t<T;t++)if(te[t]==e&&tn[t]==note[i])is_tap=false;
  int outer_count=0,held_count=0;int active[64],A=0;
  for(int j=0;j<I;j++) {
    if(batch[event[j]]!=b)continue;
-   if(j>i&&sensor[i]==sensor[j]) {
+   if(j>i&&ipad[i]==ipad[j]) {
      double bound=fmax(start[i]+2.0/60,end[i]);
      if(start[j]<bound-1e-7)mark(flags,0,e,event[j],clean,C);
      bool taps=(end[i]-start[i]<=1e-7)&&(end[j]-start[j]<=1e-7);
@@ -37,10 +72,10 @@ extern "C" __global__ void inputs(
         start[i]-2.0/60<=end[j]+1e-7&&start[j]-2.0/60<=end[i]+1e-7;
      if(overlap)atomicAdd((ull*)(soft+b*4+2),1ULL);
    }
-   bool on=start[j]<=at+1e-7&&end[j]+1.0/60>at+1e-7;
+   bool on=start[j]<=at+1e-7&&end[j]+1.0/180>at+1e-7;
    if(on&&outer[j]){if(A<64)active[A++]=j;outer_count++;}
    if(hold[j]&&start[j]<=at+1e-7&&end[j]>at+1e-7)held_count++;
-   if(outer[i]&&outer[j]&&hold[j]&&start[j]<at-1e-7&&end[j]>at+.015&&sensor[i]==sensor[j])mark(flags,2,e,event[j],clean,C);
+   if(outer[i]&&outer[j]&&hold[j]&&start[j]<at-1e-7&&end[j]>at+1.0/180&&sensor[i]==sensor[j])mark(flags,2,e,event[j],clean,C);
  }
  if(outer[i]&&outer_count>2)mark(flags,1,e,e,clean,C);
  if(hold[i]&&end[i]>limit[b]+.02)mark(flags,14,e,e,clean,C,false);
@@ -48,10 +83,10 @@ extern "C" __global__ void inputs(
  for(int t=0;t<T;t++) {
    if(batch[te[t]]!=b)continue;
    bool other=e!=te[t]||note[i]!=tn[t];double delta=at-tshoot[t];
-   if(other&&outer[i]&&sensor[i]==tt[t]&&fabs(at-tend[t])<1e-7)mark(flags,4,e,te[t],clean,C);
-   if(other&&outer[i]&&sensor[i]==th[t]&&delta>1e-7&&delta<.2-1e-7) {
+   if(other&&outer[i]&&sensor[i]==tt[t]&&track_tail_input_forbidden(at,tshoot[t],tend[t],ex[i]))mark(flags,4,e,te[t],clean,C);
+   if(other&&source_head_input&&sensor[i]==th[t]&&source_head_tap_forbidden(at,tshoot[t],tend[t])) {
      atomicAdd((ull*)(soft+b*4+1),1ULL);
-     if(!ex[i])mark(flags,5,e,te[t],clean,C);
+     mark(flags,5,e,te[t],clean,C,false);
    }
    if(at<tshoot[t]-1e-7||at>tend[t]+1e-7)continue;
    int count=0;ll lo=te[t],hi=te[t];
@@ -62,7 +97,7 @@ extern "C" __global__ void inputs(
        count++;lo=min(lo,event[j]);hi=max(hi,event[j]);
      }
    } else { // Rare already-invalid dense batch; still evaluate exact support.
-     for(int j=0;j<I;j++)if(batch[event[j]]==b&&outer[j]&&start[j]<=at+1e-7&&end[j]+1.0/60>at+1e-7) {
+     for(int j=0;j<I;j++)if(batch[event[j]]==b&&outer[j]&&start[j]<=at+1e-7&&end[j]+1.0/180>at+1e-7) {
        if(hold[j]&&end[j]<=tshoot[t]+1e-7)continue;
        if(!hold[j]&&fabs(start[j]-tshoot[t])<1e-7&&sensor[j]==th[t])continue;
        count++;lo=min(lo,event[j]);hi=max(hi,event[j]);
@@ -92,7 +127,7 @@ extern "C" __global__ void tracks(
    if(hold[i]&&istart[i]<=time+1e-7&&iend[i]>time+1e-7){holds++;hlo=min(hlo,ie[i]);hhi=max(hhi,ie[i]);}
    if(!outer[i])continue;
    if(fabs(istart[i]-time)<1.0/60-1e-7)downs++;
-   if(istart[i]>time+1e-7||iend[i]+1.0/60<=time+1e-7)continue;
+   if(istart[i]>time+1e-7||iend[i]+1.0/180<=time+1e-7)continue;
    if(hold[i]&&iend[i]<=time+1e-7)continue;
    if(!hold[i]&&fabs(istart[i]-time)<1e-7&&sensor[i]==th[t])continue;
    inputs++;low=min(low,ie[i]);high=max(high,ie[i]);
@@ -117,15 +152,19 @@ extern "C" __global__ void tracks(
  if(!wifi[t]&&distinct&&downs>=2)mark(flags,11,e,e,clean,C);
 }
 extern "C" __global__ void contacts(
- const ll* ct,const ll* cs,const double* time,const ll* te,const ll* batch,
- const ll* ie,const ll* sensor,const bool* outer,const bool* ex,const double* start,
+ const ll* ct,const ll* cs,const double* time,const ll* te,const ll* tn,const ll* th,const double* tshoot,const ll* batch,
+ const ll* ie,const ll* inode,const ll* sensor,const bool* outer,const bool* ex,const double* start,
  const ll* clean,int C,ull* flags,ll* soft,int Q,int I) {
  int q=blockIdx.x*blockDim.x+threadIdx.x;if(q>=Q)return;
- ll e=te[ct[q]],b=batch[e];
+ ll ti=ct[q],e=te[ti],b=batch[e];
  for(int i=0;i<I;i++)if(batch[ie[i]]==b&&outer[i]&&sensor[i]==cs[q]) {
-    double dt=start[i]-time[q];if(dt<=1e-7||dt>=.15-1e-7)continue;
-    atomicAdd((ull*)(soft+b*4),1ULL);
-    if(!ex[i])mark(flags,6,e,ie[i],clean,C);
+    if(ie[i]==e&&inode[i]==tn[ti])continue;
+    // A Tap exactly on the source head at shoot is the intended delayed
+    // launch cue. The inputs/tracks kernels already count it as the same
+    // hand action; contacts must not reclassify that exact action as critical.
+    if(sensor[i]==th[ti]&&fabs(start[i]-tshoot[ti])<1e-7)continue;
+    double dt=start[i]-time[q],distance=fabs(dt);if(distance>=.2-1e-7)continue;
+    mark(flags,6,e,ie[i],clean,C);
  }
 }
 extern "C" __global__ void versions(
@@ -140,21 +179,42 @@ extern "C" __global__ void versions(
  if(i<I){ll e=ie[i],v=version[batch[e]];if(!outer[i]&&hold[i]&&sensor[i]!=center&&v<24)atomicOr(flags+e,1ULL<<19);}
 }
 extern "C" __global__ void multitouch(
- const ll* ie,const ll* inode,const ll* sensor,const ll* ipad,const bool* outer,const bool* hold,
+ const ll* ie,const ll* inode,const ll* sensor,const ll* ipad,const bool* outer,const bool* hold,const bool* ex,
  const double* start,const double* iend,const ll* batch,
  const ll* te,const ll* tn,const ll* path,const ll* head,const ll* tail,const double* shoot,const double* tend,const bool* wifi,
- const double* astart,const double* aend,const ll* amask,const ll* atrack,const bool* tadj,
- const ll* clean,int C,ull* flags,int I,int T,int A) {
+ const double* astart,const double* aend,const ll* amask,const ll* aevent,const ll* atrack,const bool* tadj,
+ const ll* clean,int C,ull* flags,ll* soft,int I,int T,int A) {
  int probe=blockIdx.x*blockDim.x+threadIdx.x;if(probe>=I+T)return;
  double at;ll b,owner;
  if(probe<I){at=start[probe];owner=ie[probe];b=batch[owner];}
  else {int p=probe-I;at=shoot[p];owner=te[p];b=batch[owner];}
+ bool tap_type=probe<I&&outer[probe]&&!hold[probe];
+ if(tap_type)for(int u=0;u<T;u++)if(te[u]==owner&&tn[u]==inode[probe]){tap_type=false;break;}
+ if(tap_type)for(int a=0;a<A;a++)if(atrack[a]>=0&&batch[aevent[a]]==b&&aevent[a]!=owner) {
+   int t=(int)atrack[a];
+   // Contact intervals are the path-table authority for the moving Star's
+   // instantaneous pad occupancy.  A Tap-type landing needs 300 ms clearance
+   // on either side; Touch inputs deliberately stay outside this advisory.
+   if((((ull)amask[a]&255ULL)!=0)&&at>=astart[a]-SLIDE_HAND_ORDER_SECONDS-1e-7&&aend[a]+SLIDE_HAND_ORDER_SECONDS>=at-1e-7
+      &&(((ull)amask[a]&((ull)ipad[probe]))!=0))
+     atomicAdd((ull*)(soft+b*4+3),1ULL);
+ }
  int hands=0;ll lo=owner,hi=owner;
  for(int i=0;i<I;i++) {
    if(batch[ie[i]]!=b||start[i]>at+1e-7||iend[i]+1.0/180<=at+1e-7)continue;
-   if(outer[i]||hold[i]){hands++;lo=min(lo,ie[i]);hi=max(hi,ie[i]);continue;}
+   if(outer[i]||hold[i]){
+     bool launch_shared=false;
+     bool actual_tap=outer[i]&&!hold[i];
+     if(actual_tap)for(int u=0;u<T;u++)if(te[u]==ie[i]&&tn[u]==inode[i]){actual_tap=false;break;}
+     if(actual_tap)for(int t=0;t<T;t++){
+       if(batch[te[t]]==b&&sensor[i]==head[t]&&fabs(start[i]-shoot[t])<1e-7
+          &&shoot[t]<=at+1e-7&&tend[t]+1.0/180>at+1e-7){launch_shared=true;break;}
+     }
+     if(!launch_shared){hands++;lo=min(lo,ie[i]);hi=max(hi,ie[i]);}
+     continue;
+   }
    int sid=(int)sensor[i]-8;ull present=0,reach=1ULL<<sid;
-   for(int j=0;j<I;j++)if(ie[j]==ie[i]&&!outer[j]&&!hold[j]&&start[j]<=at+1e-7&&iend[j]+1.0/180>at+1e-7)present|=1ULL<<((int)sensor[j]-8);
+     for(int j=0;j<I;j++)if(ie[j]==ie[i]&&!outer[j]&&!hold[j]&&start[j]<=at+1e-7&&iend[j]+1.0/180>at+1e-7)present|=1ULL<<((int)sensor[j]-8);
    for(int z=0;z<33;z++)for(int a=0;a<33;a++)if((reach>>a)&1ULL)for(int q=0;q<33;q++)if(((present>>q)&1ULL)&&tadj[a*33+q])reach|=1ULL<<q;
    bool first=true;
    for(int j=0;j<i;j++)if(ie[j]==ie[i]&&!outer[j]&&!hold[j]&&((reach>>((int)sensor[j]-8))&1ULL)){first=false;break;}
@@ -181,7 +241,14 @@ extern "C" __global__ void multitouch(
 class FusedRules:
     def __init__(self,codec):
         import cupy as cp
-        self.cp=cp;module=cp.RawModule(code=SOURCE,options=('--std=c++17',),name_expressions=('inputs','tracks','contacts','versions','multitouch'))
+        self.muri_policy=load_muri_policy(codec.root);policy=self.muri_policy['slideHandOrder']
+        self.slide_hand_order_enabled=bool(policy['enabledGlobally'])
+        self.slide_hand_order_seconds=float(policy['outerTapClearanceMilliseconds'])/1000.
+        self.slide_hand_order_max_attempts=int(policy['maxSameWhatAttempts'])
+        self.slide_hand_order_try_next_what=bool(policy['tryNextDeclaredWhat'])
+        self.slide_hand_order_max_what_attempts=int(policy['maxAlternativeWhatAttempts'])
+        source=SOURCE_TEMPLATE.replace('SLIDE_HAND_ORDER_SECONDS',repr(self.slide_hand_order_seconds))
+        self.cp=cp;module=cp.RawModule(code=source,options=('--std=c++17',),name_expressions=('inputs','tracks','contacts','versions','multitouch'))
         self.functions={name:module.get_function(name) for name in ('inputs','tracks','contacts','versions','multitouch')}
         names=list(codec.vocab['touchPositions']);adj=codec.tables['touchAdjacency']
         self.touch_adjacency=torch.tensor([[a==b or b in adj.get(a,()) for b in names] for a in names],device=codec.device,dtype=torch.bool)
@@ -200,11 +267,11 @@ class FusedRules:
         stream=torch.cuda.current_stream(d)
         with cp.cuda.ExternalStream(stream.cuda_stream):
             cl=view(cp,clean);fl=view(cp,flags);sf=view(cp,soft);lim=view(cp,limits);v=view(cp,versions)
-            launch('inputs',int(I),tuple(arr(k) for k in ('input_event','input_note','input_sensor','input_outer','input_hold','input_ex','input_start','input_end','event_batch','track_event','track_note','track_head','track_tail','track_shoot','track_end','track_wifi'))+(cl,C,lim,fl,sf,I,T))
+            launch('inputs',int(I),tuple(arr(k) for k in ('input_event','input_note','input_sensor','input_pad','input_outer','input_hold','input_ex','input_start','input_end','event_batch','track_event','track_note','track_head','track_tail','track_shoot','track_end','track_wifi'))+(cl,C,lim,fl,sf,I,T))
             launch('tracks',int(T),tuple(arr(k) for k in ('track_event','track_note','track_head','track_route','track_path','track_contacts_key','track_start','track_shoot','track_end','track_wifi','event_batch','input_event','input_sensor','input_outer','input_hold','input_start','input_end'))+(lim,cl,C,fl,I,T))
-            launch('contacts',int(Q),tuple(arr(k) for k in ('contact_track','contact_sensor','contact_time','track_event','event_batch','input_event','input_sensor','input_outer','input_ex','input_start'))+(cl,C,fl,sf,Q,I))
+            launch('contacts',int(Q),tuple(arr(k) for k in ('contact_track','contact_sensor','contact_time','track_event','track_note','track_head','track_shoot','event_batch','input_event','input_note','input_sensor','input_outer','input_ex','input_start'))+(cl,C,fl,sf,Q,I))
             N=np.int32(len(c['note_event']))
             launch('versions',max(int(N),int(I)),tuple(arr(k) for k in ('note_event','note_kind','note_modifiers','event_batch'))+(v,)+tuple(arr(k) for k in ('input_event','input_sensor','input_outer','input_hold'))+(fl,N,I,np.int32(center)))
             A=np.int32(len(c['action_event']))
-            launch('multitouch',int(I+T),tuple(arr(k) for k in ('input_event','input_note','input_sensor','input_pad','input_outer','input_hold','input_start','input_end','event_batch','track_event','track_note','track_path','track_head','track_tail','track_shoot','track_end','track_wifi','action_start','action_end','action_mask','action_track'))+(view(cp,self.touch_adjacency),cl,C,fl,I,T,A))
+            launch('multitouch',int(I+T),tuple(arr(k) for k in ('input_event','input_note','input_sensor','input_pad','input_outer','input_hold','input_ex','input_start','input_end','event_batch','track_event','track_note','track_path','track_head','track_tail','track_shoot','track_end','track_wifi','action_start','action_end','action_mask','action_event','action_track'))+(view(cp,self.touch_adjacency),cl,C,fl,sf,I,T,A))
         return flags,soft

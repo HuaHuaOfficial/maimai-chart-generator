@@ -22,7 +22,8 @@ from ..io.timing import ticks_to_seconds
 from ..io.audio import FRAME_SECONDS, extract_log_mel
 from ..io.simai import parse_maidata, render_compact_maidata
 from ..generator.frontend import NativeFrontend
-from ..generator.model_store import available_models,model_spec_from_renderer_path,load_models,ModelSpec
+from ..generator.model_store import native_model_spec,load_models
+from ..version_semantics import touch_enabled, touch_hold_enabled
 TPB=384
 
 
@@ -133,17 +134,46 @@ def _write_track_mp3(audio_path: Path, output_path: Path, ffmpeg: Path) -> None:
     )
 
 
-def _create_generation_dir(root: Path, model_name: str) -> Path:
-    """Create a unique model-name plus timestamp directory."""
+def _write_cover_png(cover_path: Path, output_path: Path, ffmpeg: Path) -> None:
+    if cover_path.suffix.lower() == '.png':
+        shutil.copy2(cover_path, output_path)
+        return
+    subprocess.run(
+        [str(ffmpeg), '-y', '-v', 'error', '-i', str(cover_path), '-frames:v', '1', str(output_path)],
+        check=True,
+        creationflags=subprocess.CREATE_NO_WINDOW,
+    )
+
+
+def _write_bga_mp4(bga_path: Path, output_path: Path) -> None:
+    shutil.copy2(bga_path, output_path)
+
+
+def _safe_windows_component(value: str, fallback: str, limit: int = 96) -> str:
+    text=re.sub(r'[<>:"/\\|?*\x00-\x1f]+','_',str(value)).strip(' .')[:limit]
+    if not text:text=fallback
+    if text.upper() in {'CON','PRN','AUX','NUL',*(f'COM{i}' for i in range(1,10)),*(f'LPT{i}' for i in range(1,10))}:
+        text='_'+text
+    return text
+
+
+def _validate_song_id(value: str) -> str:
+    text=str(value).strip()
+    if not text or text in {'.','..'} or len(text)>80 or text.rstrip(' .')!=text or re.search(r'[<>:"/\\|?*\x00-\x1f]',text):
+        raise ValueError('自定义歌曲ID不能为空、不能包含Windows非法字符，且最多80个字符')
+    return _safe_windows_component(text,'song',80)
+
+
+def _create_generation_dir(root: Path, title: str) -> Path:
+    """Create ``乐曲名-YYYYMMDD_HHMMSS`` without changing the title text."""
 
     root = Path(root)
     root.mkdir(parents=True, exist_ok=True)
-    safe_name = re.sub(r"[^0-9A-Za-z._-]+", "_", str(model_name))
-    safe_name = safe_name.strip("._-")[:80] or "model"
+    safe_name = _safe_windows_component(title,'未命名乐曲')
     stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     for serial in range(1, 1000):
         suffix = "" if serial == 1 else f"_{serial:02d}"
-        candidate = root / f"{safe_name}_{stamp}{suffix}"
+        candidate = root / f"{safe_name}-{stamp}{suffix}"
         try:
             candidate.mkdir()
         except FileExistsError:
@@ -155,9 +185,10 @@ def _create_generation_dir(root: Path, model_name: str) -> Path:
 def prepare_request(
     *,
     root: Path,
-    model_key: str | None = None,
-    renderer_path: Path | str | None = None,
     audio_path: Path,
+    cover_path: Path,
+    bga_path: Path,
+    song_id: str,
     output_dir: Path,
     title: str,
     version_id: int,
@@ -167,9 +198,8 @@ def prepare_request(
     exploration: float = 0.8,
     extra_metadata: dict | None = None,
     progress: Callable[[str], None] | None = None,
-    inference_backend: str = "auto",
 ) -> dict:
-    """Run a packaged or path-selected renderer without any chart dataset."""
+    """Prepare one request for the fixed 1.0.0 native model set."""
 
     total_started = time.perf_counter()
     timings: dict[str, float] = {}
@@ -181,45 +211,35 @@ def prepare_request(
 
     root = Path(root)
     if not torch.cuda.is_available():raise RuntimeError('本原生版本需要 NVIDIA CUDA')
-    if inference_backend not in ('auto','cuda'):raise ValueError('本原生版本使用已验证的 CUDA 后端')
-    acceleration_info = {'requested':inference_backend,'effective':'cuda','gpu':torch.cuda.get_device_name(0)}
+    profile=json.loads((root/'models/experimental/what_complexity_profile.json').read_text(encoding='utf8'))
+    if profile.get('schemaVersion')!=3:raise ValueError('1.0.0需要五档版本化WHAT profile')
+    for slot,level in levels.items():
+        key=str(round(float(level)*10))
+        if key not in profile.get('slots',{}).get(str(slot),{}):raise ValueError(f'当前联合profile不支持难度{slot}的DS {level:.1f}')
+    acceleration_info = {'effective':'cuda','gpu':torch.cuda.get_device_name(0)}
     frontend=NativeFrontend(root)
     if progress is not None:
-        progress(
-            f"推理后端: 请求={acceleration_info['requested']} / "
-            f"实际={acceleration_info['effective']} / "
-            f"GPU={acceleration_info.get('gpu') or 'CPU'}"
-        )
-        if inference_backend == "tensorrt":
-            progress(
-                "TensorRT 首次启用需要编译；同一 GUI 进程后续生成会复用已编译模块。"
-            )
+        progress(f"推理后端: CUDA / GPU={acceleration_info['gpu']}")
     audio_path = Path(audio_path)
+    cover_path = Path(cover_path)
+    bga_path = Path(bga_path)
+    song_id = _validate_song_id(song_id)
     output_root = Path(output_dir)
     if not audio_path.is_file():
         raise FileNotFoundError(audio_path)
-    if renderer_path is not None:
-        spec = model_spec_from_renderer_path(root, renderer_path)
-    else:
-        model_map = {spec.key: spec for spec in available_models(root)}
-        if model_key not in model_map:
-            raise ValueError(f"模型不可用：{model_key}")
-        spec = model_map[model_key]
+    if not cover_path.is_file() or cover_path.suffix.lower() not in {'.png','.jpg','.jpeg','.webp','.bmp'}:
+        raise ValueError('请选择PNG、JPG、WEBP或BMP封面图片')
+    if not bga_path.is_file() or bga_path.suffix.lower()!='.mp4':
+        raise ValueError('请选择MP4格式的BGA视频')
+    spec = native_model_spec(root)
     asset_root = _asset_root(root)
     if not asset_root.is_dir():
         raise FileNotFoundError(f"缺少 V2 推理资源：{asset_root}")
-    # These two modules intentionally keep their asset root configurable so
-    # the same code works in the source tree and the standalone package.
     extra = dict(extra_metadata or {})
-    experimental = True
-    contextual_repair = True
-    if contextual_repair:
-        if not torch.cuda.is_available():raise RuntimeError('CUDA Harness 必须可用；禁止回退到CPU逐项检查')
-        extra.setdefault('parallelDifficultyWorkers', 2)
-    if experimental:
-        acceleration_info['requestedByUser']=inference_backend
-        acceleration_info['reason']='CUDA Harness is required by this runtime'
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    extra.setdefault('artist','')
+    if not isinstance(extra['artist'],str):raise ValueError('artist必须是字符串')
+    extra.setdefault('parallelDifficultyWorkers', 2)
+    device = torch.device("cuda")
     ffmpeg = _find_ffmpeg(root)
     beat_offset = max(
         0.0, float(extra.get("detectedBeatOffsetSeconds", extra.get("first", 0.0)))
@@ -267,9 +287,7 @@ def prepare_request(
 
     _notify(progress, f"加载 {spec.label}…")
     phase_started = time.perf_counter()
-    planner, factor_session, model_cache_hit = load_models(
-        spec, device, acceleration_info["effective"]
-    )
+    planner, factor_session, model_cache_hit = load_models(spec, device)
     timings["modelLoadSeconds"] = time.perf_counter() - phase_started
     timings["modelSessionCacheHit"] = model_cache_hit
     duration_calibration_path = asset_root / "duration_density_calibration.json"
@@ -390,9 +408,12 @@ def prepare_request(
     offset_frames = min(len(mel_all) - 1, max(0, int(round(beat_offset / FRAME_SECONDS))))
     mel = mel_all[offset_frames:]
     timings["melSeconds"] = time.perf_counter() - phase_started
+    causal_search_mode = str(extra.get("causalSearchMode", "stable"))
+    if causal_search_mode not in ("stable", "causal-v1"):
+        raise ValueError("无效的因果搜索模式。")
     metadata = {
         "title": title,
-        "artist": extra.get("artist", "AI Generated"),
+        "artist": extra["artist"],
         "first": beat_offset,
         "wholebpm": bpm,
         "shortid": extra.get("shortid", 0),
@@ -401,12 +422,19 @@ def prepare_request(
         "version": version_name,
         "clock_count": 4,
         "difficultyWorkloadMode": workload_mode,
-        # This is a direct target ratio against the calibrated official-star
-        # reference.  It is deliberately not a "fill the gap from the first
-        # draft" ratio: the first draft is model-dependent and made the GUI
-        # slider ineffective whenever the model already landed near the
-        # reference count.
-        "starTargetRatio": float(np.clip(extra.get("starTargetRatio", 0.5), 0.0, 1.0)),
+        # Unified WHAT style scales. 1.0 means the typical displayed-DS
+        # distribution; the planner applies these as relative odds inside one
+        # normalized configuration distribution.
+        "whatStarScale": float(np.clip(extra.get("whatStarScale", 1.0), 0.0, 3.0)),
+        "whatVariation": float(np.clip(extra.get("whatVariation", 0.35), 0.0, 1.0)),
+        "whatArity2Scale": float(np.clip(extra.get("whatArity2Scale", 1.0), 0.0, 3.0)),
+        "whatHoldScale": float(np.clip(extra.get("whatHoldScale", 1.0), 0.0, 3.0)),
+        "whatTouchScale": float(np.clip(extra.get("whatTouchScale", 1.0), 0.0, 3.0)) if touch_enabled(version_id) else 0.0,
+        "whatTouchHoldScale": float(np.clip(extra.get("whatTouchHoldScale", 1.0), 0.0, 3.0)) if touch_hold_enabled(version_id) else 0.0,
+        "causalSearchMode": causal_search_mode,
+        "whatArity2TargetRate": None if extra.get("whatArity2TargetRate") is None else float(np.clip(extra["whatArity2TargetRate"], 0.0, 0.8)),
+        "whatHoldTargetRate": None if extra.get("whatHoldTargetRate") is None else float(np.clip(extra["whatHoldTargetRate"], 0.0, 0.5)),
+        "whatTouchTargetRate": None if extra.get("whatTouchTargetRate") is None else float(np.clip(extra["whatTouchTargetRate"], 0.0, 0.5)),
         "chartEndSeconds": min(float(duration - beat_offset), float(ticks_to_seconds(np.asarray([total_ticks]), bpm_ticks, bpm_values)[0])),
         **{f"lv_{slot}": value for slot, value in levels.items()},
     }
@@ -453,7 +481,8 @@ def prepare_request(
         style_results[str(slot)] = style_info
         slot_inputs.append((slot, level, style_vector))
 
-    return dict(root=root, spec=spec, audio_path=audio_path, output_root=output_root,
+    return dict(root=root, spec=spec, audio_path=audio_path, cover_path=cover_path, bga_path=bga_path,
+        song_id=song_id, output_root=output_root,
         title=title, version_id=version_id, version_name=version_name, levels=levels,
         bpm=bpm, bpm_ticks=bpm_ticks, bpm_values=bpm_values, beat_offset=beat_offset,
         duration=duration, total_ticks=total_ticks, audio_end_tick=audio_end_tick,
@@ -461,5 +490,5 @@ def prepare_request(
         metadata=metadata, extra=extra, device=device, factor_session=factor_session,
         anchors=anchors, anchor_logits=anchor_logits, slot_inputs=slot_inputs,
         plan_info=plan_info, style_results=style_results, timings=timings,
-        acceleration_info=acceleration_info, seed=seed, experimental=experimental,
+        acceleration_info=acceleration_info, seed=seed,
         end_seconds=metadata['chartEndSeconds'], total_started=total_started)

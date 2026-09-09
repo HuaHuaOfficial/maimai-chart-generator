@@ -35,8 +35,11 @@ class PreviewWindow(tk.Toplevel):
         self.events=[(float(s)+first,text,tick) for s,(_,text),tick in zip(secs,parsed.events,ticks)];end=ticks_to_seconds(np.array([parsed.end_tick]),np.array(parsed.bpm_ticks),np.array(parsed.bpm_values))[0]+first;self.duration=max(1.,float(end));self.scale.configure(to=self.duration);self.seek(0)
     def ffplay(self):
         root=Path(os.environ.get('MAIMAI_INFERENCE_ROOT',str(Path(__file__).resolve().parents[3])))
-        matches=list((root/'tools'/'ffmpeg').glob('**/ffplay.exe'))
-        return matches[0] if matches else shutil.which('ffplay')
+        for directory in (root/'tools'/'ffmpeg', root/'.tools'/'ffmpeg'):
+            matches=list(directory.glob('**/ffplay.exe'))
+            if matches:
+                return matches[0]
+        return shutil.which('ffplay')
     def start_audio(self):
         self.stop_audio();exe=self.ffplay();track=self.song_dir/'track.mp3'
         if exe and track.is_file():

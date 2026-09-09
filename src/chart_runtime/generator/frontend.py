@@ -9,7 +9,6 @@ from ..io.timing import ticks_to_seconds,sample_positions
 from .models.structure import ChartTransformerV2,V2Config
 from .models.anchor import AnchorRelationModel
 from .models.style import StylePrior,StylePriorConfig
-from .models.density_calibrator import DensityCalibrator,DensityCalibratorConfig
 from .tokens import metadata_tokens,GROUP_BY_SLOT
 TPB=384
 MERT_SR=24000
@@ -119,15 +118,6 @@ class NativeFrontend:
             structure = model.structure(model.audio(source) + model.bar_pos(pos)[None])
             density = model.predict_density(structure, torch.tensor([version_id], device=device), torch.from_numpy(level_values)[None].to(device))
         density_values=density[0].float().cpu().numpy();calibration=[None]*5
-        calibrator_path=self.root/'checkpoints_density_calibrator'/'best.pt'
-        if calibrator_path.exists():
-            calibrator_checkpoint=torch.load(calibrator_path,map_location='cpu',weights_only=False);calibrator=DensityCalibrator(DensityCalibratorConfig(**calibrator_checkpoint['config']));calibrator.load_state_dict(calibrator_checkpoint['model']);calibrator.to(device).eval()
-            for slot,value in levels.items():
-                if not 2<=slot<=6:continue
-                index=slot-2
-                with torch.inference_mode():target=float(calibrator(torch.tensor([version_id],device=device),torch.tensor([index],device=device),torch.tensor([round(value*10)],device=device),torch.tensor([float(bpm_values[0])],device=device))[0])
-                before=float(density_values[:,index].mean());scale=target/max(before,1e-6);density_values[:,index]*=scale;calibration[index]={'before':before,'target':target,'scale':scale}
-            del calibrator
         result = structure[0].float().cpu().numpy(),density_values,calibration,bar_audio,seconds
         del model
         if device.type == "cuda":

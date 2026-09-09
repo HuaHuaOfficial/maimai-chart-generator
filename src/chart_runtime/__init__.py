@@ -1,5 +1,3 @@
-"""Redesigned runtime contracts; intentionally not wired to the legacy GUI.
+"""maimai Chart Studio native CUDA runtime."""
 
-This package currently verifies authority and orchestration contracts only.
-It does not implement a CUDA legality kernel or a trained generator backend.
-"""
+__version__ = "1.0.0"

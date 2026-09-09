@@ -1,0 +1,14 @@
+{
+  "schema": "chart-runtime-muri-policy/1",
+  "slideHandOrder": {
+    "enabledGlobally": true,
+    "classification": "SOFT",
+    "sameOuterPadOnly": true,
+    "touchAllowed": true,
+    "outerTapClearanceMilliseconds": 300,
+    "maxSameWhatAttempts": 3,
+    "suppression": "STRONG",
+    "tryNextDeclaredWhat": false,
+    "maxAlternativeWhatAttempts": 1
+  }
+}
