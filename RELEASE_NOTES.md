@@ -4,7 +4,6 @@
 
 1.1.0 is the complete package built from the current native production runtime. It includes the full 0.4.0-to-1.0.0 feature line and the current production fixes; it is not a reduced compatibility patch.
 
-Version 1.0.1 was an unreleased transition node. Its complete working-tree changes are folded directly into 1.1.0; there is no separate 1.0.1 release artifact.
 
 - This complete package includes the two-tier difficulty policy: lightweight V4 combined sampling for BASIC/ADVANCED and joint WHAT plus relational WHERE for EXPERT/MASTER/Re:MASTER.
 - It includes cross-process automatic song-ID allocation, cover/BGA preview and clear controls, local token-protected media streaming, and new-audio asset reset behavior.
