@@ -1,5 +1,7 @@
 # maimai Chart Studio 1.0.0
 
+[English](README.en.md) | 简体中文
+
 本地运行的 maimai 谱面生成器。1.0.0 固定使用一套原生模型链：全曲 planner、五难度 joint WHAT planner、V4 relational renderer，以及共享 CUDA Harness。
 
 ## 支持范围
@@ -36,7 +38,28 @@ pip install -r requirements.txt
 - 可选的 BGA MP4；
 - 谱面版本、难度与精确定数。
 
-1.0.0 不再提供任意 checkpoint 选择器或后端选择器。发布包只接受清单中的固定模型，并只运行 CUDA 路径。
+
+
+## 外部工具安装
+
+发布 ZIP 不包含 FFmpeg、MiaCode 或 MajdataViewX。请下载 Windows x64 的 ZIP/7z 发行包并解压到程序目录的 `tools`；不要只把压缩文件本身放进去。运行时识别以下结构：
+
+```text
+maimai Chart Studio 1.0.0/
+└─ tools/
+   ├─ ffmpeg/
+   │  └─ <任意解压层级>/bin/ffmpeg.exe
+   ├─ MiaCode-v1.0.0-win64/
+   │  └─ MiaCode.exe
+   └─ MajdataViewX-v6.2.0/
+      └─ MajdataEdit-Neo.exe
+```
+
+- FFmpeg：`ffmpeg.exe` 可位于 `tools/ffmpeg` 下任意层级，常见 Windows x64 包解压后位于 `bin/ffmpeg.exe`；系统 `PATH` 中的 FFmpeg 也可使用。
+- MiaCode：解压后必须存在 `tools/MiaCode-v1.0.0-win64/MiaCode.exe`。
+- MajdataViewX：解压后必须存在 `tools/MajdataViewX-v6.2.0/MajdataEdit-Neo.exe`。
+
+点击 MiaCode 或 MajdataViewX 时会先检查对应入口文件，存在后才选择或打开 `maidata.txt`。
 
 ## 输出目录
 
@@ -55,12 +78,9 @@ pip install -r requirements.txt
 
 `track.mp3` 由输入音频转码。选择封面时写出 `bg.png`（非 PNG 输入会转换为 PNG）；选择 BGA 时写出 `pv.mp4`。`元数据.json` 记录最终歌曲 ID、是否自动分配、模型、Harness、各难度摘要、内容 digest 和实际输出路径。
 
-## 模型与实验边界
-
-正式包不包含训练集、实验脚本、历史 checkpoint、失败的 ranker、生成成品、日志、备份或阶段性部署文档。官谱 profile 只控制全曲组成，不给 Touch-on-Slide 等局部配置添加人工奖励；局部编排仍由模型和音乐条件自然产生，Harness 只负责合法性。
 
 ## 预览
 
-可选安装 MiaCode 或 MajdataViewX。制作台会优先调用外部工具；不可用时回退到内置预览。标准歌曲素材名为 `track.mp3`、`bg.png` 和 `pv.mp4`。
+可选安装 MiaCode 或 MajdataViewX。制作台会提供两个并列的外部工具入口；MajdataViewX 不可用时只提示安装位置，不再回退到内置预览。MajdataViewX 可安装到 `tools/MajdataViewX-v6.2.0` 或 `.tools/MajdataViewX-v6.2.0`，也可通过 `MAJDATA_EXE` 指定 `MajdataEdit-Neo.exe`。标准歌曲素材名为 `track.mp3`、`bg.png` 和 `pv.mp4`。
 
 本项目为非官方工具，不隶属于 SEGA。

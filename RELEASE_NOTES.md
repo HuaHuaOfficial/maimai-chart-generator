@@ -4,6 +4,8 @@
 
 1.0.0 is the first formal package built from the current native production runtime. It removes the historical release surface instead of carrying compatibility selectors forward.
 
+- MiaCode and MajdataViewX are now separate peer actions; the unreliable built-in chart preview fallback has been removed. MajdataViewX remains installable through the documented `tools/` / `.tools/` locations or `MAJDATA_EXE`.
+
 ## One five-difficulty planning hierarchy
 
 - The joint WHAT planner now has dedicated BASIC, ADVANCED, EXPERT, MASTER, and Re:MASTER heads.
@@ -21,6 +23,24 @@
 ## Output package
 
 Successful generations use `乐曲名-YYYYMMDD_HHMMSS/歌曲ID/`. A blank ID is allocated persistently from 3000 before DX or 13000 from DX onward without reuse. The pure-ID directory always contains `maidata.txt` and `track.mp3`; optional selections add `bg.png` and `pv.mp4`. `元数据.json` is stored in the outer timestamped directory.
+
+## External tools
+
+FFmpeg, MiaCode, and MajdataViewX are optional external Windows x64 packages and are not bundled. Extract them under `tools/` so the following executable paths exist:
+
+```text
+tools/ffmpeg/<distribution>/bin/ffmpeg.exe
+tools/MiaCode-v1.0.0-win64/MiaCode.exe
+tools/MajdataViewX-v6.2.0/MajdataEdit-Neo.exe
+```
+
+FFmpeg is discovered recursively below `tools/ffmpeg` or from the system `PATH`. MiaCode and MajdataViewX are checked before the Studio asks the user to choose a `maidata.txt` file. The built-in chart preview has been removed.
+
+## Reliability and operation
+
+- BPM detection and generation can be cancelled from the Studio; the worker process tree is terminated while existing completed files are preserved.
+- Native sampling exhaustion is returned to the bounded resume path instead of terminating the whole job as `no allowed factor ids`.
+- Native file dialogs use a short-lived topmost owner so they remain visible above the browser-based Studio.
 
 ## Current Harness
 

@@ -514,20 +514,19 @@ class ChartGeneratorApp(tk.Tk):
     def preview(self,data):
         kind=data.get('kind')
         if kind not in ('preview','miacode'):raise ValueError('无效预览操作。')
+        from .external_preview import find_miacode_executable,find_majdata_executable,launch_miacode,launch_majdata_preview
+        if kind=='miacode':
+            find_miacode_executable(self.runtime_root)
+        else:
+            find_majdata_executable(self.runtime_root)
         folder=self._output_path(data.get('id'));path=folder/'maidata.txt' if folder else None
         if path is None or not path.is_file():
             value=self._native(lambda:self._dialog(lambda owner:filedialog.askopenfilename(parent=owner,title='选择要预览的谱面',filetypes=[('谱面','maidata.txt'),('文本','*.txt')])))
             if not value:return {'ok':True,'message':'已取消选择。'}
             path=Path(value)
-        from .external_preview import launch_miacode,launch_majdata_preview
         if kind=='miacode':
             launch_miacode(path,self.runtime_root);return {'ok':True,'message':'已在 MiaCode 中打开谱面。'}
-        try:
-            launch_majdata_preview(path);return {'ok':True,'message':'已在 MajdataViewX 中打开谱面。'}
-        except Exception:
-            from .preview import PreviewWindow
-            self._native(lambda:PreviewWindow(self,path))
-            return {'ok':True,'message':'外部预览器不可用，已打开内置预览。'}
+        launch_majdata_preview(path,self.runtime_root);return {'ok':True,'message':'已在 MajdataViewX 中打开谱面。'}
 
     def destroy(self):
         if getattr(self,'closed',False):return

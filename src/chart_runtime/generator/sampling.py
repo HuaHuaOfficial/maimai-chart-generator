@@ -284,7 +284,7 @@ def choose_allowed(
 ) -> int:
     ids = np.asarray(list(allowed), np.int64)
     if len(ids) == 0:
-        raise ValueError("no allowed factor ids")
+        raise WhereSamplingUnavailable("no allowed factor ids")
     if len(ids) == 1:
         return int(ids[0])
     values = logits.float().detach().cpu().numpy()[ids]

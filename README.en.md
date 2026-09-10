@@ -1,5 +1,7 @@
 # maimai Chart Studio 1.0.0
 
+[简体中文](README.md) | English
+
 maimai Chart Studio is a local Windows chart generator. Version 1.0.0 ships one fixed native model chain: a whole-song planner, a five-difficulty joint WHAT planner, the V4 relational renderer, and the shared CUDA Harness.
 
 ## Supported generation
@@ -26,7 +28,28 @@ pip install -r requirements.txt
 
 Double-click `启动生成器.pyw` to open the local Studio. Audio and media assets remain on the computer.
 
-The form requires audio, title, BPM, chart version, difficulty, and exact internal level. Song ID is optional: automatic IDs start at 3000 before DX and 13000 from DX onward, and are persisted without reuse. Cover and BGA MP4 are optional. Version 1.0.0 no longer exposes arbitrary checkpoint or backend selectors; the release accepts only its manifest-listed native model set and CUDA backend.
+The form requires audio, title, BPM, chart version, difficulty, and exact internal level. Song ID is optional: automatic IDs start at 3000 before DX and 13000 from DX onward, and are persisted without reuse. Cover and BGA MP4 are optional.
+
+## External tools
+
+The release ZIP does not bundle FFmpeg, MiaCode, or MajdataViewX. Download and extract Windows x64 ZIP/7z distributions into the application's `tools` directory; placing the archive file itself there is not sufficient. The runtime recognizes:
+
+```text
+maimai Chart Studio 1.0.0/
+└─ tools/
+   ├─ ffmpeg/
+   │  └─ <any extracted nesting>/bin/ffmpeg.exe
+   ├─ MiaCode-v1.0.0-win64/
+   │  └─ MiaCode.exe
+   └─ MajdataViewX-v6.2.0/
+      └─ MajdataEdit-Neo.exe
+```
+
+- FFmpeg may be nested anywhere below `tools/ffmpeg`; standard Windows x64 builds normally place it at `bin/ffmpeg.exe`. FFmpeg on the system `PATH` is also accepted.
+- MiaCode requires `tools/MiaCode-v1.0.0-win64/MiaCode.exe`.
+- MajdataViewX requires `tools/MajdataViewX-v6.2.0/MajdataEdit-Neo.exe`.
+
+The Studio checks each editor/viewer executable before asking for a `maidata.txt` file.
 
 ## Output layout
 
@@ -41,6 +64,10 @@ output/
       └─ pv.mp4 (optional)
 ```
 
-The release archive excludes datasets, experiments, obsolete checkpoints and APIs, generated charts, logs, backups, and internal deployment notes. Official-chart profiles control composition only; expressive local structures remain model-emergent and are not manually rewarded.
+
+
+## Preview
+
+MiaCode and MajdataViewX are optional external tools exposed as two separate actions in the Studio. If MajdataViewX is unavailable, the action reports the installation locations instead of opening a built-in preview. Install it at `tools/MajdataViewX-v6.2.0` or `.tools/MajdataViewX-v6.2.0`, or set `MAJDATA_EXE` to the `MajdataEdit-Neo.exe` path.
 
 This is an unofficial project and is not affiliated with SEGA.
