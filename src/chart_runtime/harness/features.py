@@ -29,7 +29,7 @@ import torch
 
 # Bump whenever the feature ordering or any numerical boundary changes.  The
 # string is part of receipts/calibration identity, not a user-facing label.
-FEATURES_ID = "chart-runtime.local-features.cuda.v1"
+FEATURES_ID = "chart-runtime.local-features.cuda.v2"
 
 
 def _require_cuda_tensors(*tensors: torch.Tensor | None) -> torch.device:
@@ -353,4 +353,9 @@ def violation_masks(
     # This is the historical floor/tolerance rule: burst (feature 0) only
     # becomes sustained when the same event has nonzero unexpected jerk.
     sustained[:, 0] &= features[:, 3] != 0.0
-    return (ratios > extreme_ratio) | sustained
+    result=(ratios > extreme_ratio) | sustained
+    for feature_index in tolerance.get('instantaneousFeatureIndexes', ()):
+        index=int(feature_index)
+        if not 0<=index<4:raise ValueError('instantaneous feature index out of range')
+        result[:,index]|=ratios[:,index]>1.0
+    return result

@@ -16,7 +16,7 @@ from .source_head import TRACK_LIFECYCLE
 from ..io.codec import Codec, ChartPayload
 
 RULES_ID = TRACK_LIFECYCLE.rules_id
-QUALITY_NAMES = ('unpredictabilityWeightedInputs1s', 'outerKeyStepsPerSecond', 'slideSegmentsPerSecond', 'unexpectedMotionChangeRate')
+QUALITY_NAMES = ('unpredictabilityWeightedInputs1s', 'outerKeyStepsPerSecond', 'slideJudgeAreasPerSecond', 'unexpectedMotionChangeRate')
 HARD_NAMES = ('SameSensorStack','OuterMultiPress','HoldLaneConflict','DoubleHoldBlocksSlide',
               'TrackEndInput','UnprotectedSlideHeadInput','TapOnSlideCritical',
               'DoubleInputDuringSlide','WifiWithIndependentInput','DoubleWifi','WifiWithTwoTracks',

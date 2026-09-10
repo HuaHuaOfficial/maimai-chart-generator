@@ -281,7 +281,7 @@ class SamplingProvider:
         count=len(drafts)
         thresholds=[self.calibration['thresholds']]*count if self.calibration else None
         started=time.perf_counter()
-        result=self.kernel.evaluate(drafts,versions=[self.version]*count,end_seconds=[self.end_seconds]*count,bpms=[bpm]*count,thresholds=thresholds,features=bool(self.calibration))
+        result=self.kernel.evaluate(drafts,versions=[self.version]*count,end_seconds=[self.end_seconds]*count,bpms=[bpm]*count,thresholds=thresholds,tolerances=self.calibration['tolerance'] if self.calibration else None,features=bool(self.calibration))
         self.timings['kernelSeconds']+=time.perf_counter()-started;started=time.perf_counter()
         keys=result.event_tick[None,:]*len(result.hard)+torch.arange(len(result.hard),device=self.device)[:,None]
         flags=torch.stack(tuple(result.hard.values()));baseflags=flags&(result.event_batch[None]==0)

@@ -86,7 +86,7 @@ class HarnessBackend:
         B=len(proposals);c=self.conditions
         payloads=[p.chart.payload for p in proposals]
         result=self.kernel.evaluate(payloads,versions=[request.version_id]*B,end_seconds=[c['end_seconds']]*B,bpms=[float(c['bpm'])]*B,
-                                    thresholds=[self.calibration['thresholds'] if self.calibration else None]*B,features=True)
+                                    thresholds=[self.calibration['thresholds'] if self.calibration else None]*B,tolerances=self.calibration['tolerance'] if self.calibration else None,features=True)
         stars=result.star_counts.detach().cpu().tolist()
         if self.base_stars is None and proposals[0].complete:self.base_stars=stars[0]
         verdicts=[]

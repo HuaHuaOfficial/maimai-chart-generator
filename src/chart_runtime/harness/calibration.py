@@ -14,7 +14,7 @@ def load_calibration(root,version,slot,ds_tenths,bpm):
     path=Path(root)/'models/experimental/contextual_calibration.npz'
     if not path.is_file():raise FileNotFoundError(path)
     result=calibrate(root,version,slot,ds_tenths/10.,bpm)
-    return {**result,'assetDigest':sha256(path.read_bytes()).hexdigest(),'definition':'training-local-features-v1'}
+    return {**result,'assetDigest':sha256(path.read_bytes()).hexdigest(),'definition':'training-local-features-v2'}
 
 
 
@@ -50,14 +50,17 @@ def calibrate(root,version,slot,ds,bpm,exclude_song_keys=()):
         sources=[{'songKey':str(data['song_key'][i]),'sha256':str(data['source_sha256'][i]),'ds':float(data['ds'][i]),
                   'version':int(data['version'][i]),'events':int(offsets[i+1]-offsets[i])} for i in ids]
     all_rows=np.concatenate(features)
-    # 99th percentile, with a floor to avoid treating absent Slide tracks as zero support.
+    # Per-feature empirical guardrails; Slide geometry uses a rarer-tail quantile.
+    # Floors avoid treating absent mechanisms as zero support.
     thresholds=np.quantile(all_rows,.99,axis=0).tolist()
+    slide_rows=all_rows[:,2][all_rows[:,2]>0]
+    thresholds[2]=float(np.quantile(slide_rows,.999)) if len(slide_rows) else 1.0
     thresholds=[max(1.,thresholds[0]),max(2.,thresholds[1]),max(1.,thresholds[2]),max(8.,thresholds[3])]
-    return {'schemaVersion':1,'target':{'version':version,'slot':slot,'ds':ds,'bpm':bpm},
+    return {'schemaVersion':2,'target':{'version':version,'slot':slot,'ds':ds,'bpm':bpm},
             'cohortRule':'train, same slot, DS +/-0.3, version +/-6, BPM ratio .75..1.25; nearest <=48 charts; no D8 views',
-            'sources':sources,'quantile':.99,'features':['unpredictabilityWeightedInputs1s','outerKeyStepsPerSecond','slideSegmentsPerSecond','unexpectedMotionChangeRate'],
+            'sources':sources,'quantile':.99,'featureQuantiles':[.99,.99,.999,.99],'features':['unpredictabilityWeightedInputs1s','outerKeyStepsPerSecond','slideJudgeAreasPerSecond','unexpectedMotionChangeRate'],
             'cohortFallback':fallback,
             'thresholds':thresholds,
-            'tolerance':{'sustainedRatio':1.35,'sustainedEvents':3,'windowSeconds':1.,'extremeRatio':2.},
+            'tolerance':{'sustainedRatio':1.35,'sustainedEvents':3,'windowSeconds':1.,'extremeRatio':2.,'instantaneousFeatureIndexes':[2]},
             'calibrationAsset':'bundled frozen training-derived numeric profiles; no runtime chart access',
             'scope':'empirical local workload guardrail; not a calibrated local DS estimator; song-section strata pending'}

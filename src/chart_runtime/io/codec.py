@@ -182,7 +182,7 @@ class Codec:
                     for lane in entry['judgeLanes']:
                         count = len(lane['areaMasks']); max_areas = max(max_areas,count)
                         data['queue_track'].append(ti); data['queue_masks'].append(list(lane['areaMasks'])); data['queue_skip'].append(list(lane['skipNoPress'])); data['queue_count'].append(count)
-                    track_speed = max(track_speed, len(re.findall(r'pp|qq|[-<>^vpqszVw]',route))/max(move,1e-6))
+                    track_speed = max(track_speed, max((len(lane['areaMasks']) for lane in entry['judgeLanes']), default=0)/max(move,1e-6))
             data['event_track_speed'].append(track_speed)
         floats = {'event_time','event_track_speed','input_start','input_end','track_start','track_shoot','track_end','track_early','contact_time','action_start','action_end'}
         bools = {'input_outer','input_hold','input_ex','track_wifi'}
