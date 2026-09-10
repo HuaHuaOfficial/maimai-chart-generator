@@ -84,5 +84,6 @@ maimai Chart Studio 1.0.0/
 ## 预览
 
 可选安装 MiaCode 或 MajdataViewX。制作台会提供两个并列的外部工具入口；MajdataViewX 不可用时只提示安装位置，不再回退到内置预览。MajdataViewX 可安装到 `tools/MajdataViewX-v6.2.0` 或 `.tools/MajdataViewX-v6.2.0`，也可通过 `MAJDATA_EXE` 指定 `MajdataEdit-Neo.exe`。标准歌曲素材名为 `track.mp3`、`bg.png` 和 `pv.mp4`。
+- 选择封面后显示图片缩略图，选择 BGA MP4 后显示可播放预览；清空按钮只清除当前选择，不删除原始文件。
 
 本项目为非官方工具，不隶属于 SEGA。

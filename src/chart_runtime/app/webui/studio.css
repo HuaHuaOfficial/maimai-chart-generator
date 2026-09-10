@@ -1,3 +1,5 @@
+
+.asset-preview{display:block;width:100%;margin-top:7px;border:1px solid var(--line);border-radius:8px;background:var(--soft);object-fit:cover;max-height:150px}.cover-asset .asset-preview{aspect-ratio:1/1}.bga-asset .asset-preview{aspect-ratio:16/9}.clear-asset{color:var(--muted)!important;font-size:17px!important}.clear-asset:hover{color:var(--accent)!important;background:var(--soft)}
 /* Original, local-only DX-inspired interface. No remote fonts or assets. */
 :root{--accent:#2e70e8;--accent2:#fb6475;--accent3:#ffcf48;--ink:#23314c;--muted:#7c879c;--bg:#f4f7fd;--surface:#fff;--soft:#eef3fd;--line:#e7ecf5;--hero:#e6efff;--hero-ink:#2455a0;--shadow:0 6px 24px #26365906;--radius:22px;--basic:#41bb70;--advanced:#efa829;--expert:#f16973;--master:#9e64d8;--remaster:#bb8edb;color-scheme:light}
 html[data-theme="dx"]{--accent:#147eca;--accent2:#f8ba27;--accent3:#f86a91;--bg:#fffcf1;--soft:#fff6d9;--line:#eee7d4;--hero:#fff1a9;--hero-ink:#997017}

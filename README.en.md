@@ -71,5 +71,6 @@ output/
 ## Preview
 
 MiaCode and MajdataViewX are optional external tools exposed as two separate actions in the Studio. If MajdataViewX is unavailable, the action reports the installation locations instead of opening a built-in preview. Install it at `tools/MajdataViewX-v6.2.0` or `.tools/MajdataViewX-v6.2.0`, or set `MAJDATA_EXE` to the `MajdataEdit-Neo.exe` path.
+- Selecting a cover shows an image thumbnail; selecting a BGA MP4 shows a playable preview. Clear buttons remove only the current selection and never delete the source file.
 
 This is an unofficial project and is not affiliated with SEGA.

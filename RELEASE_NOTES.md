@@ -5,6 +5,7 @@
 1.0.0 is the first formal package built from the current native production runtime. It removes the historical release surface instead of carrying compatibility selectors forward.
 
 - MiaCode and MajdataViewX are now separate peer actions; the unreliable built-in chart preview fallback has been removed. MajdataViewX remains installable through the documented `tools/` / `.tools/` locations or `MAJDATA_EXE`.
+- The Studio now previews the selected cover image and BGA MP4 in the asset panel; clear buttons only clear the selection.
 
 ## Two-tier difficulty planning
 

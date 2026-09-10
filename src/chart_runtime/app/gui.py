@@ -103,6 +103,8 @@ class Handler(BaseHTTPRequestHandler):
                 self.app.last_contact = time.monotonic()
                 if route == '/api/audio':
                     return self._audio()
+                if route == '/api/asset':
+                    return self._asset()
                 if route == '/api/bootstrap':
                     return self._json(self.app.bootstrap())
                 if route == '/api/state':
@@ -157,14 +159,17 @@ class Handler(BaseHTTPRequestHandler):
         except Exception as exc:
             self._json({'error':str(exc)},400)
 
-    def _audio(self):
-        path = self.app.audio_path
-        if path is None or not path.is_file():
-            return self._json({'error':'No audio selected'},404)
-        length=path.stat().st_size; start=0;end=length-1;code=200
+    def _serve_media(self, path, extensions):
+        if path is None:
+            return self._json({'error':'No media selected'},404)
+        path = Path(path).resolve()
+        if path.suffix.lower() not in extensions:
+            return self._json({'error':'Unsupported media format'},415)
+        if not path.is_file():
+            return self._json({'error':'Selected media does not exist'},404)
+        length=path.stat().st_size; start=0; end=length-1; code=200
         value=self.headers.get('Range','')
         if value:
-            import re
             m=re.fullmatch(r'bytes=(\d*)-(\d*)',value)
             if not m or not any(m.groups()):
                 self._headers(416,'text/plain',0,{'Content-Range':f'bytes */{length}'});return
@@ -185,6 +190,20 @@ class Handler(BaseHTTPRequestHandler):
                 part=f.read(min(262144,remaining))
                 if not part:break
                 self.wfile.write(part);remaining-=len(part)
+
+    def _audio(self):
+        return self._serve_media(self.app.audio_path,AUDIO_EXTENSIONS)
+
+    def _asset(self):
+        query=parse_qs(urlsplit(self.path).query)
+        kind=query.get('kind',[''])[0]
+        extensions={'cover':{'.png','.jpg','.jpeg','.webp','.bmp'},'bga':{'.mp4'}}.get(kind)
+        if extensions is None:
+            return self._json({'error':'Unsupported asset kind'},400)
+        value=query.get('path',[''])[0]
+        if not value:
+            return self._json({'error':'No asset selected'},404)
+        return self._serve_media(Path(value),extensions)
 
     def _upload(self):
         if self.app.busy:
