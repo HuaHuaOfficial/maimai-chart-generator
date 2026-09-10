@@ -51,6 +51,8 @@ The bundled FFmpeg at `tools/ffmpeg/ffmpeg.exe` is preferred; recursive discover
 
 ## Reliability and operation
 
+- Causal-v1 now gives every outer resume a fresh per-event candidate episode while preserving the global run candidate cap. A hotspot that exhausted its local candidate limit in an earlier episode can no longer poison all later resume rounds.
+- Empty relational plans on EXPERT no longer overwrite fresh/rotated WHAT choices during resume, so recovery can actually change the blocked local intent when no relation contract exists.
 - WHEN edge calibration now repairs anomalously empty first bars when adjacent bars have matching audio activity, and suppresses density only across a detected sustained end fade; interior sections are unchanged.
 - Studio audio preview now uses a normalized 320 kbps MP3 cache, so mislabeled or browser-incompatible audio remains playable; the same cached MP3 is reused verbatim as the published `track.mp3`.
 - BGA preview now extracts a cached static frame with bundled FFmpeg instead of asking the browser to decode the original MP4; the original BGA is still copied unchanged to `pv.mp4`.

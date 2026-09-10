@@ -60,6 +60,11 @@ class GeneratorBackend:
         if ctx.progress:
             names={'initial':'主生成','repair':'按 Harness 约束重生成','resume':'恢复受阻的生成'}
             ctx.progress(f"难度 {ctx.slot}: {names[phase]}（轮次 {data['variant']+1}）")
+        if phase=='resume' and self.causal_budget is not None:
+            # Each outer resume is a new bounded local search episode.
+            # Keep the global run cap, but do not let a saturated per-event
+            # counter from an earlier episode poison the new resume scope.
+            self.causal_budget.reset_episode()
         provider=self.harness.sampling_provider(ctx);interruption=None
         if phase=='initial':
             if ctx.slot>=4:
@@ -105,8 +110,11 @@ class GeneratorBackend:
                         intents={tick:(rep.rotated(data.get('escape_level',1)) if isinstance(rep,IntentChoices) else rep) for tick,rep in intents.items()}
                     if not intents:intents=None
             if not targets:return ()
-            if self.relational_plan is not None and self.what_plan:
-                # Relations are a contract across repairs, not an initial-only hint.
+            relation_active=(self.relational_plan is not None and
+                             bool(getattr(self.relational_plan,'links',())))
+            if relation_active and self.what_plan:
+                # Preserve relation-owned WHAT only when a real relation contract exists.
+                # Empty Expert relation plans must not overwrite resume's fresh choices.
                 intents={t:self.what_plan[t] for t in targets if t in self.what_plan}
                 duration_masks={t:m for t,m in self.relational_plan.duration_masks.items() if t in targets}
             local_context=replace(ctx,progress=None)

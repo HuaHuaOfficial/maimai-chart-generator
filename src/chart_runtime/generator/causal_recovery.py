@@ -33,14 +33,18 @@ def nonempty_plan(plan):
 
 class CausalBudget:
     def __init__(self):
-        self.events=Counter();self.total=0
+        self.events=Counter();self.lifetime_events=Counter();self.total=0;self.episode=0
     def view(self):
         return CausalBudgetView(self)
+    def reset_episode(self):
+        self.events.clear();self.episode+=1
     def metrics(self):
-        return {'candidateCount':int(self.total),'maxEventCandidates':max(self.events.values() or [0]),
+        return {'candidateCount':int(self.total),'episode':int(self.episode),
+                'maxEventCandidates':max(self.events.values() or [0]),
                 'eventCandidates':{str(k):int(v) for k,v in sorted(self.events.items())},
-                'eventLimit':EVENT_CANDIDATE_LIMIT,'runLimit':RUN_CANDIDATE_LIMIT,
-                'scope':'one difficulty session including recovery and Harness-directed revisions'}
+                'lifetimeMaxEventCandidates':max(self.lifetime_events.values() or [0]),
+                'eventLimit':EVENT_CANDIDATE_LIMIT,'eventLimitPerEpisode':EVENT_CANDIDATE_LIMIT,'runLimit':RUN_CANDIDATE_LIMIT,
+                'scope':'global run budget with per-event limits reset for each outer resume episode'}
 
 
 class CausalBudgetView:
@@ -65,7 +69,8 @@ class CausalBudgetView:
             raise RenderFailure('causal candidate budget exhausted',stage='provider_sampling',tick=tick,
                                 details={'requestedCandidates':count,'remainingCandidates':remaining,
                                          'causalBudget':self.shared.metrics()})
-        self.node[tick]+=count;self.shared.events[tick]+=count;self.shared.total+=count
+        self.node[tick]+=count;self.shared.events[tick]+=count
+        self.shared.lifetime_events[tick]+=count;self.shared.total+=count
 
 
 def _plan_variant(plan,overrides):
