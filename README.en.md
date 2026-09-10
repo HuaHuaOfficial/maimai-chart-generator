@@ -34,11 +34,11 @@ The form requires audio, title, BPM, chart version, difficulty, and exact intern
 output/
 └─ Song title-YYYYMMDD_HHMMSS/
    ├─ 元数据.json
-   └─ CustomSongId/
+   └─ SongId/
       ├─ maidata.txt
       ├─ track.mp3
-      ├─ bg.mp4 (optional)
-      └─ bg.png (optional)
+      ├─ bg.png (optional)
+      └─ pv.mp4 (optional)
 ```
 
 The release archive excludes datasets, experiments, obsolete checkpoints and APIs, generated charts, logs, backups, and internal deployment notes. Official-chart profiles control composition only; expressive local structures remain model-emergent and are not manually rewarded.

@@ -46,14 +46,14 @@ pip install -r requirements.txt
 输出目录/
 └─ 乐曲名-YYYYMMDD_HHMMSS/
    ├─ 元数据.json
-   └─ 自定义歌曲ID/
+   └─ 歌曲ID/
       ├─ maidata.txt
       ├─ track.mp3
-      ├─ bg.mp4（可选）
-      └─ bg.png（可选）
+      ├─ bg.png（可选）
+      └─ pv.mp4（可选）
 ```
 
-`track.mp3` 由输入音频转码。选择 BGA 时写出 `bg.mp4`；选择封面时写出 `bg.png`（非 PNG 输入会转换为 PNG）。`元数据.json` 记录最终歌曲 ID、是否自动分配、模型、Harness、各难度摘要、内容 digest 和实际输出路径。
+`track.mp3` 由输入音频转码。选择封面时写出 `bg.png`（非 PNG 输入会转换为 PNG）；选择 BGA 时写出 `pv.mp4`。`元数据.json` 记录最终歌曲 ID、是否自动分配、模型、Harness、各难度摘要、内容 digest 和实际输出路径。
 
 ## 模型与实验边界
 
@@ -61,6 +61,6 @@ pip install -r requirements.txt
 
 ## 预览
 
-可选安装 MiaCode 或 MajdataViewX。制作台会优先调用外部工具；不可用时回退到内置预览。标准歌曲素材名为 `track.mp3`、`bg.mp4` 和 `bg.png`。
+可选安装 MiaCode 或 MajdataViewX。制作台会优先调用外部工具；不可用时回退到内置预览。标准歌曲素材名为 `track.mp3`、`bg.png` 和 `pv.mp4`。
 
 本项目为非官方工具，不隶属于 SEGA。
