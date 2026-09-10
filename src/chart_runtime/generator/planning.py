@@ -23,7 +23,7 @@ def predict_heads(context):
         if key not in _MODELS:
             checkpoint=torch.load(path,map_location='cpu',weights_only=False)
             if checkpoint.get('modelClass')!='FiveSlotJointEventPlanModel' or checkpoint.get('slots')!=[2,3,4,5,6]:
-                raise ValueError('Wrong 1.0.0 five-slot Joint WHAT checkpoint')
+                raise ValueError('Wrong 1.0.1 five-slot Joint WHAT checkpoint')
             model=JointEventPlanModel();model.load_state_dict(checkpoint['model'],strict=True);model.cuda().eval()
             _MODELS.clear();_MODELS[key]=model
         model=_MODELS[key]
@@ -122,7 +122,7 @@ def _mechanics_era(version):
 def _versioned_profile_pool(context,entry):
     records=entry.get('samples') or []
     if not records or not isinstance(records[0],dict):
-        raise ValueError('1.0.0 requires versioned WHAT profile samples')
+        raise ValueError('1.0.1 requires versioned WHAT profile samples')
     requested_version=int(context.version);requested_bpm=float(context.metadata.get('wholebpm',0.) or 0.)
     exact=[row for row in records if int(row['versionId'])==requested_version]
     era=_mechanics_era(requested_version)
@@ -154,7 +154,7 @@ def _profile_entry(context):
     path=Path(context.root)/'models/experimental/what_complexity_profile.json'
     if not path.is_file():raise FileNotFoundError(path)
     doc=json.loads(path.read_text(encoding='utf8'))
-    if doc.get('schemaVersion')!=3:raise ValueError('1.0.0 requires WHAT profile schemaVersion 3')
+    if doc.get('schemaVersion')!=3:raise ValueError('1.0.1 requires WHAT profile schemaVersion 3')
     entries=doc.get('slots',{}).get(str(context.slot),{})
     if not entries:raise ValueError(f'WHAT profile has no support for slot {context.slot}')
     display_levels=context.metadata.get('difficultyDisplayLevels',{}) if isinstance(context.metadata,dict) else {}
@@ -248,7 +248,7 @@ def intent_plan(context,target_stars,topk=8):
     if not 1<=topk<=64:raise ValueError('WHAT candidate support must be 1..64')
     heads=predict_heads(context);ticks=np.asarray(context.ticks,dtype=np.int64)
     document=json.loads((Path(context.root)/'models/experimental/intent_support.json').read_text(encoding='utf8'))
-    if document.get('schemaVersion')!=2:raise ValueError('1.0.0 requires five-slot intent support schemaVersion 2')
+    if document.get('schemaVersion')!=2:raise ValueError('1.0.1 requires five-slot intent support schemaVersion 2')
     touch_capacity=touch_sensor_capacity(context.version)
     allowed={tuple(x) for x in document['slots'][str(context.slot)]['configurations']
              if int(x[3])<=touch_capacity}

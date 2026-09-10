@@ -7,7 +7,7 @@ from .simai import render_compact_maidata,parse_maidata,parse_inote_ticks
 
 def publish(prepared,results,codecs,folder,release_folder):
     from ..app.preparation import _write_track_mp3,_write_cover_png,_write_bga_mp4
-    folder=Path(folder);lines=[f"&title={prepared['title']}",f"&artist={prepared['metadata']['artist']}",f"&first={prepared['beat_offset']:g}",f"&wholebpm={prepared['bpm']:g}",f"&versionid={prepared['version_id']}",f"&version={prepared['version_name']}",'&clock_count=4','&chartgenerator=ChartRuntime-1.0.0','']
+    folder=Path(folder);lines=[f"&title={prepared['title']}",f"&artist={prepared['metadata']['artist']}",f"&first={prepared['beat_offset']:g}",f"&wholebpm={prepared['bpm']:g}",f"&versionid={prepared['version_id']}",f"&version={prepared['version_name']}",'&clock_count=4','&chartgenerator=ChartRuntime-1.0.1','']
     records=[]
     for slot,entry in sorted(results.items()):
         result,backend,generator,request=entry;chart=result.chart;permit=result.permit
@@ -35,7 +35,7 @@ def publish(prepared,results,codecs,folder,release_folder):
     if prepared['bga_path'] is not None:
         bga_pending=folder/'pv.pending.mp4';_write_bga_mp4(prepared['bga_path'],bga_pending)
         bga_pending.replace(folder/'pv.mp4')
-    document={'schemaVersion':4,'release':'1.0.0','title':prepared['title'],'versionId':prepared['version_id'],'versionName':prepared['version_name'],'bpm':prepared['bpm'],'first':prepared['beat_offset'],
+    document={'schemaVersion':4,'release':'1.0.1','title':prepared['title'],'versionId':prepared['version_id'],'versionName':prepared['version_name'],'bpm':prepared['bpm'],'first':prepared['beat_offset'],
               'whatQuotas':{'starScale':float(prepared['metadata']['whatStarScale']),'arity2Scale':float(prepared['metadata']['whatArity2Scale']),'holdScale':float(prepared['metadata']['whatHoldScale']),'touchScale':float(prepared['metadata']['whatTouchScale']),'touchHoldScale':float(prepared['metadata']['whatTouchHoldScale']),'variation':float(prepared['metadata']['whatVariation']),'semantics':'1.0 is the typical official-chart distribution at displayed DS; scales are relative odds in one normalized WHAT configuration distribution, so changing them may also change notes/event and effective difficulty; Stars are never post-filled'},
               'levels':{str(k):v for k,v in prepared['levels'].items()},'audioDurationSeconds':prepared['duration'],'roundedTotalTicks':prepared['total_ticks'],'endSeconds':prepared['end_seconds'],
               'songId':prepared['song_id'],'songIdAuto':prepared['song_id_auto'],'charts':records,'timings':prepared['timings'],'outputDir':str(folder),'releaseDir':str(release_folder),'inferenceBackend':prepared['acceleration_info'],'cpuMusicalChecks':False}

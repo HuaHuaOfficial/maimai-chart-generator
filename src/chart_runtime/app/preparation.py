@@ -269,7 +269,7 @@ def prepare_request(
     extra_metadata: dict | None = None,
     progress: Callable[[str], None] | None = None,
 ) -> dict:
-    """Prepare one request for the fixed 1.0.0 native model set."""
+    """Prepare one request for the fixed 1.0.1 native model set."""
 
     total_started = time.perf_counter()
     timings: dict[str, float] = {}
@@ -282,7 +282,7 @@ def prepare_request(
     root = Path(root)
     if not torch.cuda.is_available():raise RuntimeError('本原生版本需要 NVIDIA CUDA')
     profile=json.loads((root/'models/experimental/what_complexity_profile.json').read_text(encoding='utf8'))
-    if profile.get('schemaVersion')!=3:raise ValueError('1.0.0需要五档版本化WHAT profile')
+    if profile.get('schemaVersion')!=3:raise ValueError('1.0.1需要五档版本化WHAT profile')
     for slot,level in levels.items():
         key=str(round(float(level)*10))
         if key not in profile.get('slots',{}).get(str(slot),{}):raise ValueError(f'当前联合profile不支持难度{slot}的DS {level:.1f}')

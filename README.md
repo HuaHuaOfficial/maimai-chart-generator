@@ -1,8 +1,8 @@
-# maimai Chart Studio 1.0.0
+# maimai Chart Studio 1.0.1
 
 [English](README.en.md) | 简体中文
 
-本地运行的 maimai 谱面生成器。1.0.0 固定使用一套原生模型链：全曲 planner、低难度轻量 V4 联合采样、高难度 joint WHAT planner 与 relational WHERE、以及共享 CUDA Harness。
+本地运行的 maimai 谱面生成器。1.0.1 固定使用一套原生模型链：全曲 planner、低难度轻量 V4 联合采样、高难度 joint WHAT planner 与 relational WHERE、以及共享 CUDA Harness。
 
 ## 支持范围
 
@@ -46,7 +46,7 @@ pip install -r requirements.txt
 发布 ZIP 不包含 FFmpeg、MiaCode 或 MajdataViewX。请下载 Windows x64 的 ZIP/7z 发行包并解压到程序目录的 `tools`；不要只把压缩文件本身放进去。运行时识别以下结构：
 
 ```text
-maimai Chart Studio 1.0.0/
+maimai Chart Studio 1.0.1/
 └─ tools/
    ├─ ffmpeg/
    │  └─ <任意解压层级>/bin/ffmpeg.exe

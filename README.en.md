@@ -1,8 +1,8 @@
-# maimai Chart Studio 1.0.0
+# maimai Chart Studio 1.0.1
 
 [简体中文](README.md) | English
 
-maimai Chart Studio is a local Windows chart generator. Version 1.0.0 ships one fixed native chain: a whole-song planner, lightweight V4 combined sampling for lower difficulties, joint WHAT plus relational WHERE for higher difficulties, and the shared CUDA Harness.
+maimai Chart Studio is a local Windows chart generator. Version 1.0.1 ships one fixed native chain: a whole-song planner, lightweight V4 combined sampling for lower difficulties, joint WHAT plus relational WHERE for higher difficulties, and the shared CUDA Harness.
 
 ## Supported generation
 
@@ -37,7 +37,7 @@ The form requires audio, title, BPM, chart version, difficulty, and exact intern
 The release ZIP does not bundle FFmpeg, MiaCode, or MajdataViewX. Download and extract Windows x64 ZIP/7z distributions into the application's `tools` directory; placing the archive file itself there is not sufficient. The runtime recognizes:
 
 ```text
-maimai Chart Studio 1.0.0/
+maimai Chart Studio 1.0.1/
 └─ tools/
    ├─ ffmpeg/
    │  └─ <any extracted nesting>/bin/ffmpeg.exe

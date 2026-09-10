@@ -1,8 +1,11 @@
-# maimai Chart Studio 1.0.0
+# maimai Chart Studio 1.0.1
 
 ## Formal release boundary
 
-1.0.0 is the first formal package built from the current native production runtime. It removes the historical release surface instead of carrying compatibility selectors forward.
+1.0.1 is the complete package built from the current native production runtime. It includes the full 0.4.0-to-1.0.0 feature line and the current production fixes; it is not a reduced compatibility patch.
+
+- This complete package includes the two-tier difficulty policy: lightweight V4 combined sampling for BASIC/ADVANCED and joint WHAT plus relational WHERE for EXPERT/MASTER/Re:MASTER.
+- It includes cross-process automatic song-ID allocation, cover/BGA preview and clear controls, local token-protected media streaming, and new-audio asset reset behavior.
 
 - MiaCode and MajdataViewX are now separate peer actions; the unreliable built-in chart preview fallback has been removed. MajdataViewX remains installable through the documented `tools/` / `.tools/` locations or `MAJDATA_EXE`.
 - The Studio now previews the selected cover image and BGA MP4 in the asset panel; clear buttons only clear the selection.
@@ -51,7 +54,7 @@ The release includes shared CUDA rules for complete Slide contacts and queues, v
 
 ## Claim boundary
 
-The current version-conditioned joint profile has not been shown to suppress Touch-on-Slide: in the matched Koi comparison, its conditional ratio was not lower than the earlier profile. The confirmed historical discrepancy was request-identity drift caused by omitting `artist`; 1.0.0 does not add a Touch-on-Slide reward.
+The current version-conditioned joint profile has not been shown to suppress Touch-on-Slide: in the matched Koi comparison, its conditional ratio was not lower than the earlier profile. The confirmed historical discrepancy was request-identity drift caused by omitting `artist`; 1.0.1 does not add a Touch-on-Slide reward.
 
 ## Validation
 

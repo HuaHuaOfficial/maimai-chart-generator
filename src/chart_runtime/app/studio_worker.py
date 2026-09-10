@@ -1,4 +1,4 @@
-"""Owned UI worker for the fixed 1.0.0 native runtime."""
+"""Owned UI worker for the fixed 1.0.1 native runtime."""
 from __future__ import annotations
 import json
 import os

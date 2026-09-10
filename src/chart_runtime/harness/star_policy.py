@@ -7,7 +7,7 @@ import math
 def target_stars(official_stars: int, target_ratio: float, event_count: int | None = None) -> int:
     """Scale a calibrated official-chart Star reference with a safe count cap.
 
-    1.0.0 uses ratio=1 for the default planner anchor; user Star emphasis is
+    1.0.1 uses ratio=1 for the default planner anchor; user Star emphasis is
     applied later as a normalized WHAT relative-odds scale, not as a hard quota.
     """
 
