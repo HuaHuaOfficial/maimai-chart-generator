@@ -45,7 +45,16 @@ def _song_id_process_lock(path: Path):
         try:
             if os.name == 'nt':
                 import msvcrt
-                msvcrt.locking(handle.fileno(), msvcrt.LK_LOCK, 1)
+                deadline = time.monotonic() + 30.0
+                while True:
+                    try:
+                        handle.seek(0)
+                        msvcrt.locking(handle.fileno(), msvcrt.LK_NBLCK, 1)
+                        break
+                    except OSError:
+                        if time.monotonic() >= deadline:
+                            raise
+                        time.sleep(0.05)
             else:
                 import fcntl
                 fcntl.flock(handle.fileno(), fcntl.LOCK_EX)
