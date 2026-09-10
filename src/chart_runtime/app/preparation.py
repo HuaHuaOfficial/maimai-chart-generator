@@ -23,7 +23,7 @@ from ..io.audio import FRAME_SECONDS, extract_log_mel
 from ..io.simai import parse_maidata, render_compact_maidata
 from ..generator.frontend import NativeFrontend
 from ..generator.model_store import native_model_spec,load_models
-from ..version_semantics import touch_enabled, touch_hold_enabled
+from ..version_semantics import DX_VERSION, touch_enabled, touch_hold_enabled
 TPB=384
 
 
@@ -164,6 +164,36 @@ def _validate_song_id(value: str) -> str:
     return _safe_windows_component(text,'song',80)
 
 
+def _resolve_song_id(root: Path, output_root: Path, version_id: int, requested: str | None) -> tuple[str,bool]:
+    """Return a persistent, non-repeating automatic ID or the validated manual ID."""
+    registry_path=Path(root)/'logs'/'song_id_registry.json'
+    with _CACHE_LOCK:
+        try:
+            registry=json.loads(registry_path.read_text(encoding='utf8'))
+            if registry.get('schemaVersion')!=1:raise ValueError
+        except (OSError,ValueError,TypeError):
+            registry={'schemaVersion':1,'preDxNext':3000,'dxNext':13000,'allocated':[]}
+        allocated={str(value) for value in registry.get('allocated',[]) if str(value).isdigit()}
+        if Path(output_root).is_dir():
+            allocated.update(path.name for path in Path(output_root).glob('*/*') if path.is_dir() and path.name.isdigit())
+        manual=str(requested or '').strip()
+        if manual:
+            value=_validate_song_id(manual)
+            if value.isdigit():allocated.add(value)
+            automatic=False
+        else:
+            key='preDxNext' if int(version_id)<DX_VERSION else 'dxNext';base=3000 if key=='preDxNext' else 13000
+            candidate=max(base,int(registry.get(key,base)))
+            while str(candidate) in allocated:candidate+=1
+            value=str(candidate);allocated.add(value);registry[key]=candidate+1;automatic=True
+        registry['allocated']=sorted(allocated,key=lambda item:(int(item),item))
+        registry_path.parent.mkdir(parents=True,exist_ok=True)
+        temporary=registry_path.with_name(f'.{registry_path.name}.{os.getpid()}.{time.time_ns()}.tmp')
+        temporary.write_text(json.dumps(registry,ensure_ascii=False,indent=2),encoding='utf8')
+        os.replace(temporary,registry_path)
+    return value,automatic
+
+
 def _create_generation_dir(root: Path, title: str) -> Path:
     """Create ``乐曲名-YYYYMMDD_HHMMSS`` without changing the title text."""
 
@@ -186,9 +216,9 @@ def prepare_request(
     *,
     root: Path,
     audio_path: Path,
-    cover_path: Path,
-    bga_path: Path,
-    song_id: str,
+    cover_path: Path | None = None,
+    bga_path: Path | None = None,
+    song_id: str | None = None,
     output_dir: Path,
     title: str,
     version_id: int,
@@ -221,15 +251,14 @@ def prepare_request(
     if progress is not None:
         progress(f"推理后端: CUDA / GPU={acceleration_info['gpu']}")
     audio_path = Path(audio_path)
-    cover_path = Path(cover_path)
-    bga_path = Path(bga_path)
-    song_id = _validate_song_id(song_id)
+    cover_path = Path(cover_path) if cover_path else None
+    bga_path = Path(bga_path) if bga_path else None
     output_root = Path(output_dir)
     if not audio_path.is_file():
         raise FileNotFoundError(audio_path)
-    if not cover_path.is_file() or cover_path.suffix.lower() not in {'.png','.jpg','.jpeg','.webp','.bmp'}:
+    if cover_path is not None and (not cover_path.is_file() or cover_path.suffix.lower() not in {'.png','.jpg','.jpeg','.webp','.bmp'}):
         raise ValueError('请选择PNG、JPG、WEBP或BMP封面图片')
-    if not bga_path.is_file() or bga_path.suffix.lower()!='.mp4':
+    if bga_path is not None and (not bga_path.is_file() or bga_path.suffix.lower()!='.mp4'):
         raise ValueError('请选择MP4格式的BGA视频')
     spec = native_model_spec(root)
     asset_root = _asset_root(root)
@@ -241,6 +270,7 @@ def prepare_request(
     extra.setdefault('parallelDifficultyWorkers', 2)
     device = torch.device("cuda")
     ffmpeg = _find_ffmpeg(root)
+    song_id,song_id_auto = _resolve_song_id(root,output_root,version_id,song_id)
     beat_offset = max(
         0.0, float(extra.get("detectedBeatOffsetSeconds", extra.get("first", 0.0)))
     )
@@ -482,7 +512,7 @@ def prepare_request(
         slot_inputs.append((slot, level, style_vector))
 
     return dict(root=root, spec=spec, audio_path=audio_path, cover_path=cover_path, bga_path=bga_path,
-        song_id=song_id, output_root=output_root,
+        song_id=song_id, song_id_auto=song_id_auto, output_root=output_root,
         title=title, version_id=version_id, version_name=version_name, levels=levels,
         bpm=bpm, bpm_ticks=bpm_ticks, bpm_values=bpm_values, beat_offset=beat_offset,
         duration=duration, total_ticks=total_ticks, audio_end_tick=audio_end_tick,

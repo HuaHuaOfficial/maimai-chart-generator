@@ -35,8 +35,8 @@ def main():
     elif mode=='generate':
         from chart_runtime.app.service import generate
         result=generate(
-            root=root,audio_path=Path(data['audioPath']),cover_path=Path(data['coverPath']),
-            bga_path=Path(data['bgaPath']),song_id=data['songId'],output_dir=Path(data['outputDir']),
+            root=root,audio_path=Path(data['audioPath']),cover_path=Path(data['coverPath']) if data.get('coverPath') else None,
+            bga_path=Path(data['bgaPath']) if data.get('bgaPath') else None,song_id=data.get('songId'),output_dir=Path(data['outputDir']),
             title=data['title'],version_id=int(data['versionId']),version_name=data['versionName'],
             levels={int(k):float(v) for k,v in data['levels'].items()},
             bpm=float(data['bpm']),exploration=float(data['exploration']),

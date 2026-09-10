@@ -26,7 +26,7 @@ pip install -r requirements.txt
 
 Double-click `启动生成器.pyw` to open the local Studio. Audio and media assets remain on the computer.
 
-The form requires audio, title, BPM, a custom song ID, a cover image, a BGA MP4, chart version, difficulty, and exact internal level. Version 1.0.0 no longer exposes arbitrary checkpoint or backend selectors; the release accepts only its manifest-listed native model set and CUDA backend.
+The form requires audio, title, BPM, chart version, difficulty, and exact internal level. Song ID is optional: automatic IDs start at 3000 before DX and 13000 from DX onward, and are persisted without reuse. Cover and BGA MP4 are optional. Version 1.0.0 no longer exposes arbitrary checkpoint or backend selectors; the release accepts only its manifest-listed native model set and CUDA backend.
 
 ## Output layout
 
@@ -37,8 +37,8 @@ output/
    └─ CustomSongId/
       ├─ maidata.txt
       ├─ track.mp3
-      ├─ bg.mp4
-      └─ bg.png
+      ├─ bg.mp4 (optional)
+      └─ bg.png (optional)
 ```
 
 The release archive excludes datasets, experiments, obsolete checkpoints and APIs, generated charts, logs, backups, and internal deployment notes. Official-chart profiles control composition only; expressive local structures remain model-emergent and are not manually rewarded.

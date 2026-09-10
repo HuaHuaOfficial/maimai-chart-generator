@@ -394,14 +394,20 @@ class ChartGeneratorApp(tk.Tk):
         if version<13:extra['whatTouchScale']=extra['whatTouchHoldScale']=0.
         clean['extraMetadata']=extra
         song_id=str(data.get('songId','')).strip()
-        if not song_id or song_id in ('.','..') or len(song_id)>80 or song_id.rstrip(' .')!=song_id or re.search(r'[<>:"/\\|?*\x00-\x1f]',song_id):raise ValueError('请输入有效的自定义歌曲ID。')
+        if song_id and (song_id in ('.','..') or len(song_id)>80 or song_id.rstrip(' .')!=song_id or re.search(r'[<>:"/\\|?*\x00-\x1f]',song_id)):raise ValueError('请输入有效的自定义歌曲ID。')
         clean['songId']=song_id
-        cover=Path(str(data.get('coverPath',''))).expanduser()
-        if not cover.is_file() or cover.suffix.lower() not in ('.png','.jpg','.jpeg','.webp','.bmp'):raise ValueError('请选择有效的封面图片。')
-        clean['coverPath']=str(cover.resolve())
-        bga=Path(str(data.get('bgaPath',''))).expanduser()
-        if not bga.is_file() or bga.suffix.lower()!='.mp4':raise ValueError('请选择有效的BGA MP4。')
-        clean['bgaPath']=str(bga.resolve())
+        cover_text=str(data.get('coverPath','')).strip()
+        if cover_text:
+            cover=Path(cover_text).expanduser()
+            if not cover.is_file() or cover.suffix.lower() not in ('.png','.jpg','.jpeg','.webp','.bmp'):raise ValueError('请选择有效的封面图片。')
+            clean['coverPath']=str(cover.resolve())
+        else:clean['coverPath']=''
+        bga_text=str(data.get('bgaPath','')).strip()
+        if bga_text:
+            bga=Path(bga_text).expanduser()
+            if not bga.is_file() or bga.suffix.lower()!='.mp4':raise ValueError('请选择有效的BGA MP4。')
+            clean['bgaPath']=str(bga.resolve())
+        else:clean['bgaPath']=''
         output=str(data.get('outputDir','')).strip()
         clean['outputDir']=str(Path(output).expanduser().resolve() if output else self.runtime_root/'generated')
         return clean

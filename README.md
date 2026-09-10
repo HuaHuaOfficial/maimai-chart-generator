@@ -31,9 +31,9 @@ pip install -r requirements.txt
 生成前需要填写或选择：
 
 - 音频、曲名、BPM；
-- 自定义歌曲 ID（与官方谱面 ID 类似，作为歌曲子目录名）；
-- 封面图片；
-- BGA MP4；
+- 自定义歌曲 ID（可留空；DX 前从 3000、DX 及以后从 13000 开始自动分配并持久避重）；
+- 可选的封面图片；
+- 可选的 BGA MP4；
 - 谱面版本、难度与精确定数。
 
 1.0.0 不再提供任意 checkpoint 选择器或后端选择器。发布包只接受清单中的固定模型，并只运行 CUDA 路径。
@@ -49,11 +49,11 @@ pip install -r requirements.txt
    └─ 自定义歌曲ID/
       ├─ maidata.txt
       ├─ track.mp3
-      ├─ bg.mp4
-      └─ bg.png
+      ├─ bg.mp4（可选）
+      └─ bg.png（可选）
 ```
 
-`track.mp3` 由输入音频转码；`bg.mp4` 是所选 BGA MP4；`bg.png` 是所选封面（非 PNG 输入会转换为 PNG）。`元数据.json` 记录模型、Harness、各难度摘要、内容 digest 和实际输出路径。
+`track.mp3` 由输入音频转码。选择 BGA 时写出 `bg.mp4`；选择封面时写出 `bg.png`（非 PNG 输入会转换为 PNG）。`元数据.json` 记录最终歌曲 ID、是否自动分配、模型、Harness、各难度摘要、内容 digest 和实际输出路径。
 
 ## 模型与实验边界
 

@@ -20,7 +20,7 @@
 
 ## Output package
 
-Successful generations use `乐曲名-YYYYMMDD_HHMMSS/自定义歌曲ID/`. The song-ID directory contains `maidata.txt`, `track.mp3`, `bg.mp4`, and `bg.png`; `元数据.json` is stored in the outer timestamped directory.
+Successful generations use `乐曲名-YYYYMMDD_HHMMSS/歌曲ID/`. A blank ID is allocated persistently from 3000 before DX or 13000 from DX onward without reuse. The song-ID directory always contains `maidata.txt` and `track.mp3`; optional selections add `bg.mp4` and `bg.png`. `元数据.json` is stored in the outer timestamped directory.
 
 ## Current Harness
 
@@ -36,6 +36,7 @@ The current version-conditioned joint profile has not been shown to suppress Tou
 - The migrated EXPERT/MASTER/Re:MASTER weights and real-bar logits have maximum absolute difference 0.0 from the prior production checkpoint.
 - A single Home Street run generated all five difficulties with zero feedback rounds, HARD=0, and QUALITY=0 for every chart.
 - The clean release tree independently generated BASIC 5.0 with HARD=0 and QUALITY=0.
+- A blank pre-DX song ID produced `3000`; with no cover or BGA selected, the song directory contained only `maidata.txt` and `track.mp3`.
 - Python compilation, Web UI syntax, joint/sequence/track tests, CUDA Slide queue, CUDA incremental Muri, motion, compound routes, versioned percentile, and causal recovery checks passed.
 
 ## Release contents
