@@ -12,6 +12,7 @@ TIME_EPSILON=1e-7
 # the end of the current judge tick so nanosecond-separated UP events cannot
 # create an artificial handoff between two actions.
 INPUT_RELEASE_SECONDS=1/180
+INPUT_OVERLAY_SECONDS=2/60  # MaiMuriDX OVERLAY_THRESHOLD: 6 ticks at 180 TPS
 TAP_ON_SLIDE_SOFT_SECONDS=.2
 SLIDE_HAND_ORDER_SECONDS=.3
 
@@ -52,7 +53,7 @@ __device__ void mark(ull* flags,int r,ll a,ll b,const ll* clean,int C,bool excep
 }
 // Rule positions match kernel.HARD_NAMES and are checked by a source manifest.
 extern "C" __global__ void inputs(
- const ll* event,const ll* note,const ll* sensor,const ll* ipad,const bool* outer,const bool* hold,const bool* ex,
+ const ll* event,const ll* note,const ll* ikind,const ll* sensor,const ll* ipad,const bool* outer,const bool* hold,const bool* ex,
  const double* start,const double* end,const ll* batch,
  const ll* te,const ll* tn,const ll* th,const ll* tt,const double* tshoot,const double* tend,const bool* wifi,
  const ll* clean,int C,const double* limit,ull* flags,ll* soft,int I,int T) {
@@ -65,11 +66,12 @@ extern "C" __global__ void inputs(
  for(int j=0;j<I;j++) {
    if(batch[event[j]]!=b)continue;
    if(j>i&&ipad[i]==ipad[j]) {
-     double bound=fmax(start[i]+2.0/60,end[i]);
+     double bound=fmax(start[i]+INPUT_OVERLAY_SECONDS,end[i]);
      if(start[j]<bound-1e-7)mark(flags,0,e,event[j],clean,C);
      bool taps=(end[i]-start[i]<=1e-7)&&(end[j]-start[j]<=1e-7);
-     bool overlap=taps?fabs(start[i]-start[j])<=2.0/60+1e-7:
-        start[i]-2.0/60<=end[j]+1e-7&&start[j]-2.0/60<=end[i]+1e-7;
+     bool overlap=taps?fabs(start[i]-start[j])<=INPUT_OVERLAY_SECONDS+1e-7:
+        start[i]-INPUT_OVERLAY_SECONDS<=end[j]+1e-7&&start[j]-INPUT_OVERLAY_SECONDS<=end[i]+1e-7;
+     if(ikind[i]!=2&&ikind[j]!=2&&overlap)mark(flags,0,e,event[j],clean,C);
      if(overlap)atomicAdd((ull*)(soft+b*4+2),1ULL);
    }
    bool on=start[j]<=at+1e-7&&end[j]+1.0/180>at+1e-7;
@@ -247,7 +249,7 @@ class FusedRules:
         self.slide_hand_order_max_attempts=int(policy['maxSameWhatAttempts'])
         self.slide_hand_order_try_next_what=bool(policy['tryNextDeclaredWhat'])
         self.slide_hand_order_max_what_attempts=int(policy['maxAlternativeWhatAttempts'])
-        source=SOURCE_TEMPLATE.replace('SLIDE_HAND_ORDER_SECONDS',repr(self.slide_hand_order_seconds))
+        source=SOURCE_TEMPLATE.replace('SLIDE_HAND_ORDER_SECONDS',repr(self.slide_hand_order_seconds)).replace('INPUT_OVERLAY_SECONDS',repr(INPUT_OVERLAY_SECONDS))
         self.cp=cp;module=cp.RawModule(code=source,options=('--std=c++17',),name_expressions=('inputs','tracks','contacts','versions','multitouch'))
         self.functions={name:module.get_function(name) for name in ('inputs','tracks','contacts','versions','multitouch')}
         names=list(codec.vocab['touchPositions']);adj=codec.tables['touchAdjacency']
@@ -267,7 +269,7 @@ class FusedRules:
         stream=torch.cuda.current_stream(d)
         with cp.cuda.ExternalStream(stream.cuda_stream):
             cl=view(cp,clean);fl=view(cp,flags);sf=view(cp,soft);lim=view(cp,limits);v=view(cp,versions)
-            launch('inputs',int(I),tuple(arr(k) for k in ('input_event','input_note','input_sensor','input_pad','input_outer','input_hold','input_ex','input_start','input_end','event_batch','track_event','track_note','track_head','track_tail','track_shoot','track_end','track_wifi'))+(cl,C,lim,fl,sf,I,T))
+            launch('inputs',int(I),tuple(arr(k) for k in ('input_event','input_note','input_kind','input_sensor','input_pad','input_outer','input_hold','input_ex','input_start','input_end','event_batch','track_event','track_note','track_head','track_tail','track_shoot','track_end','track_wifi'))+(cl,C,lim,fl,sf,I,T))
             launch('tracks',int(T),tuple(arr(k) for k in ('track_event','track_note','track_head','track_route','track_path','track_contacts_key','track_start','track_shoot','track_end','track_wifi','event_batch','input_event','input_sensor','input_outer','input_hold','input_start','input_end'))+(lim,cl,C,fl,I,T))
             launch('contacts',int(Q),tuple(arr(k) for k in ('contact_track','contact_sensor','contact_time','track_event','track_note','track_head','track_shoot','event_batch','input_event','input_note','input_sensor','input_outer','input_ex','input_start'))+(cl,C,fl,sf,Q,I))
             N=np.int32(len(c['note_event']))

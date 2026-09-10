@@ -198,8 +198,14 @@ def _write_cover_png(cover_path: Path, output_path: Path, ffmpeg: Path) -> None:
     )
 
 
-def _write_bga_mp4(bga_path: Path, output_path: Path) -> None:
-    shutil.copy2(bga_path, output_path)
+def _write_bga_mp4(bga_path: Path, output_path: Path, ffmpeg: Path) -> None:
+    """Publish BGA as video-only MP4 without re-encoding its video stream."""
+    subprocess.run(
+        [str(ffmpeg), '-y', '-v', 'error', '-i', str(bga_path), '-map', '0:v:0', '-c:v', 'copy', '-an', '-sn', '-dn', '-movflags', '+faststart', str(output_path)],
+        check=True,
+        creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0),
+    )
+
 
 
 def _safe_windows_component(value: str, fallback: str, limit: int = 96) -> str:

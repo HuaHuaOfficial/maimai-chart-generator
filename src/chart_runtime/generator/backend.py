@@ -91,9 +91,13 @@ class GeneratorBackend:
             self.primary_events=dict(events)
         else:
             events=dict(data['base_events']);targets=list(data.get('targets',()))
-            if self.relational_plan is not None and targets:
+            if self.relational_plan is not None and targets and phase!='resume':
                 from .contract_utils import dependency_window
                 targets=dependency_window(targets,self.relational_plan,ctx.ticks,context=ctx,events=events)
+            # Resume already owns every pending tick after the interruption plus
+            # live local owners.  Do not reverse-expand a fixed relation source
+            # merely because its cue lies in that pending suffix; renderer
+            # teacher-forces the source and reconstructs the cue obligation.
             intents=None;duration_masks={};route_masks={};start_masks={}
             if phase=='repair':
                 # Re-render the complete dependency window jointly, preserving
@@ -116,7 +120,7 @@ class GeneratorBackend:
                 # Preserve relation-owned WHAT only when a real relation contract exists.
                 # Empty Expert relation plans must not overwrite resume's fresh choices.
                 intents={t:self.what_plan[t] for t in targets if t in self.what_plan}
-                duration_masks={t:m for t,m in self.relational_plan.duration_masks.items() if t in targets}
+                duration_masks=dict(self.relational_plan.duration_masks)
             local_context=replace(ctx,progress=None)
             references=dict(events)
             for tick in ctx.ticks:references.setdefault(int(tick),'')

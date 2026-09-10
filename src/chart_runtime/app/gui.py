@@ -30,6 +30,7 @@ import uuid
 import webbrowser
 
 AUDIO_EXTENSIONS = {'.mp3','.wav','.flac','.ogg','.m4a','.aac','.opus','.wma'}
+MUSIC_SOURCE_EXTENSIONS = AUDIO_EXTENSIONS | {'.mp4'}
 COVER_EXTENSIONS = {'.png','.jpg','.jpeg','.webp','.bmp','.gif'}
 BGA_EXTENSIONS = {'.mp4'}
 ASSET_LIMITS = {'cover':32*1024*1024,'bga':512*1024*1024}
@@ -245,13 +246,14 @@ class Handler(BaseHTTPRequestHandler):
         if kind in ('cover','bga'):
             return self._upload_asset(kind)
         if self.app.busy:
-            raise ValueError('任务运行中，暂不能更换音频。')
+            raise ValueError('任务运行中，暂不能更换音乐或视频。')
         length=int(self.headers.get('Content-Length','0'))
         if not 0<length<=512*1024*1024:
-            return self._json({'error':'音频导入上限为 512 MB。'},413)
+            return self._json({'error':'音乐 / 视频导入上限为 512 MB。'},413)
         name=Path(unquote(self.headers.get('X-File-Name','audio.mp3')).replace('\\','/')).name
-        if Path(name).suffix.lower() not in AUDIO_EXTENSIONS:
-            raise ValueError('不支持此音频格式。')
+        allowed=MUSIC_SOURCE_EXTENSIONS if kind=='music' else AUDIO_EXTENSIONS
+        if Path(name).suffix.lower() not in allowed:
+            raise ValueError('不支持此音乐或视频格式。' if kind=='music' else '不支持此音频格式。')
         folder=self.app.logs/'studio_imports'/uuid.uuid4().hex
         folder.mkdir(parents=True,exist_ok=False)
         path=folder/name
@@ -262,7 +264,7 @@ class Handler(BaseHTTPRequestHandler):
                     chunk=self.rfile.read(min(1048576,remaining))
                     if not chunk:raise ValueError('音频传输中断。')
                     f.write(chunk);remaining-=len(chunk)
-            self._json(self.app.select_audio(path))
+            self._json(self.app.select_music(path) if kind=='music' else self.app.select_audio(path))
         except Exception:
             path.unlink(missing_ok=True)
             raise
@@ -282,7 +284,7 @@ class ChartGeneratorApp(tk.Tk):
         if not isinstance(self.settings,dict):self.settings={}
         self.environment={'checking':True}
         previous=self.settings.get('audioPath')
-        if previous and Path(previous).is_file() and Path(previous).suffix.lower() in AUDIO_EXTENSIONS:self.audio_path=Path(previous)
+        if previous and Path(previous).is_file() and Path(previous).suffix.lower() in MUSIC_SOURCE_EXTENSIONS:self.audio_path=Path(previous)
         self.token=secrets.token_urlsafe(32)
         self.server=StudioServer(('127.0.0.1',0),Handler);self.server.app=self
         self.host=f'127.0.0.1:{self.server.server_port}'
@@ -401,7 +403,17 @@ class ChartGeneratorApp(tk.Tk):
         if not path.is_file() or path.suffix.lower() not in AUDIO_EXTENSIONS:raise ValueError('请选择有效的音频文件。')
         self.audio_path=path;return self.audio_info()
 
+    def select_music(self,path):
+        path=Path(path).resolve()
+        if not path.is_file() or path.suffix.lower() not in MUSIC_SOURCE_EXTENSIONS:raise ValueError('请选择有效的音频或 MP4 视频。')
+        self.audio_path=path;info=self.audio_info()
+        if path.suffix.lower()=='.mp4':info.update({'bgaPath':str(path),'jointVideo':True})
+        return info
+
     def browse(self,kind):
+        if kind=='music':
+            chosen=self._native(lambda:self._dialog(lambda owner:filedialog.askopenfilename(parent=owner,title='选择音乐或视频',filetypes=[('音乐 / MP4','*.mp3 *.wav *.flac *.ogg *.m4a *.aac *.opus *.wma *.mp4'),('全部文件','*.*')])))
+            return self.select_music(chosen) if chosen else {'path':''}
         if kind=='audio':
             chosen=self._native(lambda:self._dialog(lambda owner:filedialog.askopenfilename(parent=owner,title='选择乐曲音频',filetypes=[('音频','*.mp3 *.wav *.flac *.ogg *.m4a *.aac *.opus *.wma'),('全部文件','*.*')])))
             return self.select_audio(chosen) if chosen else {'path':''}
@@ -463,7 +475,7 @@ class ChartGeneratorApp(tk.Tk):
 
     def _validate(self,mode,data):
         audio=Path(str(data.get('audioPath',''))).expanduser()
-        if not audio.is_file() or audio.suffix.lower() not in AUDIO_EXTENSIONS:raise ValueError('音频路径不存在或格式不受支持。')
+        if not audio.is_file() or audio.suffix.lower() not in MUSIC_SOURCE_EXTENSIONS:raise ValueError('音乐路径不存在或格式不受支持。')
         clean=dict(data);clean['audioPath']=str(audio.resolve())
         if mode=='bpm':return clean
         version=int(data.get('versionId',26))

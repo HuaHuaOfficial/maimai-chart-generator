@@ -8,7 +8,7 @@ import json
 from ..io.timing import ticks_to_seconds
 from ..io.durations import hold_seconds, slide_seconds
 from .durations import typed_duration_values
-from .fused import TIME_EPSILON, INPUT_RELEASE_SECONDS
+from .fused import TIME_EPSILON, INPUT_RELEASE_SECONDS, INPUT_OVERLAY_SECONDS
 from .snapshot_fast import SnapshotTracker
 from .source_head import TRACK_LIFECYCLE
 
@@ -56,6 +56,7 @@ class SamplingProvider:
         names=list(vocab['touchPositions']);adj=self.tables['touchAdjacency']
         self.adjacency=torch.tensor([[a==b or b in adj.get(a,()) for b in names] for a in names],device=self.device,dtype=torch.bool)
         self.touch_pad_masks=torch.tensor([int(self.tables['simplePadMasks'][name]) for name in names],device=self.device,dtype=torch.int64)
+        self.outer_pad_masks=torch.tensor([int(self.tables['simplePadMasks']['A'+str(i+1)]) for i in range(8)],device=self.device,dtype=torch.int64)
 
     def bind_references(self,reference_events):
         self.references={int(t):str(x.get('text','')) if isinstance(x,dict) else str(x) for t,x in (reference_events or {}).items()}
@@ -75,11 +76,28 @@ class SamplingProvider:
                     if note['family']=='tap':tap_rows.append((float(at),int(note['start'])-1,int(tick)))
             self._fixed_tap_rows=np.asarray(tap_rows,np.float64).reshape(-1,3)
         else:self._fixed_tap_rows=np.empty((0,3),np.float64)
+        eligible=c['input_kind']!=2 if len(c['input_event']) else torch.zeros(0,device=self.device,dtype=torch.bool)
+        if bool(eligible.any()):
+            self._overlay_reference_rows=np.column_stack((c['input_start'][eligible].detach().cpu().numpy(),c['input_end'][eligible].detach().cpu().numpy(),c['input_pad'][eligible].detach().cpu().numpy(),c['event_tick'][c['input_event'][eligible]].detach().cpu().numpy()))
+        else:self._overlay_reference_rows=np.empty((0,4),np.float64)
         if self.references:self._fast_snapshot_enabled=False
 
     def seed_history(self,events):
         self.history=dict(events);self._payload=None
         if self.history:self._fast_snapshot_enabled=False
+
+    def _overlay_start_masks(self,at,tick,c):
+        blocked=0
+        if len(c['input_event']):
+            eligible=(c['input_kind']!=2)&(c['input_start']<=at+INPUT_OVERLAY_SECONDS+TIME_EPSILON)&(c['input_end']>=at-INPUT_OVERLAY_SECONDS-TIME_EPSILON)
+            for pad in c['input_pad'][eligible].detach().cpu().tolist(): blocked|=int(pad)
+        rows=np.asarray(getattr(self,'_overlay_reference_rows',np.empty((0,4))),np.float64).reshape(-1,4)
+        if len(rows):
+            keep=(rows[:,0]<=at+INPUT_OVERLAY_SECONDS+TIME_EPSILON)&(rows[:,1]>=at-INPUT_OVERLAY_SECONDS-TIME_EPSILON)&(rows[:,3].astype(np.int64)!=int(tick))
+            if self.history: keep&=~np.isin(rows[:,3].astype(np.int64),np.fromiter(self.history,np.int64))
+            for pad in rows[keep,2]: blocked|=int(pad)
+        outer=self.outer_pad_masks.detach().cpu().numpy();touch=self.touch_pad_masks.detach().cpu().numpy()
+        return (outer&blocked)==0,(touch&blocked)==0
 
     def _context(self,moment,horizon):
         reference={}
@@ -120,7 +138,7 @@ class SamplingProvider:
             self.timings['snapshotSeconds']+=time.perf_counter()-started
             return result
         if self._payload is None:self._payload=self.codec.encode(self.history,self.bt,self.bv)
-        c=self._payload.columns;ie=c['input_event'];held=c['input_hold']&(c['input_start']<=at)&(c['input_end']>at+1e-7)
+        c=self._payload.columns;overlay_non_slide,overlay_touch=self._overlay_start_masks(at,tick,c);ie=c['input_event'];held=c['input_hold']&(c['input_start']<=at)&(c['input_end']>at+1e-7)
         outerheld=held&c['input_outer'];touchheld=held&~c['input_outer']
         lanes=c['input_sensor'][outerheld];touch=c['input_sensor'][touchheld]-8
         move=(c['track_shoot']<=at+TIME_EPSILON)&(c['track_end']>=at-TIME_EPSILON)
@@ -197,6 +215,7 @@ class SamplingProvider:
             muriStateFeatures=np.zeros(32,np.float32),muriOracleSourceTick=int(tick),activeTouchHoldSensors=touch_names,lastSingleTapLane=None,motionDirection=0,motionRunLength=0,
             activeHands=min(2,nh+nt),activeHoldHands=min(2,nh),activeSlideHands=min(2,ns),activeSlideCount=int(active.sum().item()),activeTouchHoldHands=min(2,nt),availableHands=available,holdAvailableHands=available,
             maxOuterArity=outer_capacity,
+            allowedNonSlideStartMask=overlay_non_slide,allowedTouchSensorMask=overlay_touch,
             allowedTouchPresenceMask=covered_touch.detach().cpu().numpy(),
             allowedHoldDurationMask=hm.detach().cpu().numpy(),allowedSlideDurationMask=sm.detach().cpu().numpy())
         if self._tap_run_state is not None:

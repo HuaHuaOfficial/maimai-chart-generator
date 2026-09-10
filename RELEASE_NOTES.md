@@ -9,7 +9,7 @@
 - It includes cross-process automatic song-ID allocation, cover/BGA preview and clear controls, local token-protected media streaming, and new-audio asset reset behavior.
 
 - MiaCode and MajdataViewX are now separate peer actions; the unreliable built-in chart preview fallback has been removed. MajdataViewX remains installable through the documented `tools/` / `.tools/` locations or `MAJDATA_EXE`.
-- The Studio now keeps cover and BGA drop zones fixed-size below the title, BPM, and song ID fields. BGA preview uses a cached FFmpeg-extracted static frame instead of browser video decoding; the original MP4 is preserved unchanged. Clear buttons only clear the selection.
+- The Studio now keeps cover and BGA drop zones fixed-size below the title, BPM, and song ID fields. BGA preview uses a cached FFmpeg-extracted static frame instead of browser video decoding. Source media is never modified; published `pv.mp4` keeps only the video stream via stream copy. Clear buttons only clear the selection.
 
 ## Two-tier difficulty planning
 
@@ -53,9 +53,11 @@ The bundled FFmpeg at `tools/ffmpeg/ffmpeg.exe` is preferred; recursive discover
 
 - Causal-v1 now gives every outer resume a fresh per-event candidate episode while preserving the global run candidate cap. A hotspot that exhausted its local candidate limit in an earlier episode can no longer poison all later resume rounds.
 - Empty relational plans on EXPERT no longer overwrite fresh/rotated WHAT choices during resume, so recovery can actually change the blocked local intent when no relation contract exists.
+- Resume now freezes validated prefixes instead of applying a bidirectional relation closure to the whole pending suffix; relational MASTER recovery reuses cached prefix frames instead of silently re-forwarding most of the chart.
+- MaiMuriDX overlap semantics are now enforced as HARD for same-pad Hold/Tap/Touch stacks at the 180 Hz two-frame boundary, and the same constraint is exposed to candidate sampling so these stacks are rejected before full-chart recovery.
 - WHEN edge calibration now repairs anomalously empty first bars when adjacent bars have matching audio activity, and suppresses density only across a detected sustained end fade; interior sections are unchanged.
 - Studio audio preview now uses a normalized 320 kbps MP3 cache, so mislabeled or browser-incompatible audio remains playable; the same cached MP3 is reused verbatim as the published `track.mp3`.
-- BGA preview now extracts a cached static frame with bundled FFmpeg instead of asking the browser to decode the original MP4; the original BGA is still copied unchanged to `pv.mp4`.
+- BGA preview now extracts a cached static frame with bundled FFmpeg. A music MP4 can be imported once as both audio source and BGA; publication splits it into a true 320 kbps `track.mp3` plus a video-only `pv.mp4` without re-encoding the video stream.
 - The localhost media Range path now imports and handles `re` correctly, fixing `<audio>` requests that previously returned HTTP 400.
 
 - BPM detection and generation can be cancelled from the Studio; the worker process tree is terminated while existing completed files are preserved.

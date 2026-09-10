@@ -72,7 +72,8 @@ output/
 
 ## Preview
 
+- A video with an audio track can be selected once as both music and BGA. Publication splits it into a normalized 320 kbps `track.mp3` and a video-only `pv.mp4`; the video stream is copied without re-encoding.
 MiaCode and MajdataViewX are optional external tools exposed as two separate actions in the Studio. If MajdataViewX is unavailable, the action reports the installation locations instead of opening a built-in preview. Install it at `tools/MajdataViewX-v6.2.0` or `.tools/MajdataViewX-v6.2.0`, or set `MAJDATA_EXE` to the `MajdataEdit-Neo.exe` path.
-- Cover and BGA controls use fixed-size drop zones. BGA preview is a static thumbnail extracted by the bundled FFmpeg, so the browser never needs to decode the original MP4; the original BGA and final `pv.mp4` are not transcoded. Clear buttons remove only the current selection and never delete the source file.
+- Cover and BGA controls use fixed-size drop zones. BGA preview is a static thumbnail extracted by the bundled FFmpeg, so the browser never needs to decode the original MP4; source media is never modified, and the final video-only `pv.mp4` remuxes the original video stream without transcoding. Clear buttons remove only the current selection and never delete the source file.
 
 This is an unofficial project and is not affiliated with SEGA.

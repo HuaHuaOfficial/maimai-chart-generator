@@ -116,7 +116,7 @@ class Codec:
         seconds = ticks_to_seconds(ticks, np.asarray(bt), np.asarray(bv))
         data = {k: [] for k in (
             'event_tick', 'event_time', 'event_notes', 'event_lanes', 'event_lane_count', 'event_track_speed',
-            'input_event', 'input_note', 'input_sensor', 'input_pad', 'input_outer', 'input_hold', 'input_ex', 'input_start', 'input_end',
+            'input_event', 'input_note', 'input_kind', 'input_sensor', 'input_pad', 'input_outer', 'input_hold', 'input_ex', 'input_start', 'input_end',
             'note_event', 'note_kind', 'note_sensor', 'note_modifiers',
               'track_event', 'track_note', 'track_route', 'track_path', 'track_head', 'track_tail', 'track_start', 'track_shoot', 'track_end', 'track_early', 'track_wifi', 'track_contacts_key',
             'contact_track', 'contact_sensor', 'contact_time',
@@ -147,7 +147,7 @@ class Codec:
                 pad_name = 'A'+str(sensor+1) if outer else note['start']
                 pad = int(self.tables['simplePadMasks'][pad_name])
                 if not (family == 'slide' and note['is_headless']):
-                    for key, val in zip(('input_event','input_note','input_sensor','input_pad','input_outer','input_hold','input_ex','input_start','input_end'), (ei,ni,sensor,pad,outer,held,note['is_ex'],at,at+length)):
+                    for key, val in zip(('input_event','input_note','input_kind','input_sensor','input_pad','input_outer','input_hold','input_ex','input_start','input_end'), (ei,ni,kind,sensor,pad,outer,held,note['is_ex'],at,at+length)):
                         data[key].append(val)
                     data['action_start'].append(at); data['action_end'].append(at+length+1/60); data['action_mask'].append(pad); data['action_event'].append(ei); data['action_track'].append(-1)
                 if family != 'slide':

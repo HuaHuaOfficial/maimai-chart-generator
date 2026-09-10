@@ -34,7 +34,7 @@ def publish(prepared,results,codecs,folder,release_folder):
         cover_pending=folder/'bg.pending.png';_write_cover_png(prepared['cover_path'],cover_pending,prepared['ffmpeg'])
         cover_pending.replace(folder/'bg.png')
     if prepared['bga_path'] is not None:
-        bga_pending=folder/'pv.pending.mp4';_write_bga_mp4(prepared['bga_path'],bga_pending)
+        bga_pending=folder/'pv.pending.mp4';_write_bga_mp4(prepared['bga_path'],bga_pending,prepared['ffmpeg'])
         bga_pending.replace(folder/'pv.mp4')
     document={'schemaVersion':4,'release':'1.1.0','title':prepared['title'],'versionId':prepared['version_id'],'versionName':prepared['version_name'],'bpm':prepared['bpm'],'first':prepared['beat_offset'],
               'whatQuotas':{'starScale':float(prepared['metadata']['whatStarScale']),'arity2Scale':float(prepared['metadata']['whatArity2Scale']),'holdScale':float(prepared['metadata']['whatHoldScale']),'touchScale':float(prepared['metadata']['whatTouchScale']),'touchHoldScale':float(prepared['metadata']['whatTouchHoldScale']),'variation':float(prepared['metadata']['whatVariation']),'semantics':'1.0 is the typical official-chart distribution at displayed DS; scales are relative odds in one normalized WHAT configuration distribution, so changing them may also change notes/event and effective difficulty; Stars are never post-filled'},

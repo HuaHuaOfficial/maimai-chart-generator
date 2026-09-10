@@ -32,10 +32,10 @@ pip install -r requirements.txt
 
 生成前需要填写或选择：
 
-- 音频、曲名、BPM；
+- 音频或带音轨的 MP4、曲名、BPM；
 - 自定义歌曲 ID（可留空；DX 前从 3000、DX 及以后从 13000 开始自动分配并持久避重）；
 - 可选的封面图片；
-- 可选的 BGA MP4；
+- 可选的 BGA MP4；也可以直接把同一个 MP4 同时作为音乐与 BGA；
 - 谱面版本、难度与精确定数。
 - 更换或上传新音频会清空上一首的封面和 BGA 选择；曲名仍默认使用音频文件名。
 
@@ -79,13 +79,13 @@ maimai Chart Studio 1.1.0/
       └─ pv.mp4（可选）
 ```
 
-`track.mp3` 由输入音频转码。选择封面时写出 `bg.png`（非 PNG 输入会转换为 PNG）；选择 BGA 时写出 `pv.mp4`。`元数据.json` 记录最终歌曲 ID、是否自动分配、模型、Harness、各难度摘要、内容 digest 和实际输出路径。
+`track.mp3` 始终规范化为真实的 320 kbps MP3，并复用 Studio 试听缓存。选择封面时写出 `bg.png`（非 PNG 输入会转换为 PNG）；选择 BGA 时写出只含视频流的 `pv.mp4`，视频流采用 stream copy、不重新编码。带音轨 MP4 可一次导入并自动拆成 `track.mp3 + pv.mp4`。`元数据.json` 记录最终歌曲 ID、是否自动分配、模型、Harness、各难度摘要、内容 digest 和实际输出路径。
 - 自动歌曲 ID 注册表使用跨进程锁；同时打开多个 Studio 实例申请 ID 时也不会重复分配。
 
 
 ## 预览
 
 可选安装 MiaCode 或 MajdataViewX。制作台会提供两个并列的外部工具入口；MajdataViewX 不可用时只提示安装位置，不再回退到内置预览。MajdataViewX 可安装到 `tools/MajdataViewX-v6.2.0` 或 `.tools/MajdataViewX-v6.2.0`，也可通过 `MAJDATA_EXE` 指定 `MajdataEdit-Neo.exe`。标准歌曲素材名为 `track.mp3`、`bg.png` 和 `pv.mp4`。
-- 封面与 BGA 下方各有固定大小的拖放框；拖入图片或 MP4 会自动导入。BGA 使用包内 FFmpeg 从原视频截取静态缩略图预览，不要求浏览器直接解码 MP4，也不会修改或转码最终 `pv.mp4`。清空按钮只清除当前选择，不删除原始文件。
+- 封面与 BGA 下方各有固定大小的拖放框；拖入图片或 MP4 会自动导入。BGA 使用包内 FFmpeg 从原视频截取静态缩略图预览，不要求浏览器直接解码 MP4；源文件不会被修改，最终 `pv.mp4` 只做视频流 remux，不重新编码画面。清空按钮只清除当前选择，不删除原始文件。
 
 本项目为非官方工具，不隶属于 SEGA。

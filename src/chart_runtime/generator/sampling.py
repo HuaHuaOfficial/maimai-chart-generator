@@ -321,9 +321,10 @@ def valid_outer_assignments(snapshot,starts,families,duration_count):
     from itertools import permutations
     from .shared_launch import HAND_ACCOUNTING
     tap_allowed=np.asarray(snapshot.get('allowedTapStartMask',np.ones(8,np.bool_)),np.bool_)
+    non_slide_allowed=np.asarray(snapshot.get('allowedNonSlideStartMask',np.ones(8,np.bool_)),np.bool_)
     held={int(x)-1 for x in snapshot.get('holdLanes',())};cue=snapshot.get('_launch_cue_lane')
     return [order for order in set(permutations(families)) if HAND_ACCOUNTING.assignment_fits(snapshot,starts,order) and all(
-        (f!=0 or tap_allowed[int(lane)]) and (f not in (0,1) or int(lane) not in held)
+        (f!=0 or tap_allowed[int(lane)]) and (f not in (0,1) or (int(lane) not in held and non_slide_allowed[int(lane)]))
         and (f!=2 or slide_start_available(snapshot,lane,duration_count))
         and (cue is None or int(lane)!=int(cue) or f==0)
         for lane,f in zip(starts,order))]
@@ -388,6 +389,7 @@ def decode_structured_factor_event_fast(
     def where_slide_can_start(start):return slide_start_available(snapshot,start,len(vocab['durations']))
 
     tap_allowed=np.asarray(snapshot.get('allowedTapStartMask',np.ones(8,np.bool_)),np.bool_)
+    non_slide_allowed=np.asarray(snapshot.get('allowedNonSlideStartMask',np.ones(8,np.bool_)),np.bool_)
     from .shared_launch import HAND_ACCOUNTING
     launch_heads=HAND_ACCOUNTING.launch_heads(snapshot)
 
@@ -417,7 +419,7 @@ def decode_structured_factor_event_fast(
             candidate_ids = [i for i in candidate_ids if int(cue_lane) in candidate_starts[i]]
         if intent_override is not None and 2 in EventIntent.from_representation(intent_override).button_families:
             candidate_ids=[i for i in candidate_ids if any(where_slide_can_start(x) for x in candidate_starts[i])]
-        if intent_override is not None and (launch_heads or not tap_allowed.all()):
+        if intent_override is not None and (launch_heads or not tap_allowed.all() or not non_slide_allowed.all()):
             families=EventIntent.from_representation(intent_override).button_families
             candidate_ids=[i for i in candidate_ids if valid_assignments(candidate_starts[i],families)]
         if intent_override is None and not tap_allowed.all() and not any(
@@ -649,6 +651,13 @@ def decode_structured_factor_event_fast(
     touch_active = np.zeros(head.c.touch_positions, dtype=np.bool_)
     names = vocab['touchPositions']
     sensor_allowed_np = np.asarray([touch_sensor_allowed(version_id,n) for n in names],np.bool_)
+    sensor_allowed_np &= np.asarray(snapshot.get('allowedTouchSensorMask',np.ones(len(names),np.bool_)),np.bool_)
+    current_non_slide_pad=0
+    for note_index in range(int(rep['button_arity'])):
+        if int(rep['button_family'][note_index]) in (0,1):
+            current_non_slide_pad|=int(state.tables['simplePadMasks']['A'+str(int(rep['button_start'][note_index])+1)])
+    if current_non_slide_pad:
+        sensor_allowed_np &= np.asarray([(int(state.tables['simplePadMasks'][name])&current_non_slide_pad)==0 for name in names],np.bool_)
     covered_np = np.asarray(snapshot.get('allowedTouchPresenceMask',np.zeros(len(names),np.bool_)),np.bool_) & sensor_allowed_np
     adjacency = getattr(state,'tables',{}).get('touchAdjacency')
     def count_groups(mask):

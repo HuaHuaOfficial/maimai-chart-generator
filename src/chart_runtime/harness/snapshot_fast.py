@@ -4,12 +4,12 @@ from dataclasses import dataclass,field
 import numpy as np
 from ..io.timing import ticks_to_seconds
 from ..io.durations import hold_seconds,slide_seconds
-from .fused import TIME_EPSILON,INPUT_RELEASE_SECONDS
+from .fused import TIME_EPSILON,INPUT_RELEASE_SECONDS,INPUT_OVERLAY_SECONDS
 from .source_head import TRACK_LIFECYCLE
 
 @dataclass
 class InputState:
-    event:int; outer:bool; sensor:int; hold:bool; start:float; end:float
+    event:int; outer:bool; sensor:int; hold:bool; start:float; end:float; pad:int; overlay:bool
 @dataclass
 class TrackState:
     event:int; start:float; shoot:float; end:float; wifi:bool; actions:list=field(default_factory=list)
@@ -21,6 +21,7 @@ class SnapshotTracker:
     def __init__(self,vocab,tables,bt,bv):
         self.vocab=vocab;self.tables=tables;self.bt=np.asarray(bt);self.bv=np.asarray(bv);self.events=[]
         self.touch_masks=np.asarray([int(tables['simplePadMasks'][x]) for x in vocab['touchPositions']],np.int64)
+        self.outer_masks=np.asarray([int(tables['simplePadMasks']['A'+str(i+1)]) for i in range(8)],np.int64)
         names=list(vocab['touchPositions']);adj=tables['touchAdjacency']
         self.adj=[[a==b or b in adj.get(a,()) for b in names] for a in names]
     def time(self,tick):return float(ticks_to_seconds(np.asarray([tick]),self.bt,self.bv)[0])
@@ -39,10 +40,11 @@ class SnapshotTracker:
         for j in range(arity):
             family=int(rep['button_family'][j]);lane=int(rep['button_start'][j]);lanes.append(lane)
             mods=int(rep['button_modifiers'][j]);duration=int(rep['button_duration'][j])
+            pad=int(self.outer_masks[lane])
             if family==1:
-                length=hold_seconds(self.vocab['durations'][duration],bpm);inputs.append(InputState(tick,True,lane,True,at,at+length))
+                length=hold_seconds(self.vocab['durations'][duration],bpm);inputs.append(InputState(tick,True,lane,True,at,at+length,pad,True))
             elif family in (0,2) and not (family==2 and mods&16):
-                inputs.append(InputState(tick,True,lane,False,at,at))
+                inputs.append(InputState(tick,True,lane,False,at,at,pad,family!=2))
             if family!=2:continue
             route=int(rep['button_route'][j]);entry=self.tables['slideConflicts'][f'{lane+1}:{route}']
             wait,move=slide_seconds(self.vocab['durations'][duration],bpm);shoot=at+wait;end=shoot+move;wifi=bool(entry.get('isWifi',False));actions=[]
@@ -53,11 +55,16 @@ class SnapshotTracker:
             tracks.append(TrackState(tick,at,shoot,end,wifi,actions))
         for j in touch_ids:
             duration=int(rep['touch_duration'][j]);hold=duration!=0;length=hold_seconds(self.vocab['durations'][duration],bpm) if hold else 0.
-            inputs.append(InputState(tick,False,j,hold,at,at+length))
+            inputs.append(InputState(tick,False,j,hold,at,at+length,int(self.touch_masks[j]),True))
         pure=notes==1 and arity==1 and int(rep['button_family'][0])==0
         self.events.append(EventState(tick,at,notes,tuple(lanes),pure,inputs,tracks))
     def snapshot(self,tick,bpm,durations,end_seconds):
         at=self.time(int(tick));inputs=[x for e in self.events for x in e.inputs];tracks=[x for e in self.events for x in e.tracks]
+        overlay_inputs=[x for x in inputs if x.overlay and x.start-INPUT_OVERLAY_SECONDS<=at+TIME_EPSILON and x.end+INPUT_OVERLAY_SECONDS>=at-TIME_EPSILON]
+        blocked_pad=0
+        for x in overlay_inputs: blocked_pad|=int(x.pad)
+        allowed_non_slide=(self.outer_masks&blocked_pad)==0
+        allowed_touch=(self.touch_masks&blocked_pad)==0
         held=[x for x in inputs if x.hold and x.start<=at and x.end>at+1e-7]
         outerheld=[x for x in held if x.outer];touchheld=[x for x in held if not x.outer]
         move=[x for x in tracks if x.shoot<=at+TIME_EPSILON and x.end>=at-TIME_EPSILON]
@@ -99,7 +106,7 @@ class SnapshotTracker:
             slideEndpointActionCount=0,slideTailLanes=set(),slideTailCooldownCount=0,slideTailCooldownEndTicks=[],muriStateFeatures=np.zeros(32,np.float32),
             muriOracleSourceTick=int(tick),activeTouchHoldSensors=touch_names,lastSingleTapLane=None,motionDirection=0,motionRunLength=0,
             activeHands=min(2,nh+nt),activeHoldHands=min(2,nh),activeSlideHands=min(2,ns),activeSlideCount=len(active),activeTouchHoldHands=min(2,nt),
-            availableHands=available,holdAvailableHands=available,maxOuterArity=outer_capacity,allowedTouchPresenceMask=covered,
+            availableHands=available,holdAvailableHands=available,maxOuterArity=outer_capacity,allowedNonSlideStartMask=allowed_non_slide,allowedTouchSensorMask=allowed_touch,allowedTouchPresenceMask=covered,
             allowedHoldDurationMask=np.asarray(hm),allowedSlideDurationMask=np.asarray(sm),oneHandHoldConstraint=bool(one_hand))
         if tap_state:result.update(lastSingleTapLane=tap_state['last_lane'],motionDirection=tap_state['direction'],motionRunLength=tap_state['run_length'],tapRunLastTime=tap_state['last_time'])
         if one_state:result.update(freeHandLastLane=one_state['last_lane'],freeHandLastTime=one_state['last_time'],freeHandPreviousDelta=one_state['previous_delta'],oneHandConstraintStart=one_state['constraint_start'])
