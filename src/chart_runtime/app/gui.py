@@ -6,6 +6,7 @@ runs in an owned subprocess, so it never blocks the UI and can be cancelled.
 """
 from __future__ import annotations
 import collections
+import hashlib
 import json
 import math
 import mimetypes
@@ -28,6 +29,9 @@ import uuid
 import webbrowser
 
 AUDIO_EXTENSIONS = {'.mp3','.wav','.flac','.ogg','.m4a','.aac','.opus','.wma'}
+COVER_EXTENSIONS = {'.png','.jpg','.jpeg','.webp','.bmp','.gif'}
+BGA_EXTENSIONS = {'.mp4'}
+ASSET_LIMITS = {'cover':32*1024*1024,'bga':512*1024*1024}
 UI_BUILD = 'dx-studio-ui/2'
 WEBROOT = Path(__file__).with_name('webui')
 VERSIONS = ['maimai','maimai PLUS','GreeN','GreeN PLUS','ORANGE','ORANGE PLUS','PiNK','PiNK PLUS','MURASAKi','MURASAKi PLUS','MiLK','MiLK PLUS','FiNALE','でらっくす','でらっくす PLUS','Splash','Splash PLUS','UNiVERSE','UNiVERSE PLUS','FESTiVAL','FESTiVAL PLUS','BUDDiES','BUDDiES PLUS','PRiSM','PRiSM PLUS','CiRCLE','CiRCLE PLUS']
@@ -197,15 +201,47 @@ class Handler(BaseHTTPRequestHandler):
     def _asset(self):
         query=parse_qs(urlsplit(self.path).query)
         kind=query.get('kind',[''])[0]
-        extensions={'cover':{'.png','.jpg','.jpeg','.webp','.bmp'},'bga':{'.mp4'}}.get(kind)
+        value=query.get('path',[''])[0]
+        if kind=='bga-thumb':
+            if not value:return self._json({'error':'No asset selected'},404)
+            return self._serve_media(self.app.bga_thumbnail(Path(value)),{'.jpg'})
+        extensions={'cover':COVER_EXTENSIONS,'bga':BGA_EXTENSIONS}.get(kind)
         if extensions is None:
             return self._json({'error':'Unsupported asset kind'},400)
-        value=query.get('path',[''])[0]
         if not value:
             return self._json({'error':'No asset selected'},404)
         return self._serve_media(Path(value),extensions)
 
+    def _upload_asset(self, kind):
+        if self.app.busy:
+            raise ValueError('任务运行中，暂不能更换素材。')
+        extensions={'cover':COVER_EXTENSIONS,'bga':BGA_EXTENSIONS}[kind]
+        limit=ASSET_LIMITS[kind]
+        length=int(self.headers.get('Content-Length','0'))
+        if not 0<length<=limit:
+            return self._json({'error':f'{kind} 文件不能超过 {limit//1024//1024} MB。'},413)
+        name=Path(unquote(self.headers.get('X-File-Name','asset')).replace('\\','/')).name
+        if Path(name).suffix.lower() not in extensions:
+            raise ValueError('不支持此素材格式。')
+        folder=self.app.logs/'studio_imports'/uuid.uuid4().hex
+        folder.mkdir(parents=True,exist_ok=False)
+        path=folder/name
+        try:
+            with path.open('wb') as f:
+                remaining=length
+                while remaining:
+                    chunk=self.rfile.read(min(1048576,remaining))
+                    if not chunk:raise ValueError('素材传输中断。')
+                    f.write(chunk);remaining-=len(chunk)
+            self._json({'path':str(path),'name':name,'size':length,'kind':kind})
+        except Exception:
+            path.unlink(missing_ok=True)
+            raise
+
     def _upload(self):
+        kind=parse_qs(urlsplit(self.path).query).get('kind',['audio'])[0]
+        if kind in ('cover','bga'):
+            return self._upload_asset(kind)
         if self.app.busy:
             raise ValueError('任务运行中，暂不能更换音频。')
         length=int(self.headers.get('Content-Length','0'))
@@ -370,11 +406,33 @@ class ChartGeneratorApp(tk.Tk):
         if kind=='output':
             chosen=self._native(lambda:self._dialog(lambda owner:filedialog.askdirectory(parent=owner,title='选择输出目录',initialdir=str(self.runtime_root))))
         elif kind=='cover':
-            chosen=self._native(lambda:self._dialog(lambda owner:filedialog.askopenfilename(parent=owner,title='选择封面图片',filetypes=[('封面图片','*.png *.jpg *.jpeg *.webp *.bmp')])))
+            chosen=self._native(lambda:self._dialog(lambda owner:filedialog.askopenfilename(parent=owner,title='选择封面图片',filetypes=[('封面图片','*.png *.jpg *.jpeg *.webp *.bmp *.gif')])))
         elif kind=='bga':
             chosen=self._native(lambda:self._dialog(lambda owner:filedialog.askopenfilename(parent=owner,title='选择BGA MP4',filetypes=[('MP4视频','*.mp4')])))
         else:raise ValueError('不支持此选择器。')
         return {'path':chosen or ''}
+
+    def bga_thumbnail(self,path):
+        path=Path(path).resolve()
+        if not path.is_file() or path.suffix.lower() not in BGA_EXTENSIONS:raise ValueError('请选择有效的BGA MP4。')
+        stat=path.stat();key=hashlib.sha256(f'{str(path).casefold()}|{stat.st_size}|{stat.st_mtime_ns}'.encode('utf8')).hexdigest()
+        folder=self.logs/'studio_previews';folder.mkdir(parents=True,exist_ok=True);target=folder/(key+'.jpg')
+        if target.is_file() and target.stat().st_size>0:return target
+        bundled=self.runtime_root/'tools/ffmpeg/ffmpeg.exe'
+        ffmpeg=bundled if bundled.is_file() else next((x for x in (self.runtime_root/'tools/ffmpeg').glob('**/ffmpeg.exe') if x.is_file()),None)
+        if ffmpeg is None:ffmpeg=shutil.which('ffmpeg')
+        if not ffmpeg:raise FileNotFoundError('找不到 FFmpeg，无法生成 BGA 静态预览。')
+        errors=[]
+        for seek in ('1.0','0'):
+            temp=folder/(key+'.'+uuid.uuid4().hex+'.tmp.jpg')
+            try:
+                cmd=[str(ffmpeg),'-y','-v','error','-ss',seek,'-i',str(path),'-map','0:v:0','-an','-sn','-dn','-frames:v','1','-vf','scale=960:-2:force_original_aspect_ratio=decrease','-q:v','3',str(temp)]
+                result=subprocess.run(cmd,capture_output=True,text=True,encoding='utf8',errors='replace',timeout=30,creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
+                if result.returncode==0 and temp.is_file() and temp.stat().st_size>0:os.replace(temp,target);return target
+                errors.append((result.stderr or '').strip()[-500:])
+            except subprocess.TimeoutExpired:errors.append('FFmpeg thumbnail timeout')
+            finally:temp.unlink(missing_ok=True)
+        raise RuntimeError('无法从 BGA 提取静态预览。 '+next((x for x in errors if x),'FFmpeg returned no frame'))
 
     def save_settings(self,data):
         if len(json.dumps(data))>1024*1024:raise ValueError('配置过大。')
@@ -418,13 +476,13 @@ class ChartGeneratorApp(tk.Tk):
         cover_text=str(data.get('coverPath','')).strip()
         if cover_text:
             cover=Path(cover_text).expanduser()
-            if not cover.is_file() or cover.suffix.lower() not in ('.png','.jpg','.jpeg','.webp','.bmp'):raise ValueError('请选择有效的封面图片。')
+            if not cover.is_file() or cover.suffix.lower() not in COVER_EXTENSIONS:raise ValueError('请选择有效的封面图片。')
             clean['coverPath']=str(cover.resolve())
         else:clean['coverPath']=''
         bga_text=str(data.get('bgaPath','')).strip()
         if bga_text:
             bga=Path(bga_text).expanduser()
-            if not bga.is_file() or bga.suffix.lower()!='.mp4':raise ValueError('请选择有效的BGA MP4。')
+            if not bga.is_file() or bga.suffix.lower() not in BGA_EXTENSIONS:raise ValueError('请选择有效的BGA MP4。')
             clean['bgaPath']=str(bga.resolve())
         else:clean['bgaPath']=''
         output=str(data.get('outputDir','')).strip()

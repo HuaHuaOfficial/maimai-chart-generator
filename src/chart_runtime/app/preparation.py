@@ -20,12 +20,35 @@ import numpy as np
 import torch
 
 from ..io.timing import ticks_to_seconds
-from ..io.audio import FRAME_SECONDS, extract_log_mel
+from ..io.audio import FRAME_SECONDS, extract_log_mel, decode_mp3
 from ..io.simai import parse_maidata, render_compact_maidata
 from ..generator.frontend import NativeFrontend
 from ..generator.model_store import native_model_spec,load_models
 from ..version_semantics import DX_VERSION, touch_enabled, touch_hold_enabled
 TPB=384
+
+def _edge_audio_profile(audio_path,ffmpeg,beat_offset,bpm_ticks,bpm_values,bars):
+    """Measure only start/end loudness cues; never drive interior WHEN density."""
+    wave=decode_mp3(audio_path,ffmpeg,8000).numpy().astype(np.float64,copy=False)
+    boundaries=beat_offset+ticks_to_seconds(np.arange(bars+1,dtype=np.int64)*TPB,bpm_ticks,bpm_values)
+    values=np.zeros(bars,np.float64)
+    for bar in range(bars):
+        a=max(0,int(boundaries[bar]*8000));z=min(len(wave),int(boundaries[bar+1]*8000))
+        values[bar]=np.sqrt(np.mean(wave[a:z]*wave[a:z])+1e-15) if z>a else 0.0
+    peak=max(float(values.max()),1e-12);db=20.0*np.log10(np.maximum(values,1e-12)/peak);gate=np.ones(bars,np.float64)
+    tail_n=min(bars,max(4,int(math.ceil(24.0/max(float(np.median(np.diff(boundaries))),1e-6)))))
+    start=max(0,bars-tail_n);ref_lo=max(0,start-tail_n)
+    reference=float(np.percentile(db[ref_lo:start],75)) if start>ref_lo else float(np.percentile(db[:max(1,bars//2)],75))
+    tail=db[start:].copy();smooth=tail.copy()
+    for i in range(1,len(tail)-1):smooth[i]=float(np.median(tail[i-1:i+2]))
+    t=np.asarray(boundaries[start:-1]-boundaries[start],dtype=np.float64)
+    slope=float(np.polyfit(t,smooth,1)[0]) if len(smooth)>=4 and float(np.ptp(t))>1e-6 else 0.0
+    final_level=float(np.median(smooth[-min(3,len(smooth)):])) if len(smooth) else reference
+    fade=bool(len(smooth)>=4 and reference-final_level>=12.0 and slope<=-0.25)
+    if fade:
+        drop=np.maximum(0.0,reference-smooth);gate[start:]=np.clip((24.0-drop)/21.0,0.0,1.0);gate[start:][drop<=3.0]=1.0
+    durations=np.maximum(np.diff(boundaries),0.0);budget_scale=float(np.sum(durations*gate)/max(np.sum(durations),1e-8))
+    return db.astype(np.float32),gate.astype(np.float32),budget_scale,fade,slope
 
 
 _CACHE_LOCK = threading.Lock()
@@ -352,6 +375,7 @@ def prepare_request(
     structure = structure[:bars].astype(np.float32, copy=False)
     mert_bars = mert_bars[:bars].astype(np.float32, copy=False)
     total_ticks = min(total_ticks, bars * TPB)
+    edge_db,edge_gate,edge_budget_scale,edge_fade,edge_fade_slope=_edge_audio_profile(audio_path,ffmpeg,beat_offset,bpm_ticks,bpm_values,bars)
     if raw_ticks > total_ticks:
         _notify(progress, "音频超过 256 小节；推理包仅生成前 256 小节。")
 
@@ -411,6 +435,13 @@ def prepare_request(
             plan = planner(batch)
             raw_total = float(plan["total"][0])
             raw_value = plan["expected"][0, :bars].float().cpu().numpy()
+            head_before=float(raw_value[0]) if bars else 0.0
+            if bars >= 2:
+                stop=min(4,bars);head_ref_db=float(np.median(edge_db[1:stop]));head_ref=float(np.median(np.maximum(raw_value[1:stop],0.0)))
+                if edge_db[0] >= max(-30.0,head_ref_db-3.0) and head_ref>1e-6 and raw_value[0] < .25*head_ref:
+                    similarity=min(1.0,10.0**(float(edge_db[0]-head_ref_db)/20.0));raw_value=raw_value.copy();raw_value[0]=max(float(raw_value[0]),.50*head_ref*similarity)
+            head_after=float(raw_value[0]) if bars else 0.0
+            raw_value=np.maximum(raw_value,0.0)*edge_gate
             difficulty_target = workload_target(level)
             target_event_rate = None
             difficulty_blend = 0.0
@@ -433,6 +464,7 @@ def prepare_request(
             else:
                 duration_scale = 1.0
                 target_total = raw_total
+            target_total *= edge_budget_scale
             active_tick_limit = max(1, min(int(math.floor(raw_ticks)), int(total_ticks)))
             bar_starts = np.arange(bars, dtype=np.float64) * TPB
             active_fraction = np.clip((active_tick_limit - bar_starts) / TPB, 0.0, 1.0).astype(np.float32)
@@ -459,6 +491,14 @@ def prepare_request(
                 "difficultyBlend": float(difficulty_blend),
                 "shortProfileBlend": float(profile_blend),
                 "workloadMode": workload_mode if float(level) >= 13.0 else "auto",
+                "edgeAudioBudgetScale": float(edge_budget_scale),
+                "firstBarDbRelPeak": float(edge_db[0]) if bars else None,
+                "firstBarDensityBefore": float(head_before),
+                "firstBarDensityAfter": float(head_after),
+                "tailSuppressedBars": int(np.count_nonzero(edge_gate < .999)),
+                "tailMinGate": float(edge_gate.min()) if bars else 1.0,
+                "tailFadeDetected": bool(edge_fade),
+                "tailFadeSlopeDbPerSecond": float(edge_fade_slope),
             }
             if "sectionSwitchProbability" in plan:
                 plan_info[str(slot)]["sectionSwitchProbability"] = float(

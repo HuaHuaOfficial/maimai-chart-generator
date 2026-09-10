@@ -18,7 +18,7 @@
 - NVIDIA CUDA GPU
 - 与驱动匹配的 CUDA 版 PyTorch
 - Python 3.11 或更新版本
-- FFmpeg，且 `ffmpeg.exe` 已加入 `PATH`
+- FFmpeg 已随发布包内置；无需单独安装或配置 `PATH`
 
 安装 Python 依赖：
 
@@ -41,22 +41,24 @@ pip install -r requirements.txt
 
 
 
-## 外部工具安装
+## 内置 FFmpeg 与外部预览工具
 
-发布 ZIP 不包含 FFmpeg、MiaCode 或 MajdataViewX。请下载 Windows x64 的 ZIP/7z 发行包并解压到程序目录的 `tools`；不要只把压缩文件本身放进去。运行时识别以下结构：
+发布 ZIP 已内置 Windows x64 FFmpeg。MiaCode 和 MajdataViewX 仍是可选外部工具；如需使用，请解压到程序目录的 `tools`。运行时识别以下结构：
 
 ```text
 maimai Chart Studio 1.0.1/
 └─ tools/
    ├─ ffmpeg/
-   │  └─ <任意解压层级>/bin/ffmpeg.exe
+   │  ├─ ffmpeg.exe
+   │  ├─ BUILD_INFO.txt
+   │  └─ LICENSE-GPL-3.0.txt
    ├─ MiaCode-v1.0.0-win64/
    │  └─ MiaCode.exe
    └─ MajdataViewX-v6.2.0/
       └─ MajdataEdit-Neo.exe
 ```
 
-- FFmpeg：`ffmpeg.exe` 可位于 `tools/ffmpeg` 下任意层级，常见 Windows x64 包解压后位于 `bin/ffmpeg.exe`；系统 `PATH` 中的 FFmpeg 也可使用。
+- FFmpeg：发布包内置 `tools/ffmpeg/ffmpeg.exe`；运行时优先使用包内版本，系统 `PATH` 仅作为兼容 fallback。
 - MiaCode：解压后必须存在 `tools/MiaCode-v1.0.0-win64/MiaCode.exe`。
 - MajdataViewX：解压后必须存在 `tools/MajdataViewX-v6.2.0/MajdataEdit-Neo.exe`。
 
@@ -84,6 +86,6 @@ maimai Chart Studio 1.0.1/
 ## 预览
 
 可选安装 MiaCode 或 MajdataViewX。制作台会提供两个并列的外部工具入口；MajdataViewX 不可用时只提示安装位置，不再回退到内置预览。MajdataViewX 可安装到 `tools/MajdataViewX-v6.2.0` 或 `.tools/MajdataViewX-v6.2.0`，也可通过 `MAJDATA_EXE` 指定 `MajdataEdit-Neo.exe`。标准歌曲素材名为 `track.mp3`、`bg.png` 和 `pv.mp4`。
-- 选择封面后显示图片缩略图，选择 BGA MP4 后显示可播放预览；清空按钮只清除当前选择，不删除原始文件。
+- 封面与 BGA 下方各有固定大小的拖放框；拖入图片或 MP4 会自动导入。BGA 使用包内 FFmpeg 从原视频截取静态缩略图预览，不要求浏览器直接解码 MP4，也不会修改或转码最终 `pv.mp4`。清空按钮只清除当前选择，不删除原始文件。
 
 本项目为非官方工具，不隶属于 SEGA。

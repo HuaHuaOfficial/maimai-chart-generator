@@ -8,7 +8,7 @@
 - It includes cross-process automatic song-ID allocation, cover/BGA preview and clear controls, local token-protected media streaming, and new-audio asset reset behavior.
 
 - MiaCode and MajdataViewX are now separate peer actions; the unreliable built-in chart preview fallback has been removed. MajdataViewX remains installable through the documented `tools/` / `.tools/` locations or `MAJDATA_EXE`.
-- The Studio now previews the selected cover image and BGA MP4 in the asset panel; clear buttons only clear the selection.
+- The Studio now keeps cover and BGA drop zones fixed-size below the title, BPM, and song ID fields. BGA preview uses a cached FFmpeg-extracted static frame instead of browser video decoding; the original MP4 is preserved unchanged. Clear buttons only clear the selection.
 
 ## Two-tier difficulty planning
 
@@ -32,15 +32,21 @@ Successful generations use `乐曲名-YYYYMMDD_HHMMSS/歌曲ID/`. A blank ID is 
 
 ## External tools
 
-FFmpeg, MiaCode, and MajdataViewX are optional external Windows x64 packages and are not bundled. Extract them under `tools/` so the following executable paths exist:
+FFmpeg is now bundled as a Windows x64 runtime. MiaCode and MajdataViewX remain optional external packages. The following paths are used:
 
 ```text
-tools/ffmpeg/<distribution>/bin/ffmpeg.exe
+tools/ffmpeg/ffmpeg.exe
 tools/MiaCode-v1.0.0-win64/MiaCode.exe
 tools/MajdataViewX-v6.2.0/MajdataEdit-Neo.exe
 ```
 
-FFmpeg is discovered recursively below `tools/ffmpeg` or from the system `PATH`. MiaCode and MajdataViewX are checked before the Studio asks the user to choose a `maidata.txt` file. The built-in chart preview has been removed.
+The bundled FFmpeg at `tools/ffmpeg/ffmpeg.exe` is preferred; recursive discovery below `tools/ffmpeg` and the system `PATH` remain compatibility fallbacks. MiaCode and MajdataViewX are checked before the Studio asks the user to choose a `maidata.txt` file. The built-in chart preview has been removed.
+
+## WHEN edge calibration
+
+- A locally active first bar is no longer left empty solely because the whole-song density planner assigns an anomalously near-zero first-bar expectation; a bounded continuity calibration uses only neighboring opening bars.
+- A genuine sustained fade-out is detected from local audio energy and progressively lowers only the ending WHEN budget. Quiet interior sections and non-fade endings are not globally loudness-scaled.
+- The regression cases `390982371_nb2-1-30280` and `TheFatRat - Unity` both completed with HARD=0 and QUALITY=0 after this change.
 
 ## Reliability and operation
 
@@ -67,4 +73,4 @@ The current version-conditioned joint profile has not been shown to suppress Tou
 
 ## Release contents
 
-Only runtime source, the fixed model/assets, launcher, user documentation, dependency manifest, and legal notices are shipped. Experiments, generated outputs, backups, tools, caches, failed rankers, old interfaces, and stage-by-stage Markdown records are excluded.
+Only runtime source, the fixed model/assets, bundled FFmpeg runtime, launcher, user documentation, dependency manifest, and legal notices are shipped. Experiments, generated outputs, backups, optional editor/viewer tools, caches, failed rankers, old interfaces, and stage-by-stage Markdown records are excluded.

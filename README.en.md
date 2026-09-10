@@ -18,7 +18,7 @@ maimai Chart Studio is a local Windows chart generator. Version 1.0.1 ships one 
 - NVIDIA CUDA GPU
 - A CUDA-enabled PyTorch build compatible with the installed driver
 - Python 3.11 or newer
-- FFmpeg available on `PATH`
+- FFmpeg is bundled with the release; no separate installation or `PATH` setup is required
 
 Install the Python dependencies:
 
@@ -32,22 +32,24 @@ The form requires audio, title, BPM, chart version, difficulty, and exact intern
 - Choosing or uploading a new audio clears the previous cover and BGA selections; the title still defaults to the audio filename.
 - Automatic song-ID allocation uses a cross-process lock, so simultaneous Studio instances do not receive the same ID.
 
-## External tools
+## Bundled FFmpeg and optional preview tools
 
-The release ZIP does not bundle FFmpeg, MiaCode, or MajdataViewX. Download and extract Windows x64 ZIP/7z distributions into the application's `tools` directory; placing the archive file itself there is not sufficient. The runtime recognizes:
+The release ZIP bundles a Windows x64 FFmpeg runtime. MiaCode and MajdataViewX remain optional external tools; extract them into the application's `tools` directory if desired. The runtime recognizes:
 
 ```text
 maimai Chart Studio 1.0.1/
 └─ tools/
    ├─ ffmpeg/
-   │  └─ <any extracted nesting>/bin/ffmpeg.exe
+   │  ├─ ffmpeg.exe
+   │  ├─ BUILD_INFO.txt
+   │  └─ LICENSE-GPL-3.0.txt
    ├─ MiaCode-v1.0.0-win64/
    │  └─ MiaCode.exe
    └─ MajdataViewX-v6.2.0/
       └─ MajdataEdit-Neo.exe
 ```
 
-- FFmpeg may be nested anywhere below `tools/ffmpeg`; standard Windows x64 builds normally place it at `bin/ffmpeg.exe`. FFmpeg on the system `PATH` is also accepted.
+- FFmpeg is bundled at `tools/ffmpeg/ffmpeg.exe`. The runtime prefers this bundled binary and accepts a system `PATH` installation only as a compatibility fallback.
 - MiaCode requires `tools/MiaCode-v1.0.0-win64/MiaCode.exe`.
 - MajdataViewX requires `tools/MajdataViewX-v6.2.0/MajdataEdit-Neo.exe`.
 
@@ -71,6 +73,6 @@ output/
 ## Preview
 
 MiaCode and MajdataViewX are optional external tools exposed as two separate actions in the Studio. If MajdataViewX is unavailable, the action reports the installation locations instead of opening a built-in preview. Install it at `tools/MajdataViewX-v6.2.0` or `.tools/MajdataViewX-v6.2.0`, or set `MAJDATA_EXE` to the `MajdataEdit-Neo.exe` path.
-- Selecting a cover shows an image thumbnail; selecting a BGA MP4 shows a playable preview. Clear buttons remove only the current selection and never delete the source file.
+- Cover and BGA controls use fixed-size drop zones. BGA preview is a static thumbnail extracted by the bundled FFmpeg, so the browser never needs to decode the original MP4; the original BGA and final `pv.mp4` are not transcoded. Clear buttons remove only the current selection and never delete the source file.
 
 This is an unofficial project and is not affiliated with SEGA.
