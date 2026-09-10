@@ -23,6 +23,7 @@
 ## Output package
 
 Successful generations use `乐曲名-YYYYMMDD_HHMMSS/歌曲ID/`. A blank ID is allocated persistently from 3000 before DX or 13000 from DX onward without reuse. The pure-ID directory always contains `maidata.txt` and `track.mp3`; optional selections add `bg.png` and `pv.mp4`. `元数据.json` is stored in the outer timestamped directory.
+- Automatic song-ID allocation now locks the registry transaction across processes, closing the read-allocate-write race when multiple Studio instances run at once.
 
 ## External tools
 

@@ -8,6 +8,7 @@ import shutil
 import subprocess
 import time
 import threading
+from contextlib import contextmanager
 from collections import OrderedDict
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
@@ -28,146 +29,40 @@ TPB=384
 
 
 _CACHE_LOCK = threading.Lock()
-_AUDIO_FEATURE_CACHE: OrderedDict[tuple, tuple] = OrderedDict()
-_MODEL_SESSION_CACHE: OrderedDict[tuple, tuple] = OrderedDict()
 
-
-def _file_cache_key(path: Path) -> tuple:
-    resolved = Path(path).resolve()
-    stat = resolved.stat()
-    return str(resolved).lower(), int(stat.st_size), int(stat.st_mtime_ns)
-
-
-def _audio_cache_get(path: Path):
-    key = _file_cache_key(path)
-    with _CACHE_LOCK:
-        value = _AUDIO_FEATURE_CACHE.get(key)
-        if value is not None:
-            _AUDIO_FEATURE_CACHE.move_to_end(key)
-    return key, value
-
-
-def _audio_cache_put(key: tuple, value: tuple) -> None:
-    with _CACHE_LOCK:
-        _AUDIO_FEATURE_CACHE[key] = value
-        _AUDIO_FEATURE_CACHE.move_to_end(key)
-        while len(_AUDIO_FEATURE_CACHE) > 2:
-            _AUDIO_FEATURE_CACHE.popitem(last=False)
-
-
-def _notify(progress: Callable[[str], None] | None, text: str) -> None:
-    if progress is not None:
-        progress(text)
-
-
-def _asset_root(root: Path) -> Path:
-    return root / "models" / "v2"
-
-
-def _find_ffmpeg(root: Path) -> Path:
-    candidates = (
-        root / "tools" / "ffmpeg",
-        root / ".tools" / "ffmpeg",
-    )
-    for directory in candidates:
-        if directory.is_dir():
-            found = next(directory.glob("**/ffmpeg.exe"), None)
-            if found is not None:
-                return found
-    command = shutil.which("ffmpeg")
-    if command:
-        return Path(command)
-    raise FileNotFoundError("找不到 ffmpeg.exe；请安装 FFmpeg 并加入系统 PATH。")
-
-
-def _planner_batch(
-    mert_bars: np.ndarray,
-    bpm_ticks: np.ndarray,
-    bpm_values: np.ndarray,
-    version_id: int,
-    difficulty_slot: int,
-    level: float,
-    device: torch.device,
-) -> tuple[dict[str, torch.Tensor], int]:
-    bars = min(256, len(mert_bars))
-    padded_mert = np.zeros((256, mert_bars.shape[1]), np.float32)
-    padded_mert[:bars] = mert_bars[:bars]
-    mask = np.zeros(256, np.bool_)
-    mask[:bars] = True
-    bpm = np.zeros(256, np.float32)
-    bar_ticks = np.arange(bars, dtype=np.int64) * TPB
-    indices = np.clip(
-        np.searchsorted(bpm_ticks, bar_ticks, side="right") - 1,
-        0,
-        len(bpm_values) - 1,
-    )
-    bpm[:bars] = bpm_values[indices]
-    boundary_seconds = ticks_to_seconds(
-        np.arange(bars + 1, dtype=np.int64) * TPB,
-        bpm_ticks,
-        bpm_values,
-    )
-    bar_duration = np.zeros(256, np.float32)
-    bar_duration[:bars] = np.diff(boundary_seconds).astype(np.float32)
-    return {
-        "mert": torch.from_numpy(padded_mert)[None].to(device),
-        "bar_mask": torch.from_numpy(mask)[None].to(device),
-        "bpm": torch.from_numpy(bpm)[None].to(device),
-        "bar_duration": torch.from_numpy(bar_duration)[None].to(device),
-        "version": torch.tensor([version_id], device=device),
-        "slot": torch.tensor([difficulty_slot - 2], device=device),
-        "level": torch.tensor([round(level * 10)], device=device),
-    }, bars
-
-
-def _write_track_mp3(audio_path: Path, output_path: Path, ffmpeg: Path) -> None:
-    if audio_path.suffix.lower() == ".mp3":
-        shutil.copy2(audio_path, output_path)
-        return
-    subprocess.run(
-        [
-            str(ffmpeg), "-y", "-v", "error", "-i", str(audio_path), "-vn",
-            "-c:a", "libmp3lame", "-q:a", "2", str(output_path),
-        ],
-        check=True,
-        creationflags=subprocess.CREATE_NO_WINDOW,
-    )
-
-
-def _write_cover_png(cover_path: Path, output_path: Path, ffmpeg: Path) -> None:
-    if cover_path.suffix.lower() == '.png':
-        shutil.copy2(cover_path, output_path)
-        return
-    subprocess.run(
-        [str(ffmpeg), '-y', '-v', 'error', '-i', str(cover_path), '-frames:v', '1', str(output_path)],
-        check=True,
-        creationflags=subprocess.CREATE_NO_WINDOW,
-    )
-
-
-def _write_bga_mp4(bga_path: Path, output_path: Path) -> None:
-    shutil.copy2(bga_path, output_path)
-
-
-def _safe_windows_component(value: str, fallback: str, limit: int = 96) -> str:
-    text=re.sub(r'[<>:"/\\|?*\x00-\x1f]+','_',str(value)).strip(' .')[:limit]
-    if not text:text=fallback
-    if text.upper() in {'CON','PRN','AUX','NUL',*(f'COM{i}' for i in range(1,10)),*(f'LPT{i}' for i in range(1,10))}:
-        text='_'+text
-    return text
-
-
-def _validate_song_id(value: str) -> str:
-    text=str(value).strip()
-    if not text or text in {'.','..'} or len(text)>80 or text.rstrip(' .')!=text or re.search(r'[<>:"/\\|?*\x00-\x1f]',text):
-        raise ValueError('自定义歌曲ID不能为空、不能包含Windows非法字符，且最多80个字符')
-    return _safe_windows_component(text,'song',80)
-
+@contextmanager
+def _song_id_process_lock(path: Path):
+    """Serialize song-id registry transactions across Studio processes."""
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open('a+b') as handle:
+        handle.seek(0, os.SEEK_END)
+        if handle.tell() == 0:
+            handle.write(b'\0')
+            handle.flush()
+        handle.seek(0)
+        locked = False
+        try:
+            if os.name == 'nt':
+                import msvcrt
+                msvcrt.locking(handle.fileno(), msvcrt.LK_LOCK, 1)
+            else:
+                import fcntl
+                fcntl.flock(handle.fileno(), fcntl.LOCK_EX)
+            locked = True
+            yield
+        finally:
+            if locked:
+                if os.name == 'nt':
+                    handle.seek(0)
+                    msvcrt.locking(handle.fileno(), msvcrt.LK_UNLCK, 1)
+                else:
+                    fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
 
 def _resolve_song_id(root: Path, output_root: Path, version_id: int, requested: str | None) -> tuple[str,bool]:
     """Return a persistent, non-repeating automatic ID or the validated manual ID."""
     registry_path=Path(root)/'logs'/'song_id_registry.json'
-    with _CACHE_LOCK:
+    with _CACHE_LOCK, _song_id_process_lock(registry_path.with_name(f'.{registry_path.name}.lock')):
         try:
             registry=json.loads(registry_path.read_text(encoding='utf8'))
             if registry.get('schemaVersion')!=1:raise ValueError

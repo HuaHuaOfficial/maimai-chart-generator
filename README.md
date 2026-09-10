@@ -77,6 +77,7 @@ maimai Chart Studio 1.0.0/
 ```
 
 `track.mp3` 由输入音频转码。选择封面时写出 `bg.png`（非 PNG 输入会转换为 PNG）；选择 BGA 时写出 `pv.mp4`。`元数据.json` 记录最终歌曲 ID、是否自动分配、模型、Harness、各难度摘要、内容 digest 和实际输出路径。
+- 自动歌曲 ID 注册表使用跨进程锁；同时打开多个 Studio 实例申请 ID 时也不会重复分配。
 
 
 ## 预览
