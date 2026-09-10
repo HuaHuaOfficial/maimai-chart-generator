@@ -13,6 +13,7 @@ import mimetypes
 import os
 from pathlib import Path
 import queue
+import re
 import secrets
 import shutil
 import subprocess
@@ -196,7 +197,8 @@ class Handler(BaseHTTPRequestHandler):
                 self.wfile.write(part);remaining-=len(part)
 
     def _audio(self):
-        return self._serve_media(self.app.audio_path,AUDIO_EXTENSIONS)
+        if self.app.audio_path is None:return self._json({'error':'No audio selected'},404)
+        return self._serve_media(self.app.audio_preview(self.app.audio_path),{'.mp3'})
 
     def _asset(self):
         query=parse_qs(urlsplit(self.path).query)
@@ -273,7 +275,7 @@ class ChartGeneratorApp(tk.Tk):
         self.title(f'maimai Chart Studio {__version__}')
         self.runtime_root=Path(os.environ.get('MAIMAI_INFERENCE_ROOT',str(Path(__file__).resolve().parents[3]))).resolve()
         self.logs=self.runtime_root/'logs';self.logs.mkdir(parents=True,exist_ok=True)
-        self.native_tasks=queue.Queue();self.lock=threading.RLock();self.events=collections.deque(maxlen=1600);self.seq=0
+        self.native_tasks=queue.Queue();self.lock=threading.RLock();self.preview_lock=threading.Lock();self.events=collections.deque(maxlen=1600);self.seq=0
         self.busy=False;self.kind='';self.job_id='';self.child=None;self.probe=None;self.cancelled=False;self.started=0.;self.duration=0.;self.closed=False
         self.audio_path=None;self.last_result=None;self.last_contact=time.monotonic()
         self.settings=_load_json(self.logs/'studio_settings.json',{})
@@ -411,6 +413,22 @@ class ChartGeneratorApp(tk.Tk):
             chosen=self._native(lambda:self._dialog(lambda owner:filedialog.askopenfilename(parent=owner,title='选择BGA MP4',filetypes=[('MP4视频','*.mp4')])))
         else:raise ValueError('不支持此选择器。')
         return {'path':chosen or ''}
+
+    def _preview_ffmpeg(self):
+        bundled=self.runtime_root/'tools/ffmpeg/ffmpeg.exe'
+        if bundled.is_file():return bundled
+        tree=self.runtime_root/'tools/ffmpeg'
+        if tree.is_dir():
+            found=next((x for x in tree.glob('**/ffmpeg.exe') if x.is_file()),None)
+            if found is not None:return found
+        system=shutil.which('ffmpeg')
+        if system:return Path(system)
+        raise FileNotFoundError('找不到 FFmpeg，无法生成媒体预览。')
+
+    def audio_preview(self,path):
+        from .media_cache import ensure_track_mp3
+        target,_=ensure_track_mp3(self.runtime_root,Path(path),self._preview_ffmpeg())
+        return target
 
     def bga_thumbnail(self,path):
         path=Path(path).resolve()

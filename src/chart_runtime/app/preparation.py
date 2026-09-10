@@ -184,17 +184,7 @@ def _planner_batch(
 
 
 def _write_track_mp3(audio_path: Path, output_path: Path, ffmpeg: Path) -> None:
-    if audio_path.suffix.lower() == ".mp3":
-        shutil.copy2(audio_path, output_path)
-        return
-    subprocess.run(
-        [
-            str(ffmpeg), "-y", "-v", "error", "-i", str(audio_path), "-vn",
-            "-c:a", "libmp3lame", "-q:a", "2", str(output_path),
-        ],
-        check=True,
-        creationflags=subprocess.CREATE_NO_WINDOW,
-    )
+    subprocess.run([str(ffmpeg),'-y','-v','error','-i',str(audio_path),'-map','0:a:0','-vn','-sn','-dn','-c:a','libmp3lame','-b:a','320k',str(output_path)],check=True,creationflags=subprocess.CREATE_NO_WINDOW)
 
 
 def _write_cover_png(cover_path: Path, output_path: Path, ffmpeg: Path) -> None:
@@ -292,7 +282,7 @@ def prepare_request(
     extra_metadata: dict | None = None,
     progress: Callable[[str], None] | None = None,
 ) -> dict:
-    """Prepare one request for the fixed 1.0.1 native model set."""
+    """Prepare one request for the fixed 1.1.0 native model set."""
 
     total_started = time.perf_counter()
     timings: dict[str, float] = {}
@@ -305,7 +295,7 @@ def prepare_request(
     root = Path(root)
     if not torch.cuda.is_available():raise RuntimeError('本原生版本需要 NVIDIA CUDA')
     profile=json.loads((root/'models/experimental/what_complexity_profile.json').read_text(encoding='utf8'))
-    if profile.get('schemaVersion')!=3:raise ValueError('1.0.1需要五档版本化WHAT profile')
+    if profile.get('schemaVersion')!=3:raise ValueError('1.1.0需要五档版本化WHAT profile')
     for slot,level in levels.items():
         key=str(round(float(level)*10))
         if key not in profile.get('slots',{}).get(str(slot),{}):raise ValueError(f'当前联合profile不支持难度{slot}的DS {level:.1f}')

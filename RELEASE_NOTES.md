@@ -1,8 +1,10 @@
-# maimai Chart Studio 1.0.1
+# maimai Chart Studio 1.1.0
 
 ## Formal release boundary
 
-1.0.1 is the complete package built from the current native production runtime. It includes the full 0.4.0-to-1.0.0 feature line and the current production fixes; it is not a reduced compatibility patch.
+1.1.0 is the complete package built from the current native production runtime. It includes the full 0.4.0-to-1.0.0 feature line and the current production fixes; it is not a reduced compatibility patch.
+
+Version 1.0.1 was an unreleased transition node. Its complete working-tree changes are folded directly into 1.1.0; there is no separate 1.0.1 release artifact.
 
 - This complete package includes the two-tier difficulty policy: lightweight V4 combined sampling for BASIC/ADVANCED and joint WHAT plus relational WHERE for EXPERT/MASTER/Re:MASTER.
 - It includes cross-process automatic song-ID allocation, cover/BGA preview and clear controls, local token-protected media streaming, and new-audio asset reset behavior.
@@ -50,6 +52,11 @@ The bundled FFmpeg at `tools/ffmpeg/ffmpeg.exe` is preferred; recursive discover
 
 ## Reliability and operation
 
+- WHEN edge calibration now repairs anomalously empty first bars when adjacent bars have matching audio activity, and suppresses density only across a detected sustained end fade; interior sections are unchanged.
+- Studio audio preview now uses a normalized 320 kbps MP3 cache, so mislabeled or browser-incompatible audio remains playable; the same cached MP3 is reused verbatim as the published `track.mp3`.
+- BGA preview now extracts a cached static frame with bundled FFmpeg instead of asking the browser to decode the original MP4; the original BGA is still copied unchanged to `pv.mp4`.
+- The localhost media Range path now imports and handles `re` correctly, fixing `<audio>` requests that previously returned HTTP 400.
+
 - BPM detection and generation can be cancelled from the Studio; the worker process tree is terminated while existing completed files are preserved.
 - Native sampling exhaustion is returned to the bounded resume path instead of terminating the whole job as `no allowed factor ids`.
 - Native file dialogs use a short-lived topmost owner so they remain visible above the browser-based Studio.
@@ -60,7 +67,7 @@ The release includes shared CUDA rules for complete Slide contacts and queues, v
 
 ## Claim boundary
 
-The current version-conditioned joint profile has not been shown to suppress Touch-on-Slide: in the matched Koi comparison, its conditional ratio was not lower than the earlier profile. The confirmed historical discrepancy was request-identity drift caused by omitting `artist`; 1.0.1 does not add a Touch-on-Slide reward.
+The current version-conditioned joint profile has not been shown to suppress Touch-on-Slide: in the matched Koi comparison, its conditional ratio was not lower than the earlier profile. The confirmed historical discrepancy was request-identity drift caused by omitting `artist`; 1.1.0 does not add a Touch-on-Slide reward.
 
 ## Validation
 

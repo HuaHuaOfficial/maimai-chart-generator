@@ -1,0 +1,10 @@
+Bundled runtime dependency: FFmpeg
+Binary: ffmpeg.exe
+Version: 7.1.1-essentials_build-www.gyan.dev
+Architecture: Windows x86_64, static build
+License: GNU GPL version 3 or later (this build enables GPL/version3 components)
+Binary is redistributed unmodified.
+SHA256: B90225987BDD042CCA09A1EFB5E34E9848F2D1DBF5FBCD388753A44145522997
+Build/source information: https://www.gyan.dev/ffmpeg/builds/
+FFmpeg upstream source: https://ffmpeg.org/download.html
+Full GPLv3 text: LICENSE-GPL-3.0.txt

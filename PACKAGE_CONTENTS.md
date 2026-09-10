@@ -1,4 +1,4 @@
-# maimai Chart Studio 1.0.1 package boundary
+# maimai Chart Studio 1.1.0 package boundary
 
 The release contains only:
 
