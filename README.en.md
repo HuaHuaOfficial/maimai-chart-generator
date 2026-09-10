@@ -29,6 +29,7 @@ pip install -r requirements.txt
 Double-click `启动生成器.pyw` to open the local Studio. Audio and media assets remain on the computer.
 
 The form requires audio, title, BPM, chart version, difficulty, and exact internal level. Song ID is optional: automatic IDs start at 3000 before DX and 13000 from DX onward, and are persisted without reuse. Cover and BGA MP4 are optional.
+- Choosing or uploading a new audio clears the previous cover and BGA selections; the title still defaults to the audio filename.
 - Automatic song-ID allocation uses a cross-process lock, so simultaneous Studio instances do not receive the same ID.
 
 ## External tools
