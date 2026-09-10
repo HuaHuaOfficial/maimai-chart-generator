@@ -2,12 +2,12 @@
 
 [English](README.en.md) | 简体中文
 
-本地运行的 maimai 谱面生成器。1.0.0 固定使用一套原生模型链：全曲 planner、五难度 joint WHAT planner、V4 relational renderer，以及共享 CUDA Harness。
+本地运行的 maimai 谱面生成器。1.0.0 固定使用一套原生模型链：全曲 planner、低难度轻量 V4 联合采样、高难度 joint WHAT planner 与 relational WHERE、以及共享 CUDA Harness。
 
 ## 支持范围
 
-- BASIC、ADVANCED、EXPERT、MASTER、Re:MASTER 五档均由同一 joint WHAT 分层生成，不回退旧的 factorized WHAT 路径。
-- 定数精确到 0.1。WHAT 组成先按谱面版本/机制兼容性筛选，再在同 DS、近 BPM 的官谱池内选择联合 profile；缺少精确官谱 profile 的档位会在生成前明确拒绝，不偷换为邻近 DS。
+- BASIC、ADVANCED 使用轻量 V4 联合采样并保持简单配置；EXPERT、MASTER、Re:MASTER 使用 joint WHAT 再进入 relational WHERE，不回退旧的 factorized WHAT 路径。
+- 五档共用 contextual V4 renderer 与 CUDA Harness，但按难度分为轻量低难度路径和重型高难度路径。
 - Star、双押、Hold、Touch、Touch Hold 的界面倍率作用于同一归一化配置分布。
 - `stable` 是默认搜索；EXPERT 以上可选 `causal-v1` 小范围因果回溯。两种模式使用同一 planner、renderer 和 Harness。
 - Harness 使用完整轨迹接触、动态手数、180 Hz 松手语义和版本能力检查；只有整谱 ACCEPT 并绑定 permit 后才会发布文件。

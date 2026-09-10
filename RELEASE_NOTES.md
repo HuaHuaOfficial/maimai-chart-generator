@@ -6,11 +6,11 @@
 
 - MiaCode and MajdataViewX are now separate peer actions; the unreliable built-in chart preview fallback has been removed. MajdataViewX remains installable through the documented `tools/` / `.tools/` locations or `MAJDATA_EXE`.
 
-## One five-difficulty planning hierarchy
+## Two-tier difficulty planning
 
-- The joint WHAT planner now has dedicated BASIC, ADVANCED, EXPERT, MASTER, and Re:MASTER heads.
-- Existing EXPERT/MASTER/Re:MASTER tensors are migrated exactly and remain unchanged; BASIC/ADVANCED are trained as new heads in the same architecture.
-- Runtime intent support and version-aware official-chart profiles cover all five slots.
+- BASIC and ADVANCED intentionally use lightweight V4 combined sampling; their production path does not invoke the heavy joint WHAT planner and remains oriented toward simple configurations.
+- EXPERT, MASTER, and Re:MASTER use the joint WHAT planner followed by relational WHERE and bounded causal recovery.
+- The five-slot Joint WHAT checkpoint contains dedicated heads for all slots for model capability and validation, while the production policy selects the lightweight or heavy path by difficulty.
 - The old factorized WHAT fallback is not included.
 
 ## Fixed native model and backend

@@ -2,12 +2,12 @@
 
 [简体中文](README.md) | English
 
-maimai Chart Studio is a local Windows chart generator. Version 1.0.0 ships one fixed native model chain: a whole-song planner, a five-difficulty joint WHAT planner, the V4 relational renderer, and the shared CUDA Harness.
+maimai Chart Studio is a local Windows chart generator. Version 1.0.0 ships one fixed native chain: a whole-song planner, lightweight V4 combined sampling for lower difficulties, joint WHAT plus relational WHERE for higher difficulties, and the shared CUDA Harness.
 
 ## Supported generation
 
-- BASIC, ADVANCED, EXPERT, MASTER, and Re:MASTER use the same joint WHAT hierarchy. There is no fallback to the old factorized WHAT path.
-- Internal levels are controlled to 0.1. Official-chart composition profiles are filtered by mechanics-compatible version first, then exact DS and nearby BPM. A level without an exact official profile is rejected before generation rather than silently mapped to a neighboring DS.
+- BASIC and ADVANCED use lightweight V4 combined sampling and remain oriented toward simple configurations; EXPERT, MASTER, and Re:MASTER use joint WHAT followed by relational WHERE. The old factorized WHAT fallback is not used.
+- All five difficulties share the contextual V4 renderer and CUDA Harness, but production intentionally uses a lightweight lower-difficulty path and a heavier higher-difficulty path.
 - Star, double-note, Hold, Touch, and Touch Hold controls operate in one normalized configuration distribution.
 - `stable` is the default search. `causal-v1` is an optional bounded recovery mode for EXPERT and above; both modes use the same planner, renderer, and Harness.
 - A chart is written only after full-chart CUDA evaluation returns ACCEPT and a permit is bound to the exact content digest.
