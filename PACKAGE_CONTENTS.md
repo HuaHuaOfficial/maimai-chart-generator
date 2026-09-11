@@ -17,4 +17,4 @@ The release excludes:
 - obsolete checkpoint selectors, backend selectors, unversioned profile adapters, unused timed-window prototypes, and failed ranker candidates;
 - `.git/` from the downloadable archive.
 
-FFmpeg is bundled and preferred from `tools/ffmpeg/ffmpeg.exe`; system `PATH` is only a fallback. MiaCode and MajdataViewX remain optional external tools.
+FFmpeg is tracked by the formal Git repository via Git LFS and is bundled in releases at `tools/ffmpeg/ffmpeg.exe`; system `PATH` is only a fallback. A normal LFS-enabled clone materializes the same binary. MiaCode and MajdataViewX remain optional external tools.

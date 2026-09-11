@@ -33,7 +33,7 @@ Successful generations use `乐曲名-YYYYMMDD_HHMMSS/歌曲ID/`. A blank ID is 
 
 ## External tools
 
-FFmpeg is now bundled as a Windows x64 runtime. MiaCode and MajdataViewX remain optional external packages. The following paths are used:
+FFmpeg is now bundled as a Windows x64 runtime in both the formal Git repository (via Git LFS) and the release package. MiaCode and MajdataViewX remain optional external packages. The following paths are used:
 
 ```text
 tools/ffmpeg/ffmpeg.exe

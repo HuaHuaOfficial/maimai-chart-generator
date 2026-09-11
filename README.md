@@ -18,7 +18,7 @@
 - NVIDIA CUDA GPU
 - 与驱动匹配的 CUDA 版 PyTorch
 - Python 3.11 或更新版本
-- FFmpeg 已随发布包内置；无需单独安装或配置 `PATH`
+- FFmpeg 已随正式 Git 仓库（Git LFS）和发布包内置；无需单独安装或配置 `PATH`
 
 安装 Python 依赖：
 
@@ -43,7 +43,7 @@ pip install -r requirements.txt
 
 ## 内置 FFmpeg 与外部预览工具
 
-发布 ZIP 已内置 Windows x64 FFmpeg。MiaCode 和 MajdataViewX 仍是可选外部工具；如需使用，请解压到程序目录的 `tools`。运行时识别以下结构：
+正式 Git 仓库（通过 Git LFS）和发布 ZIP 均内置 Windows x64 FFmpeg。正常 LFS clone 会直接得到 `tools/ffmpeg/ffmpeg.exe`；若使用了跳过 LFS 的克隆方式，可执行 `git lfs pull` 补齐。MiaCode 和 MajdataViewX 仍是可选外部工具；如需使用，请解压到程序目录的 `tools`。运行时识别以下结构：
 
 ```text
 maimai Chart Studio 1.1.0/
@@ -58,7 +58,7 @@ maimai Chart Studio 1.1.0/
       └─ MajdataEdit-Neo.exe
 ```
 
-- FFmpeg：发布包内置 `tools/ffmpeg/ffmpeg.exe`；运行时优先使用包内版本，系统 `PATH` 仅作为兼容 fallback。
+- FFmpeg：正式 Git 仓库与发布包均内置 `tools/ffmpeg/ffmpeg.exe`；Git 中由 LFS 跟踪。运行时优先使用该版本，系统 `PATH` 仅作为兼容 fallback。
 - MiaCode：解压后必须存在 `tools/MiaCode-v1.0.0-win64/MiaCode.exe`。
 - MajdataViewX：解压后必须存在 `tools/MajdataViewX-v6.2.0/MajdataEdit-Neo.exe`。
 

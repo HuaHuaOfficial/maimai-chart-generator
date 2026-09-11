@@ -18,7 +18,7 @@ maimai Chart Studio is a local Windows chart generator. Version 1.1.0 ships one 
 - NVIDIA CUDA GPU
 - A CUDA-enabled PyTorch build compatible with the installed driver
 - Python 3.11 or newer
-- FFmpeg is bundled with the release; no separate installation or `PATH` setup is required
+- FFmpeg is bundled in both the formal Git repository (via Git LFS) and the release; no separate installation or `PATH` setup is required
 
 Install the Python dependencies:
 
@@ -34,7 +34,7 @@ The form requires audio, title, BPM, chart version, difficulty, and exact intern
 
 ## Bundled FFmpeg and optional preview tools
 
-The release ZIP bundles a Windows x64 FFmpeg runtime. MiaCode and MajdataViewX remain optional external tools; extract them into the application's `tools` directory if desired. The runtime recognizes:
+Both the formal Git repository (via Git LFS) and the release ZIP bundle the Windows x64 FFmpeg runtime. A normal LFS-enabled clone materializes `tools/ffmpeg/ffmpeg.exe`; if LFS was skipped during clone, run `git lfs pull`. MiaCode and MajdataViewX remain optional external tools; extract them into the application's `tools` directory if desired. The runtime recognizes:
 
 ```text
 maimai Chart Studio 1.1.0/
@@ -49,7 +49,7 @@ maimai Chart Studio 1.1.0/
       └─ MajdataEdit-Neo.exe
 ```
 
-- FFmpeg is bundled at `tools/ffmpeg/ffmpeg.exe`. The runtime prefers this bundled binary and accepts a system `PATH` installation only as a compatibility fallback.
+- FFmpeg is tracked in the formal Git repository via LFS and bundled in releases at `tools/ffmpeg/ffmpeg.exe`. The runtime prefers this bundled binary and accepts a system `PATH` installation only as a compatibility fallback.
 - MiaCode requires `tools/MiaCode-v1.0.0-win64/MiaCode.exe`.
 - MajdataViewX requires `tools/MajdataViewX-v6.2.0/MajdataEdit-Neo.exe`.
 
